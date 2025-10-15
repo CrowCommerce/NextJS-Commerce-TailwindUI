@@ -3,10 +3,10 @@
 import { PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { addItem } from 'components/cart/actions';
-import { useProduct } from 'components/product/product-context';
 import { Product, ProductVariant } from 'lib/shopify/types';
+import { useCartStore } from 'lib/stores/cart-store';
+import { useProductStore } from 'lib/stores/product-store';
 import { useActionState } from 'react';
-import { useCart } from './cart-context';
 
 function SubmitButton({
   availableForSale,
@@ -59,13 +59,13 @@ function SubmitButton({
 
 export function AddToCart({ product }: { product: Product }) {
   const { variants, availableForSale } = product;
-  const { addCartItem } = useCart();
-  const { state } = useProduct();
+  const addCartItem = useCartStore((state) => state.addCartItem);
+  const productState = useProductStore((state) => state.state);
   const [message, formAction] = useActionState(addItem, null);
 
   const variant = variants.find((variant: ProductVariant) =>
     variant.selectedOptions.every(
-      (option) => option.value === state[option.name.toLowerCase()]
+      (option) => option.value === productState[option.name.toLowerCase()]
     )
   );
   const defaultVariantId = variants.length === 1 ? variants[0]?.id : undefined;

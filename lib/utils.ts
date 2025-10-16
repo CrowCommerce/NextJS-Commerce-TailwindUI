@@ -154,3 +154,164 @@ export const transformCollectionsToFooterProducts = (collections: Collection[]):
     href: collection.path,
   }));
 };
+
+// Types for Tailwind product components
+export type TailwindProductDetail = {
+  name: string;
+  price: string;
+  rating: number;
+  images: Array<{ id: number; name: string; src: string; alt: string }>;
+  colors: Array<{ id: string; name: string; classes: string }>;
+  description: string;
+  details: Array<{ name: string; items: string[] }>;
+};
+
+export type TailwindRelatedProduct = {
+  id: number;
+  name: string;
+  color: string;
+  href: string;
+  imageSrc: string;
+  imageAlt: string;
+  price: string;
+};
+
+// Transform Shopify Product to Tailwind Product Detail format
+export const transformShopifyProductToTailwindDetail = (product: Product): TailwindProductDetail => {
+  // Map images to Tailwind format
+  const images = product.images.map((image, index) => ({
+    id: index + 1,
+    name: image.altText || `View ${index + 1}`,
+    src: image.url,
+    alt: image.altText || product.title,
+  }));
+
+  // Extract color variants
+  const colorVariants = product.variants
+    .map((variant) => {
+      const colorOption = variant.selectedOptions.find(
+        (option) => option.name.toLowerCase() === 'color'
+      );
+      return colorOption ? { value: colorOption.value, variant } : null;
+    })
+    .filter((item, index, self) => 
+      item && self.findIndex(t => t && t.value === item.value) === index
+    );
+
+  // Map colors to Tailwind format with CSS classes
+  const colors = colorVariants.map((item) => {
+    const colorName = item!.value;
+    const colorHex = getColorHex(colorName);
+    const isLight = isLightColor(colorHex);
+    
+    return {
+      id: colorName.toLowerCase().replace(/\s+/g, '-'),
+      name: colorName,
+      classes: `bg-[${colorHex}] ${isLight ? 'checked:outline-gray-400' : 'checked:outline-gray-700'}`,
+    };
+  });
+
+  // Format price
+  const price = product.variants[0]?.price
+    ? `$${parseFloat(product.variants[0].price.amount).toFixed(2)}`
+    : '$0.00';
+
+  // Create default product details sections
+  const details = [
+    {
+      name: 'Features',
+      items: [
+        'Premium quality materials',
+        'Durable construction',
+        'Modern design',
+        'Versatile usage',
+      ],
+    },
+    {
+      name: 'Care',
+      items: [
+        'Spot clean as needed',
+        'Handle with care',
+        'Store in a cool, dry place',
+        'Avoid direct sunlight',
+      ],
+    },
+    {
+      name: 'Shipping',
+      items: [
+        'Free shipping on orders over $300',
+        'International shipping available',
+        'Expedited shipping options',
+        'Signature required upon delivery',
+      ],
+    },
+    {
+      name: 'Returns',
+      items: [
+        'Easy return requests',
+        'Pre-paid shipping label included',
+        '10% restocking fee for returns',
+        '60 day return window',
+      ],
+    },
+  ];
+
+  return {
+    name: product.title,
+    price,
+    rating: 4, // Default placeholder rating
+    images: images.length > 0 ? images : [{
+      id: 1,
+      name: 'Product image',
+      src: 'https://via.placeholder.com/600',
+      alt: product.title,
+    }],
+    colors: colors.length > 0 ? colors : [],
+    description: product.description || `<p>${product.title}</p>`,
+    details,
+  };
+};
+
+// Transform Shopify Products to Tailwind Related Products format
+export const transformShopifyProductsToRelatedProducts = (products: Product[]): TailwindRelatedProduct[] => {
+  return products.slice(0, 4).map((product, index) => {
+    // Get first color variant if available
+    const colorVariant = product.variants.find((variant) =>
+      variant.selectedOptions.some((option) => option.name.toLowerCase() === 'color')
+    );
+    const colorOption = colorVariant?.selectedOptions.find(
+      (option) => option.name.toLowerCase() === 'color'
+    );
+
+    // Format price
+    const price = product.variants[0]?.price
+      ? `$${parseFloat(product.variants[0].price.amount).toFixed(2)}`
+      : '$0.00';
+
+    return {
+      id: parseInt(product.id.replace(/\D/g, '')) || index + 1,
+      name: product.title,
+      color: colorOption?.value || '',
+      href: `/product/${product.handle}`,
+      imageSrc: product.images[0]?.url || 'https://via.placeholder.com/400',
+      imageAlt: product.images[0]?.altText || product.title,
+      price,
+    };
+  });
+};
+
+// Helper to check if a color is light (for contrast determination)
+const isLightColor = (hex: string): boolean => {
+  // Remove # if present
+  const color = hex.replace('#', '');
+  
+  // Convert to RGB
+  const r = parseInt(color.substr(0, 2), 16);
+  const g = parseInt(color.substr(2, 2), 16);
+  const b = parseInt(color.substr(4, 2), 16);
+  
+  // Calculate luminance
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  
+  return luminance > 0.5;
+};

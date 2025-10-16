@@ -8,7 +8,7 @@ interface TrendingProductsProps {
 
 export default function TrendingProducts({ products }: TrendingProductsProps) {
   return (
-    <section aria-labelledby="trending-heading" className="bg-white">
+    <section aria-labelledby="trending-heading" className="bg-slate-150">
       <div className="py-16 sm:py-24 lg:mx-auto lg:max-w-7xl lg:px-8 lg:py-32">
         <div className="flex items-center justify-between px-4 sm:px-6 lg:px-0">
           <h2 id="trending-heading" className="text-2xl font-bold tracking-tight text-gray-900">

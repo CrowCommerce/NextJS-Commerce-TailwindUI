@@ -7,6 +7,7 @@ import { ReactNode, Suspense } from 'react';
 import { Toaster } from 'sonner';
 import './globals.css';
 
+import TailwindCart from 'components/layout/tailwind-cart';
 import TailwindFooter from 'components/layout/tailwind-footer';
 import TailwindNavbar from 'components/layout/tailwind-navbar';
 
@@ -39,6 +40,7 @@ export default async function RootLayout({
           <CartInitializer cartPromise={cart} />
         </Suspense>
         <TailwindNavbar />
+        <TailwindCart />
         <main>
           {children}
           <Toaster closeButton />

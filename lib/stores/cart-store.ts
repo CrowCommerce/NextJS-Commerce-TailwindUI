@@ -5,7 +5,10 @@ type UpdateType = 'plus' | 'minus' | 'delete';
 
 interface CartState {
   cart: Cart | undefined;
+  isCartOpen: boolean;
   setCart: (cart: Cart | undefined) => void;
+  openCart: () => void;
+  closeCart: () => void;
   addCartItem: (variant: ProductVariant, product: Product) => void;
   updateCartItem: (merchandiseId: string, updateType: UpdateType) => void;
 }
@@ -98,7 +101,10 @@ function createEmptyCart(): Cart {
 
 export const useCartStore = create<CartState>((set) => ({
   cart: undefined,
+  isCartOpen: false,
   setCart: (cart) => set({ cart }),
+  openCart: () => set({ isCartOpen: true }),
+  closeCart: () => set({ isCartOpen: false }),
   addCartItem: (variant, product) =>
     set((state) => {
       const currentCart = state.cart || createEmptyCart();

@@ -1,20 +1,21 @@
 'use client'
 
 import {
-    Dialog,
-    DialogBackdrop,
-    DialogPanel,
-    Popover,
-    PopoverButton,
-    PopoverGroup,
-    PopoverPanel,
-    Tab,
-    TabGroup,
-    TabList,
-    TabPanel,
-    TabPanels,
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  Popover,
+  PopoverButton,
+  PopoverGroup,
+  PopoverPanel,
+  Tab,
+  TabGroup,
+  TabList,
+  TabPanel,
+  TabPanels,
 } from '@headlessui/react'
 import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useCartStore } from 'lib/stores/cart-store'
 import { Fragment, useState } from 'react'
 
 const navigation = {
@@ -210,6 +211,7 @@ function classNames(...classes: string[]) {
 
 export default function TailwindNavbar() {
   const [open, setOpen] = useState(false)
+  const { cart, openCart } = useCartStore()
 
   return (
     <div className="bg-white">
@@ -485,14 +487,16 @@ export default function TailwindNavbar() {
 
                 {/* Cart */}
                 <div className="ml-4 flow-root lg:ml-6">
-                  <a href="#" className="group -m-2 flex items-center p-2">
+                  <button onClick={openCart} className="group -m-2 flex items-center p-2">
                     <ShoppingBagIcon
                       aria-hidden="true"
                       className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
                     />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                      {cart?.totalQuantity ?? 0}
+                    </span>
                     <span className="sr-only">items in cart, view bag</span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>

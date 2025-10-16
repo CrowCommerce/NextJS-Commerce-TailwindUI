@@ -1,31 +1,21 @@
-const footerNavigation = {
-  products: [
-    { name: 'Bags', href: '#' },
-    { name: 'Tees', href: '#' },
-    { name: 'Objects', href: '#' },
-    { name: 'Home Goods', href: '#' },
-    { name: 'Accessories', href: '#' },
-  ],
-  company: [
-    { name: 'Who we are', href: '#' },
-    { name: 'Sustainability', href: '#' },
-    { name: 'Press', href: '#' },
-    { name: 'Careers', href: '#' },
-    { name: 'Terms & Conditions', href: '#' },
-    { name: 'Privacy', href: '#' },
-  ],
-  customerService: [
-    { name: 'Contact', href: '#' },
-    { name: 'Shipping', href: '#' },
-    { name: 'Returns', href: '#' },
-    { name: 'Warranty', href: '#' },
-    { name: 'Secure Payments', href: '#' },
-    { name: 'FAQ', href: '#' },
-    { name: 'Find a store', href: '#' },
-  ],
-}
+import { getCollections, getMenu } from 'lib/shopify';
+import { transformCollectionsToFooterProducts, transformMenuToFooterNav } from 'lib/utils';
 
-export default function TailwindFooter() {  
+const { COMPANY_NAME, SITE_NAME } = process.env;
+
+export default async function TailwindFooter() {  
+  // Fetch data from Shopify
+  const collections = await getCollections();
+  const companyMenu = await getMenu('footer-company');
+  const customerServiceMenu = await getMenu('footer-customer-service');
+
+  // Transform data to footer format
+  const footerNavigation = {
+    products: transformCollectionsToFooterProducts(collections.slice(1, 6)), // Skip "All" collection, limit to 5
+    company: transformMenuToFooterNav(companyMenu),
+    customerService: transformMenuToFooterNav(customerServiceMenu),
+  };
+
     return (
     <footer aria-labelledby="footer-heading" className="bg-gray-50">
         <h2 id="footer-heading" className="sr-only">
@@ -112,7 +102,7 @@ export default function TailwindFooter() {
           </div>
 
           <div className="border-t border-gray-100 py-10 text-center">
-            <p className="text-sm text-gray-500">&copy; 2021 Your Company, Inc. All rights reserved.</p>
+            <p className="text-sm text-gray-500">&copy; 2025 {COMPANY_NAME} All rights reserved.</p>
           </div>
         </div>
       </footer>

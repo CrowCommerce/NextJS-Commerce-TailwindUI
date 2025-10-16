@@ -76,7 +76,7 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
   const transformedProduct = transformShopifyProductToTailwindDetail(product);
 
   return (
-    <div className="bg-white dark:bg-white">
+    <div className="bg-white">
       <ProductInitializer />
       <script
         type="application/ld+json"

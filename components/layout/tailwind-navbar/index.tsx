@@ -453,7 +453,7 @@ export default function TailwindNavbar() {
               </PopoverGroup>
 
               {/* Logo */}
-              <a href="#" className="flex">
+              <a href="/" className="flex">
                 <span className="sr-only">Your Company</span>
                 <img
                   alt=""

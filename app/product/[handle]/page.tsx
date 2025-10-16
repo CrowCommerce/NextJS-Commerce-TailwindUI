@@ -2,10 +2,10 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { GridTileImage } from 'components/grid/tile';
-import Footer from 'components/layout/footer';
-import { Gallery } from 'components/product/gallery';
-import { ProductDescription } from 'components/product/product-description';
+import Footer from 'components/layout/template-footer';
 import { ProductInitializer } from 'components/product/product-initializer';
+import { Gallery } from 'components/product/template-gallery';
+import { ProductDescription } from 'components/product/template-product-description';
 import { HIDDEN_PRODUCT_TAG } from 'lib/constants';
 import { getProduct, getProductRecommendations } from 'lib/shopify';
 import { Image } from 'lib/shopify/types';

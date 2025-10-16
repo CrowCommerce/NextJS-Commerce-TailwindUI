@@ -1,5 +1,4 @@
 import { CartInitializer } from 'components/cart/cart-initializer';
-import { Navbar } from 'components/layout/navbar';
 import { GeistSans } from 'geist/font/sans';
 import { getCart } from 'lib/shopify';
 import { baseUrl } from 'lib/utils';
@@ -7,6 +6,9 @@ import { Metadata } from 'next';
 import { ReactNode, Suspense } from 'react';
 import { Toaster } from 'sonner';
 import './globals.css';
+
+import TailwindFooter from 'components/layout/tailwind-footer';
+import TailwindNavbar from 'components/layout/tailwind-navbar';
 
 const { SITE_NAME } = process.env;
 
@@ -36,11 +38,12 @@ export default async function RootLayout({
         <Suspense fallback={null}>
           <CartInitializer cartPromise={cart} />
         </Suspense>
-        <Navbar />
+        <TailwindNavbar />
         <main>
           {children}
           <Toaster closeButton />
         </main>
+        <TailwindFooter />
       </body>
     </html>
   );

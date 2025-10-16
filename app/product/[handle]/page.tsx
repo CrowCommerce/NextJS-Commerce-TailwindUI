@@ -104,7 +104,16 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
             </Suspense>
           </div>
         </div>
-        <RelatedProducts id={product.id} />
+        <Suspense
+          fallback={
+            <div className="py-8">
+              <h2 className="mb-4 text-2xl font-bold">Related Products</h2>
+              <div className="h-24 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700" />
+            </div>
+          }
+        >
+          <RelatedProducts id={product.id} />
+        </Suspense>
       </div>
       <Footer />
     </>

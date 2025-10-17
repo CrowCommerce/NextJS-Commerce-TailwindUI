@@ -3,8 +3,8 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
-import LoadingDots from 'components/loading-dots';
-import Price from 'components/price';
+import LoadingDots from 'components/template-loading-dots';
+import Price from 'components/template-price';
 import { DEFAULT_OPTION } from 'lib/constants';
 import { useCartStore } from 'lib/stores/cart-store';
 import { createUrl } from 'lib/utils';

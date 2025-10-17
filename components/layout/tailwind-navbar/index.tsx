@@ -1,21 +1,22 @@
 'use client'
 
 import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  Popover,
-  PopoverButton,
-  PopoverGroup,
-  PopoverPanel,
-  Tab,
-  TabGroup,
-  TabList,
-  TabPanel,
-  TabPanels,
+    Dialog,
+    DialogBackdrop,
+    DialogPanel,
+    Popover,
+    PopoverButton,
+    PopoverGroup,
+    PopoverPanel,
+    Tab,
+    TabGroup,
+    TabList,
+    TabPanel,
+    TabPanels,
 } from '@headlessui/react'
 import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useCartStore } from 'lib/stores/cart-store'
+import Link from 'next/link'
 import { Fragment, useState } from 'react'
 
 const navigation = {
@@ -265,10 +266,10 @@ export default function TailwindNavbar() {
                           />
                           <div className="absolute inset-0 flex flex-col justify-end">
                             <div className="bg-white/60 p-4 text-base sm:text-sm">
-                              <a href={item.href} className="font-medium text-gray-900">
+                              <Link href={item.href} className="font-medium text-gray-900">
                                 <span aria-hidden="true" className="absolute inset-0" />
                                 {item.name}
-                              </a>
+                              </Link>
                               <p aria-hidden="true" className="mt-0.5 text-gray-700 sm:mt-1">
                                 Shop now
                               </p>
@@ -291,9 +292,9 @@ export default function TailwindNavbar() {
                             >
                               {section.items.map((item) => (
                                 <li key={item.name} className="flow-root">
-                                  <a href={item.href} className="-m-2 block p-2 text-gray-500">
+                                  <Link href={item.href} className="-m-2 block p-2 text-gray-500">
                                     {item.name}
-                                  </a>
+                                  </Link>
                                 </li>
                               ))}
                             </ul>
@@ -309,9 +310,9 @@ export default function TailwindNavbar() {
             <div className="space-y-6 border-t border-gray-200 px-4 py-6">
               {navigation.pages.map((page) => (
                 <div key={page.name} className="flow-root">
-                  <a href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
+                  <Link href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
                     {page.name}
-                  </a>
+                  </Link>
                 </div>
               ))}
             </div>
@@ -393,10 +394,10 @@ export default function TailwindNavbar() {
                                     />
                                     <div className="absolute inset-0 flex flex-col justify-end">
                                       <div className="bg-white/60 p-4 text-sm">
-                                        <a href={item.href} className="font-medium text-gray-900">
+                                        <Link href={item.href} className="font-medium text-gray-900">
                                           <span aria-hidden="true" className="absolute inset-0" />
                                           {item.name}
-                                        </a>
+                                        </Link>
                                         <p aria-hidden="true" className="mt-0.5 text-gray-700 sm:mt-1">
                                           Shop now
                                         </p>
@@ -423,9 +424,9 @@ export default function TailwindNavbar() {
                                         >
                                           {section.items.map((item) => (
                                             <li key={item.name} className="flex">
-                                              <a href={item.href} className="hover:text-gray-800">
+                                              <Link href={item.href} className="hover:text-gray-800">
                                                 {item.name}
-                                              </a>
+                                              </Link>
                                             </li>
                                           ))}
                                         </ul>
@@ -441,13 +442,13 @@ export default function TailwindNavbar() {
                     </Popover>
                   ))}
                   {navigation.pages.map((page) => (
-                    <a
+                    <Link
                       key={page.name}
                       href={page.href}
                       className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
                     >
                       {page.name}
-                    </a>
+                    </Link>
                   ))}
                 </div>
               </PopoverGroup>

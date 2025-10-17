@@ -1,4 +1,4 @@
-import { CartInitializer } from 'components/cart/cart-initializer';
+import { CartInitializer } from 'components/template-cart/cart-initializer';
 import { GeistSans } from 'geist/font/sans';
 import { getCart } from 'lib/shopify';
 import { baseUrl } from 'lib/utils';

@@ -2,8 +2,9 @@
 
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import Price from 'components/price'
+import Price from 'components/template-price'
 import { useCartStore } from 'lib/stores/cart-store'
+import Link from 'next/link'
 
 export default function TailwindCart() {
   const { cart, isCartOpen, closeCart, updateCartItem } = useCartStore()
@@ -62,9 +63,9 @@ export default function TailwindCart() {
                                   <div>
                                     <div className="flex justify-between text-base font-medium text-gray-900">
                                       <h3>
-                                        <a href={`/product/${item.merchandise.product.handle}`}>
+                                        <Link href={`/product/${item.merchandise.product.handle}`}>
                                           {item.merchandise.product.title}
-                                        </a>
+                                        </Link>
                                       </h3>
                                       <p className="ml-4">
                                         <Price

@@ -1,6 +1,7 @@
 'use client'
 
 import type { TailwindRelatedProduct } from 'lib/utils'
+import Link from 'next/link'
 
 interface TailwindRelatedProductsProps {
   products: TailwindRelatedProduct[]
@@ -36,12 +37,12 @@ export default function TailwindRelatedProducts({ products, onAddToCart }: Tailw
               </div>
             </div>
             <div className="mt-6">
-              <a
+              <Link
                 href={product.href}
                 className="relative flex items-center justify-center rounded-md border border-transparent bg-gray-100 px-8 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200"
               >
                 Add to bag<span className="sr-only">, {product.name}</span>
-              </a>
+              </Link>
             </div>
           </div>
         ))}

@@ -2,7 +2,7 @@
 
 import { PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
-import { addItem } from 'components/cart/actions';
+import { addItem } from 'components/template-cart/actions';
 import { Product, ProductVariant } from 'lib/shopify/types';
 import { useCartStore } from 'lib/stores/cart-store';
 import { useProductStore } from 'lib/stores/product-store';

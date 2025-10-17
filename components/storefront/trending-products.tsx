@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { Product } from './types'
 
 interface TrendingProductsProps {
@@ -37,10 +38,10 @@ export default function TrendingProducts({ products }: TrendingProductsProps) {
                     <div className="mt-6">
                       <p className="text-sm text-gray-500">{product.color}</p>
                       <h3 className="mt-1 font-semibold text-gray-900">
-                        <a href={product.href}>
+                        <Link href={product.href}>
                           <span className="absolute inset-0" />
                           {product.name}
-                        </a>
+                        </Link>
                       </h3>
                       <p className="mt-1 text-gray-900">{product.price}</p>
                     </div>

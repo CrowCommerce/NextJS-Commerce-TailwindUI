@@ -1,5 +1,6 @@
 import { getCollections, getMenu } from 'lib/shopify';
 import { transformCollectionsToFooterProducts, transformMenuToFooterNav } from 'lib/utils';
+import Link from 'next/link';
 
 const { COMPANY_NAME, SITE_NAME } = process.env;
 
@@ -41,9 +42,9 @@ export default async function TailwindFooter() {
                     <ul role="list" className="mt-6 space-y-6">
                       {footerNavigation.products.map((item) => (
                         <li key={item.name} className="text-sm">
-                          <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                          <Link href={item.href} className="text-gray-500 hover:text-gray-600">
                             {item.name}
-                          </a>
+                          </Link>
                         </li>
                       ))}
                     </ul>
@@ -53,9 +54,9 @@ export default async function TailwindFooter() {
                     <ul role="list" className="mt-6 space-y-6">
                       {footerNavigation.company.map((item) => (
                         <li key={item.name} className="text-sm">
-                          <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                          <Link href={item.href} className="text-gray-500 hover:text-gray-600">
                             {item.name}
-                          </a>
+                          </Link>
                         </li>
                       ))}
                     </ul>
@@ -66,9 +67,9 @@ export default async function TailwindFooter() {
                   <ul role="list" className="mt-6 space-y-6">
                     {footerNavigation.customerService.map((item) => (
                       <li key={item.name} className="text-sm">
-                        <a href={item.href} className="text-gray-500 hover:text-gray-600">
+                        <Link href={item.href} className="text-gray-500 hover:text-gray-600">
                           {item.name}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>

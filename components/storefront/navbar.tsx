@@ -1,10 +1,10 @@
 'use client'
 
 import {
-  Popover,
-  PopoverButton,
-  PopoverGroup,
-  PopoverPanel,
+    Popover,
+    PopoverButton,
+    PopoverGroup,
+    PopoverPanel,
 } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Bars3Icon, MagnifyingGlassIcon, ShoppingCartIcon, UserIcon } from '@heroicons/react/24/outline'
@@ -30,7 +30,7 @@ export default function Navbar({ navigation, currencies, onMenuOpen }: NavbarPro
                   id="desktop-currency"
                   name="currency"
                   aria-label="Currency"
-                  className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-gray-900 py-0.5 pr-7 pl-2 text-left text-base font-medium text-white focus:outline-2 focus:-outline-offset-1 focus:outline-white sm:text-sm/6"
+                  className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-gray-900 py-0.5 pr-7 pl-2 text-left text-base font-medium text-white focus:outline-2 focus:-outline-offset-1 focus:outline-indigo-600 sm:text-sm/6"
                 >
                   {currencies.map((currency) => (
                     <option key={currency}>{currency}</option>
@@ -204,7 +204,7 @@ export default function Navbar({ navigation, currencies, onMenuOpen }: NavbarPro
                   <button
                     type="button"
                     onClick={onMenuOpen}
-                    className="-ml-2 rounded-md bg-white p-2 text-gray-400"
+                    className="-ml-2 rounded-md bg-white p-2 text-gray-400 focus:outline-2 focus:outline-indigo-600 focus:outline-offset-2"
                   >
                     <span className="sr-only">Open menu</span>
                     <Bars3Icon aria-hidden="true" className="size-6" />

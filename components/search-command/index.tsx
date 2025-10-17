@@ -70,12 +70,15 @@ export function SearchCommand() {
     }
   }, [isOpen]);
   
-  const handleSelect = (value: string) => {
-    closeSearch();
+  const handleSelect = (value: string | null) => {
+    // Headless UI Combobox can emit null when the input is cleared
+    if (!value) return;
     if (value.startsWith('search:')) {
       const searchQuery = value.replace('search:', '');
+      closeSearch();
       router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
     } else {
+      closeSearch();
       router.push(`/product/${value}`);
     }
   };
@@ -125,7 +128,7 @@ export function SearchCommand() {
               {query && (
                 <button
                   onClick={() => setQuery('')}
-                  className="absolute right-4 top-3.5 text-gray-400 hover:text-gray-500"
+                  className="absolute right-4 top-3.5 rounded text-gray-400 hover:text-gray-500 focus:outline-2 focus:outline-indigo-600 focus:outline-offset-2"
                   type="button"
                 >
                   <XMarkIcon className="h-5 w-5" />

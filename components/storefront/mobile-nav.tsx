@@ -1,14 +1,14 @@
 'use client'
 
 import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  Tab,
-  TabGroup,
-  TabList,
-  TabPanel,
-  TabPanels,
+    Dialog,
+    DialogBackdrop,
+    DialogPanel,
+    Tab,
+    TabGroup,
+    TabList,
+    TabPanel,
+    TabPanels,
 } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { XMarkIcon } from '@heroicons/react/24/outline'
@@ -166,7 +166,7 @@ export default function MobileNav({ open, onClose, navigation, currencies }: Mob
                   id="mobile-currency"
                   name="currency"
                   aria-label="Currency"
-                  className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-0.5 pr-7 pl-2 text-base font-medium text-gray-700 group-hover:text-gray-800 focus:outline-2 sm:text-sm/6"
+                  className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-0.5 pr-7 pl-2 text-base font-medium text-gray-700 group-hover:text-gray-800 focus:outline-2 focus:-outline-offset-1 focus:outline-indigo-600 sm:text-sm/6"
                 >
                   {currencies.map((currency) => (
                     <option key={currency}>{currency}</option>

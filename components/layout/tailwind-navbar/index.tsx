@@ -233,7 +233,7 @@ export default function TailwindNavbar() {
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="relative -m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"
+                className="relative -m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400 focus:outline-2 focus:outline-indigo-600 focus:outline-offset-2"
               >
                 <span className="absolute -inset-0.5" />
                 <span className="sr-only">Close menu</span>
@@ -342,7 +342,7 @@ export default function TailwindNavbar() {
                 <button
                   type="button"
                   onClick={() => setOpen(true)}
-                  className="-ml-2 rounded-md bg-white p-2 text-gray-400"
+                  className="-ml-2 rounded-md bg-white p-2 text-gray-400 focus:outline-2 focus:outline-indigo-600 focus:outline-offset-2"
                 >
                   <span className="sr-only">Open menu</span>
                   <Bars3Icon aria-hidden="true" className="size-6" />
@@ -351,7 +351,7 @@ export default function TailwindNavbar() {
                 <button
                   onClick={openSearch}
                   type="button"
-                  className="ml-2 p-2 text-gray-400 hover:text-gray-500"
+                  className="ml-2 rounded-md p-2 text-gray-400 hover:text-gray-500 focus:outline-2 focus:outline-indigo-600 focus:outline-offset-2"
                 >
                   <span className="sr-only">Search</span>
                   <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
@@ -364,7 +364,7 @@ export default function TailwindNavbar() {
                   {navigation.categories.map((category) => (
                     <Popover key={category.name} className="flex">
                       <div className="relative flex">
-                        <PopoverButton className="group relative flex items-center justify-center text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800 data-open:text-indigo-600">
+                        <PopoverButton className="group relative flex items-center justify-center text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800 focus:outline-2 focus:outline-indigo-600 data-open:text-indigo-600">
                           {category.name}
                           <span
                             aria-hidden="true"
@@ -484,7 +484,7 @@ export default function TailwindNavbar() {
                 <button
                   onClick={openSearch}
                   type="button"
-                  className="ml-6 hidden p-2 text-gray-400 hover:text-gray-500 lg:block"
+                  className="ml-6 hidden rounded-md p-2 text-gray-400 hover:text-gray-500 focus:outline-2 focus:outline-indigo-600 focus:outline-offset-2 lg:block"
                 >
                   <span className="sr-only">Search</span>
                   <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
@@ -498,7 +498,7 @@ export default function TailwindNavbar() {
 
                 {/* Cart */}
                 <div className="ml-4 flow-root lg:ml-6">
-                  <button onClick={openCart} className="group -m-2 flex items-center p-2">
+                  <button onClick={openCart} className="group -m-2 flex items-center rounded-md p-2 focus:outline-2 focus:outline-indigo-600 focus:outline-offset-2">
                     <ShoppingBagIcon
                       aria-hidden="true"
                       className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"

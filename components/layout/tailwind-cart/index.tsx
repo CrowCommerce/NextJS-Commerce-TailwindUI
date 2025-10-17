@@ -2,6 +2,7 @@
 
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import { EditItemQuantityButton } from 'components/template-cart/edit-item-quantity-button'
 import Price from 'components/template-price'
 import { useCartStore } from 'lib/stores/cart-store'
 import Link from 'next/link'
@@ -79,7 +80,11 @@ export default function TailwindCart() {
                                     )}
                                   </div>
                                   <div className="flex flex-1 items-end justify-between text-sm">
-                                    <p className="text-gray-500">Qty {item.quantity}</p>
+                                    <div className="ml-0 flex h-7 flex-row items-center rounded-full border border-gray-200 bg-white">
+                                      <EditItemQuantityButton item={item} type="minus" optimisticUpdate={updateCartItem} size="xs" />
+                                      <span className="relative z-10 mx-1 w-8 px-0.5 text-center text-sm font-semibold leading-none text-indigo-500 tabular-nums select-none">{item.quantity}</span>
+                                      <EditItemQuantityButton item={item} type="plus" optimisticUpdate={updateCartItem} size="xs" />
+                                    </div>
 
                                     <div className="flex">
                                       <button

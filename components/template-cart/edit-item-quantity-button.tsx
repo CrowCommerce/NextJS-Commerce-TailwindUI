@@ -6,7 +6,7 @@ import { updateItemQuantity } from 'components/template-cart/actions';
 import type { CartItem } from 'lib/shopify/types';
 import { useActionState } from 'react';
 
-function SubmitButton({ type }: { type: 'plus' | 'minus' }) {
+function SubmitButton({ type, size = 'md' }: { type: 'plus' | 'minus'; size?: 'xs' | 'sm' | 'md' }) {
   return (
     <button
       type="submit"
@@ -14,16 +14,14 @@ function SubmitButton({ type }: { type: 'plus' | 'minus' }) {
         type === 'plus' ? 'Increase item quantity' : 'Reduce item quantity'
       }
       className={clsx(
-        'ease flex h-full min-w-[36px] max-w-[36px] flex-none items-center justify-center rounded-full p-2 transition-all duration-200 hover:border-neutral-800 hover:opacity-80',
-        {
-          'ml-auto': type === 'minus'
-        }
+        'ease flex h-full flex-none items-center justify-center rounded-full transition-all duration-200 hover:border-neutral-800 hover:opacity-80 focus:outline-2 focus:outline-indigo-600 focus:outline-offset-2',
+        size === 'xs' ? 'min-w-[28px] max-w-[28px] p-1' : size === 'sm' ? 'min-w-[32px] max-w-[32px] p-1.5' : 'min-w-[36px] max-w-[36px] p-2'
       )}
     >
       {type === 'plus' ? (
-        <PlusIcon className="h-4 w-4 dark:text-neutral-500" />
+        <PlusIcon className={clsx(size === 'xs' ? 'h-3 w-3' : size === 'sm' ? 'h-3.5 w-3.5' : 'h-4 w-4', 'dark:text-neutral-500')} />
       ) : (
-        <MinusIcon className="h-4 w-4 dark:text-neutral-500" />
+        <MinusIcon className={clsx(size === 'xs' ? 'h-3 w-3' : size === 'sm' ? 'h-3.5 w-3.5' : 'h-4 w-4', 'dark:text-neutral-500')} />
       )}
     </button>
   );
@@ -32,11 +30,13 @@ function SubmitButton({ type }: { type: 'plus' | 'minus' }) {
 export function EditItemQuantityButton({
   item,
   type,
-  optimisticUpdate
+  optimisticUpdate,
+  size = 'md'
 }: {
   item: CartItem;
   type: 'plus' | 'minus';
   optimisticUpdate: any;
+  size?: 'xs' | 'sm' | 'md';
 }) {
   const [message, formAction] = useActionState(updateItemQuantity, null);
   const payload = {
@@ -52,7 +52,7 @@ export function EditItemQuantityButton({
         updateItemQuantityAction();
       }}
     >
-      <SubmitButton type={type} />
+      <SubmitButton type={type} size={size} />
       <p aria-live="polite" className="sr-only" role="status">
         {message}
       </p>

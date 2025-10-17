@@ -68,12 +68,11 @@ export default function TailwindCart() {
                                           {item.merchandise.product.title}
                                         </Link>
                                       </h3>
-                                      <p className="ml-4">
-                                        <Price
-                                          amount={item.cost.totalAmount.amount}
-                                          currencyCode={item.cost.totalAmount.currencyCode}
-                                        />
-                                      </p>
+                                      <Price
+                                        className="ml-4"
+                                        amount={item.cost.totalAmount.amount}
+                                        currencyCode={item.cost.totalAmount.currencyCode}
+                                      />
                                     </div>
                                     {item.merchandise.title !== 'Default Title' && (
                                       <p className="mt-1 text-sm text-gray-500">{item.merchandise.title}</p>
@@ -108,16 +107,16 @@ export default function TailwindCart() {
                   <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                     <div className="flex justify-between text-base font-medium text-gray-900">
                       <p>Subtotal</p>
-                      <p>
+                      <div className="text-right">
                         {cart && cart.cost.totalAmount.amount !== '0' ? (
                           <Price
                             amount={cart.cost.totalAmount.amount}
                             currencyCode={cart.cost.totalAmount.currencyCode}
                           />
                         ) : (
-                          '$0.00'
+                          <span>$0.00</span>
                         )}
-                      </p>
+                      </div>
                     </div>
                     <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                     <div className="mt-6">

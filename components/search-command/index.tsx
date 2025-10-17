@@ -128,7 +128,7 @@ export function SearchCommand() {
               {query && (
                 <button
                   onClick={() => setQuery('')}
-                  className="absolute right-4 top-3.5 rounded text-gray-400 hover:text-gray-500 focus:outline-2 focus:outline-indigo-600 focus:outline-offset-2"
+                  className="absolute right-4 top-3.5 rounded text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2"
                   type="button"
                 >
                   <XMarkIcon className="h-5 w-5" />

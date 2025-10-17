@@ -33,7 +33,7 @@ export default function TailwindCart() {
                         <button
                           type="button"
                           onClick={closeCart}
-                          className="relative -m-2 rounded-md p-2 text-gray-400 hover:text-gray-500 focus:outline-2 focus:outline-indigo-600 focus:outline-offset-2"
+                          className="relative -m-2 rounded-md p-2 text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2"
                         >
                           <span className="absolute -inset-0.5" />
                           <span className="sr-only">Close panel</span>
@@ -90,7 +90,7 @@ export default function TailwindCart() {
                                       <button
                                         type="button"
                                         onClick={() => updateCartItem(item.merchandise.id, 'delete')}
-                                        className="rounded font-medium text-indigo-600 hover:text-indigo-500 focus:outline-2 focus:outline-indigo-600 focus:outline-offset-2"
+                                        className="rounded font-medium text-indigo-600 hover:text-indigo-500 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2"
                                       >
                                         Remove
                                       </button>
@@ -123,7 +123,7 @@ export default function TailwindCart() {
                     <div className="mt-6">
                       <a
                         href={cart?.checkoutUrl || '#'}
-                        className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-xs hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden"
+                        className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-xs hover:bg-indigo-700 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus:outline-hidden"
                       >
                         Checkout
                       </a>
@@ -134,7 +134,7 @@ export default function TailwindCart() {
                         <button
                           type="button"
                           onClick={closeCart}
-                          className="rounded font-medium text-indigo-600 hover:text-indigo-500 focus:outline-2 focus:outline-indigo-600 focus:outline-offset-2"
+                          className="rounded font-medium text-indigo-600 hover:text-indigo-500 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2"
                         >
                           Continue Shopping
                           <span aria-hidden="true"> &rarr;</span>

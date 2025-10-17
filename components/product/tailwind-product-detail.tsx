@@ -1,20 +1,20 @@
 'use client'
 
 import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Tab,
-  TabGroup,
-  TabList,
-  TabPanel,
-  TabPanels,
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+    Tab,
+    TabGroup,
+    TabList,
+    TabPanel,
+    TabPanels,
 } from '@headlessui/react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import {
-  HeartIcon,
-  MinusIcon,
-  PlusIcon,
+    HeartIcon,
+    MinusIcon,
+    PlusIcon,
 } from '@heroicons/react/24/outline'
 import type { TailwindProductDetail } from 'lib/utils'
 
@@ -41,7 +41,7 @@ export default function TailwindProductDetailComponent({ product, onAddToCart }:
                 {product.images.map((image) => (
                   <Tab
                     key={image.id}
-                    className="group relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium text-gray-900 uppercase hover:bg-gray-50 focus:ring-3 focus:ring-indigo-500/50 focus:ring-offset-4 focus:outline-hidden"
+                    className="group relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium text-gray-900 uppercase hover:bg-gray-50 focus-visible:ring-3 focus-visible:ring-indigo-500/50 focus-visible:ring-offset-4 focus:outline-hidden"
                   >
                     <span className="sr-only">{image.name}</span>
                     <span className="absolute inset-0 overflow-hidden rounded-md">
@@ -134,7 +134,7 @@ export default function TailwindProductDetailComponent({ product, onAddToCart }:
               <div className="mt-10 flex">
                 <button
                   type="submit"
-                  className="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 focus:outline-hidden sm:w-full"
+                  className="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-50 focus:outline-hidden sm:w-full"
                 >
                   Add to bag
                 </button>

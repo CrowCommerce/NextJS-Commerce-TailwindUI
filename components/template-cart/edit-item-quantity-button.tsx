@@ -14,7 +14,7 @@ function SubmitButton({ type, size = 'md' }: { type: 'plus' | 'minus'; size?: 'x
         type === 'plus' ? 'Increase item quantity' : 'Reduce item quantity'
       }
       className={clsx(
-        'ease flex h-full flex-none items-center justify-center rounded-full transition-all duration-200 hover:border-neutral-800 hover:opacity-80 focus:outline-2 focus:outline-indigo-600 focus:outline-offset-2',
+        'ease flex h-full flex-none items-center justify-center rounded-full transition-all duration-200 hover:border-neutral-800 hover:opacity-80 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2',
         size === 'xs' ? 'min-w-[28px] max-w-[28px] p-1' : size === 'sm' ? 'min-w-[32px] max-w-[32px] p-1.5' : 'min-w-[36px] max-w-[36px] p-2'
       )}
     >

@@ -16,6 +16,7 @@ import {
 } from '@headlessui/react'
 import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useCartStore } from 'lib/stores/cart-store'
+import { useSearchStore } from 'lib/stores/search-store'
 import Link from 'next/link'
 import { Fragment, useState } from 'react'
 
@@ -213,6 +214,7 @@ function classNames(...classes: string[]) {
 export default function TailwindNavbar() {
   const [open, setOpen] = useState(false)
   const { cart, openCart } = useCartStore()
+  const { openSearch } = useSearchStore()
 
   return (
     <div className="bg-white">
@@ -346,10 +348,14 @@ export default function TailwindNavbar() {
                   <Bars3Icon aria-hidden="true" className="size-6" />
                 </button>
 
-                <a href="#" className="ml-2 p-2 text-gray-400 hover:text-gray-500">
+                <button
+                  onClick={openSearch}
+                  type="button"
+                  className="ml-2 p-2 text-gray-400 hover:text-gray-500"
+                >
                   <span className="sr-only">Search</span>
                   <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
-                </a>
+                </button>
               </div>
 
               {/* Flyout menus */}
@@ -475,10 +481,14 @@ export default function TailwindNavbar() {
                 </a>
 
                 {/* Search */}
-                <a href="#" className="ml-6 hidden p-2 text-gray-400 hover:text-gray-500 lg:block">
+                <button
+                  onClick={openSearch}
+                  type="button"
+                  className="ml-6 hidden p-2 text-gray-400 hover:text-gray-500 lg:block"
+                >
                   <span className="sr-only">Search</span>
                   <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
-                </a>
+                </button>
 
                 {/* Account */}
                 <a href="#" className="p-2 text-gray-400 hover:text-gray-500 lg:ml-4">

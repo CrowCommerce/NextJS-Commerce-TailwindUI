@@ -10,6 +10,7 @@ import './globals.css';
 import Footer from 'components/layout/footer';
 import TailwindCart from 'components/layout/tailwind-cart';
 import TailwindNavbar from 'components/layout/tailwind-navbar';
+import { SearchCommand } from 'components/search-command';
 
 const { SITE_NAME } = process.env;
 
@@ -39,6 +40,7 @@ export default async function RootLayout({
         <Suspense fallback={null}>
           <CartInitializer cartPromise={cart} />
         </Suspense>
+        <SearchCommand />
         <TailwindNavbar />
         <TailwindCart />
         <main>

@@ -3,6 +3,8 @@ import FooterCopyright from './footer-copyright';
 import FooterNavigation from './footer-navigation';
 import FooterNewsletter from './footer-newsletter';
 
+const { COMPANY_NAME } = process.env;
+
 // Loading skeleton for navigation sections
 const NavigationSkeleton = () => (
   <div className="col-span-6 mt-10 grid grid-cols-2 gap-8 sm:grid-cols-3 md:col-span-8 md:col-start-3 md:row-start-1 md:mt-0 lg:col-span-6 lg:col-start-2">
@@ -64,7 +66,9 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-100 py-10 text-center">
-          <FooterCopyright />
+          <Suspense fallback={<div className="h-4 w-20 animate-pulse rounded-sm bg-gray-200" />}>
+            <FooterCopyright companyName={COMPANY_NAME} />
+          </Suspense>
         </div>
       </div>
     </footer>

@@ -7,8 +7,8 @@ import { ReactNode, Suspense } from 'react';
 import { Toaster } from 'sonner';
 import './globals.css';
 
+import Footer from 'components/layout/footer';
 import TailwindCart from 'components/layout/tailwind-cart';
-import TailwindFooter from 'components/layout/tailwind-footer';
 import TailwindNavbar from 'components/layout/tailwind-navbar';
 
 const { SITE_NAME } = process.env;
@@ -45,7 +45,7 @@ export default async function RootLayout({
           {children}
           <Toaster closeButton />
         </main>
-        <TailwindFooter />
+        <Footer />
       </body>
     </html>
   );

@@ -35,7 +35,7 @@ const NavigationSkeleton = () => (
   </div>
 );
 
-export default function TailwindFooter() {
+export default function Footer() {
   return (
     <footer aria-labelledby="footer-heading" className="bg-white">
       <h2 id="footer-heading" className="sr-only">

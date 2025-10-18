@@ -19,10 +19,9 @@ interface MobileNavProps {
   open: boolean
   onClose: (value: boolean) => void
   navigation: Navigation
-  currencies: string[]
 }
 
-export default function MobileNav({ open, onClose, navigation, currencies }: MobileNavProps) {
+export default function MobileNav({ open, onClose, navigation }: MobileNavProps) {
   return (
     <Dialog open={open} onClose={onClose} className="relative z-40 lg:hidden">
       <DialogBackdrop
@@ -158,27 +157,6 @@ export default function MobileNav({ open, onClose, navigation, currencies }: Mob
             </div>
           </div>
 
-          <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-            {/* Currency selector */}
-            <form>
-              <div className="-ml-2 inline-grid grid-cols-1">
-                <select
-                  id="mobile-currency"
-                  name="currency"
-                  aria-label="Currency"
-                  className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-0.5 pr-7 pl-2 text-base font-medium text-gray-700 group-hover:text-gray-800 focus:outline-2 focus:-outline-offset-1 focus:outline-indigo-600 sm:text-sm/6"
-                >
-                  {currencies.map((currency) => (
-                    <option key={currency}>{currency}</option>
-                  ))}
-                </select>
-                <ChevronDownIcon
-                  aria-hidden="true"
-                  className="pointer-events-none col-start-1 row-start-1 mr-1 size-5 self-center justify-self-end fill-gray-500"
-                />
-              </div>
-            </form>
-          </div>
         </DialogPanel>
       </div>
     </Dialog>

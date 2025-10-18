@@ -319,17 +319,6 @@ export default function TailwindNavbar() {
               ))}
             </div>
 
-            <div className="border-t border-gray-200 px-4 py-6">
-              <a href="#" className="-m-2 flex items-center p-2">
-                <img
-                  alt=""
-                  src="https://tailwindcss.com/plus-assets/img/flags/flag-canada.svg"
-                  className="block h-auto w-5 shrink-0"
-                />
-                <span className="ml-3 block text-base font-medium text-gray-900">CAD</span>
-                <span className="sr-only">, change currency</span>
-              </a>
-            </div>
           </DialogPanel>
         </div>
       </Dialog>
@@ -470,21 +459,11 @@ export default function TailwindNavbar() {
               </a>
 
               <div className="flex flex-1 items-center justify-end">
-                <a href="#" className="hidden text-gray-700 hover:text-gray-800 lg:flex lg:items-center">
-                  <img
-                    alt=""
-                    src="https://tailwindcss.com/plus-assets/img/flags/flag-canada.svg"
-                    className="block h-auto w-5 shrink-0"
-                  />
-                  <span className="ml-3 block text-sm font-medium">CAD</span>
-                  <span className="sr-only">, change currency</span>
-                </a>
-
                 {/* Search */}
                 <button
                   onClick={openSearch}
                   type="button"
-                  className="ml-6 hidden rounded-md p-2 text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2 lg:block"
+                  className="hidden rounded-md p-2 text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2 lg:block"
                 >
                   <span className="sr-only">Search</span>
                   <MagnifyingGlassIcon aria-hidden="true" className="size-6" />

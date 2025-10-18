@@ -10,8 +10,6 @@ import SaleSection from './sale-section'
 import Testimonials from './testimonials'
 import Footer from './footer'
 
-const currencies = ['CAD', 'USD', 'AUD', 'EUR', 'GBP']
-
 const navigation = {
   categories: [
     {
@@ -233,12 +231,10 @@ export default function StorefrontPage() {
         open={mobileMenuOpen}
         onClose={setMobileMenuOpen}
         navigation={navigation}
-        currencies={currencies}
       />
 
       <Navbar
         navigation={navigation}
-        currencies={currencies}
         onMenuOpen={() => setMobileMenuOpen(true)}
       />
 

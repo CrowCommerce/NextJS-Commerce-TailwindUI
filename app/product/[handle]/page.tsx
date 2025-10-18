@@ -7,8 +7,8 @@ import TailwindRelatedProducts from 'components/product/tailwind-related-product
 import { HIDDEN_PRODUCT_TAG } from 'lib/constants';
 import { getProduct, getProductRecommendations } from 'lib/shopify';
 import {
-  transformShopifyProductToTailwindDetail,
-  transformShopifyProductsToRelatedProducts
+    transformShopifyProductToTailwindDetail,
+    transformShopifyProductsToRelatedProducts
 } from 'lib/utils';
 import { Suspense } from 'react';
 

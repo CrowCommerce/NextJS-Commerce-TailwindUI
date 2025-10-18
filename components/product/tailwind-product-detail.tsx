@@ -16,6 +16,7 @@ import {
     MinusIcon,
     PlusIcon,
 } from '@heroicons/react/24/outline'
+import ProductDetailPrice from 'components/price/product-detail-price'
 import type { TailwindProductDetail } from 'lib/utils'
 
 function classNames(...classes: string[]) {
@@ -71,7 +72,7 @@ export default function TailwindProductDetailComponent({ product, onAddToCart }:
 
             <div className="mt-3">
               <h2 className="sr-only">Product information</h2>
-              <p className="text-3xl tracking-tight text-gray-900">{product.price}</p>
+              <ProductDetailPrice amount={product.priceAmount} currencyCode={product.priceCurrency} />
             </div>
 
             {/* Reviews */}

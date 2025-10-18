@@ -159,6 +159,8 @@ export const transformCollectionsToFooterProducts = (collections: Collection[]):
 export type TailwindProductDetail = {
   name: string;
   price: string;
+  priceAmount: string;
+  priceCurrency: string;
   rating: number;
   images: Array<{ id: number; name: string; src: string; alt: string }>;
   colors: Array<{ id: string; name: string; classes: string }>;
@@ -215,6 +217,10 @@ export const transformShopifyProductToTailwindDetail = (product: Product): Tailw
   const price = product.variants[0]?.price
     ? `$${parseFloat(product.variants[0].price.amount).toFixed(2)}`
     : '$0.00';
+  
+  // Store raw price data for proper formatting
+  const priceAmount = product.variants[0]?.price?.amount || '0';
+  const priceCurrency = product.variants[0]?.price?.currencyCode || 'USD';
 
   // Create default product details sections
   const details = [
@@ -259,6 +265,8 @@ export const transformShopifyProductToTailwindDetail = (product: Product): Tailw
   return {
     name: product.title,
     price,
+    priceAmount,
+    priceCurrency,
     rating: 4, // Default placeholder rating
     images: images.length > 0 ? images : [{
       id: 1,

@@ -1,4 +1,4 @@
-import { CartInitializer } from 'components/template-cart/cart-initializer';
+import { CartInitializer } from 'components/cart/cart-initializer';
 import { GeistSans } from 'geist/font/sans';
 import { getCart } from 'lib/shopify';
 import { baseUrl } from 'lib/utils';
@@ -8,7 +8,7 @@ import './globals.css';
 
 import Footer from 'components/layout/footer';
 import Navbar from 'components/layout/navbar';
-import TailwindCart from 'components/layout/tailwind-cart';
+import Cart from 'components/cart';
 import { SearchCommand } from 'components/search-command';
 
 const { SITE_NAME } = process.env;
@@ -41,7 +41,7 @@ export default async function RootLayout({
         </Suspense>
         <SearchCommand />
         <Navbar />
-        <TailwindCart />
+        <Cart />
         <main>
           {children}
         </main>

@@ -3,8 +3,8 @@
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import CartPrice from 'components/price/cart-price'
-import { createCartAndSetCookie, redirectToCheckout, removeItem } from 'components/template-cart/actions'
-import { EditItemQuantityButton } from 'components/template-cart/edit-item-quantity-button'
+import { createCartAndSetCookie, redirectToCheckout, removeItem } from 'components/cart/actions'
+import { EditItemQuantityButton } from 'components/cart/edit-item-quantity-button'
 import LoadingDots from 'components/template-loading-dots'
 import { DEFAULT_OPTION } from 'lib/constants'
 import type { CartItem } from 'lib/shopify/types'
@@ -15,7 +15,7 @@ import Link from 'next/link'
 import { useActionState, useEffect, useRef } from 'react'
 import { useFormStatus } from 'react-dom'
 
-export default function TailwindCart() {
+export default function Cart() {
   const { cart, isCartOpen, isInitialized, closeCart, updateCartItem } = useCartStore()
   const quantityRef = useRef(cart?.totalQuantity)
   const hasCheckedForCart = useRef(false)

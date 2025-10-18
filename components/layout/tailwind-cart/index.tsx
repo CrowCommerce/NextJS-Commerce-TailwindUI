@@ -18,22 +18,31 @@ import { useFormStatus } from 'react-dom'
 export default function TailwindCart() {
   const { cart, isCartOpen, closeCart, updateCartItem } = useCartStore()
   const quantityRef = useRef(cart?.totalQuantity)
+  const hasInitialized = useRef(false)
 
-  // Ensure there is a Shopify cart and cookie on first load
+  // Only create cart if truly needed (no cookie exists) - run once on mount
   useEffect(() => {
-    if (!cart) {
-      createCartAndSetCookie()
+    if (!hasInitialized.current) {
+      hasInitialized.current = true
+      // Only create a cart if we don't have one after initialization completes
+      const timer = setTimeout(() => {
+        if (!cart) {
+          createCartAndSetCookie()
+        }
+      }, 100) // Small delay to allow cart initialization to complete
+      return () => clearTimeout(timer)
     }
-  }, [cart])
+  }, [])
 
-  // Auto-open cart when quantity increases
+  // Auto-open cart when quantity increases (not on initial hydration)
   useEffect(() => {
-    if (cart?.totalQuantity && cart.totalQuantity !== quantityRef.current && cart.totalQuantity > 0) {
+    // Skip the initial hydration by checking if quantityRef was already set
+    if (quantityRef.current !== undefined && cart?.totalQuantity && cart.totalQuantity > quantityRef.current) {
       if (!isCartOpen) {
         useCartStore.getState().openCart()
       }
-      quantityRef.current = cart.totalQuantity
     }
+    quantityRef.current = cart?.totalQuantity
   }, [isCartOpen, cart?.totalQuantity])
 
   return (

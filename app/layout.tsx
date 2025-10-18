@@ -1,10 +1,10 @@
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { CartInitializer } from 'components/template-cart/cart-initializer';
 import { GeistSans } from 'geist/font/sans';
 import { getCart } from 'lib/shopify';
 import { baseUrl } from 'lib/utils';
 import { Metadata } from 'next';
 import { ReactNode, Suspense } from 'react';
-import { Toaster } from 'sonner';
 import './globals.css';
 
 import Footer from 'components/layout/footer';
@@ -45,7 +45,7 @@ export default async function RootLayout({
         <TailwindCart />
         <main>
           {children}
-          <Toaster closeButton />
+          <SpeedInsights />
         </main>
         <Footer />
       </body>

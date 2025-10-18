@@ -7,10 +7,12 @@ import { use, useEffect } from 'react';
 export function CartInitializer({ cartPromise }: { cartPromise: Promise<Cart | undefined> }) {
   const cart = use(cartPromise);
   const setCart = useCartStore((state) => state.setCart);
+  const setInitialized = useCartStore((state) => state.setInitialized);
 
   useEffect(() => {
     setCart(cart);
-  }, [cart, setCart]);
+    setInitialized(true);
+  }, [cart, setCart, setInitialized]);
 
   return null;
 }

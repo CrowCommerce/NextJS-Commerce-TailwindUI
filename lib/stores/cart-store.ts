@@ -6,7 +6,9 @@ type UpdateType = 'plus' | 'minus' | 'delete';
 interface CartState {
   cart: Cart | undefined;
   isCartOpen: boolean;
+  isInitialized: boolean;
   setCart: (cart: Cart | undefined) => void;
+  setInitialized: (initialized: boolean) => void;
   openCart: () => void;
   closeCart: () => void;
   addCartItem: (variant: ProductVariant, product: Product) => void;
@@ -102,7 +104,9 @@ function createEmptyCart(): Cart {
 export const useCartStore = create<CartState>((set) => ({
   cart: undefined,
   isCartOpen: false,
+  isInitialized: false,
   setCart: (cart) => set({ cart }),
+  setInitialized: (initialized) => set({ isInitialized: initialized }),
   openCart: () => set({ isCartOpen: true }),
   closeCart: () => set({ isCartOpen: false }),
   addCartItem: (variant, product) =>

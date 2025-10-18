@@ -25,6 +25,7 @@ import {
   getCollectionsQuery
 } from './queries/collection';
 import { getMenuQuery } from './queries/menu';
+import { getNavigationQuery } from './queries/navigation';
 import { getPageQuery, getPagesQuery } from './queries/page';
 import {
   getProductQuery,
@@ -37,6 +38,8 @@ import {
   Connection,
   Image,
   Menu,
+  Navigation,
+  NavigationLink,
   Page,
   Product,
   ShopifyAddToCartOperation,
@@ -48,6 +51,7 @@ import {
   ShopifyCollectionsOperation,
   ShopifyCreateCartOperation,
   ShopifyMenuOperation,
+  ShopifyNavigationOperation,
   ShopifyPageOperation,
   ShopifyPagesOperation,
   ShopifyProduct,
@@ -384,6 +388,68 @@ export async function getMenu(handle: string): Promise<Menu[]> {
         .replace('/pages', '')
     })) || []
   );
+}
+
+export async function getNavigation(): Promise<Navigation> {
+  'use cache';
+  cacheTag(TAGS.collections);
+  cacheLife('days');
+
+  const res = await shopifyFetch<ShopifyNavigationOperation>({
+    query: getNavigationQuery
+  });
+
+  const navigationCategories = removeEdgesAndNodes(res.body?.data?.navigationCategories);
+  const navigationPages = res.body?.data?.navigationPages;
+
+  // Helper function to extract navigation links from metaobject references
+  const extractLinks = (field: { key: string; value: string; references?: any }): NavigationLink[] => {
+    if (!field.references?.edges) return [];
+    return field.references.edges.map((edge: any) => {
+      const linkFields = edge.node.fields.reduce((acc: any, f: any) => {
+        acc[f.key] = f.value;
+        return acc;
+      }, {});
+      return {
+        name: linkFields.label || '',
+        href: linkFields.url || '#'
+      };
+    });
+  };
+
+  // Transform navigation categories
+  const categories = navigationCategories.map((metaobject: any) => {
+    const fields = metaobject.fields.reduce((acc: any, field: any) => {
+      if (field.references) {
+        acc[field.key] = extractLinks(field);
+      } else {
+        acc[field.key] = field.value;
+      }
+      return acc;
+    }, {});
+
+    return {
+      name: fields.category_name || '',
+      featured: fields.featured_items || [],
+      categories: fields.categories_items || [],
+      collection: fields.collection_items || [],
+      brands: fields.brands_items || []
+    };
+  });
+
+  // Transform navigation pages
+  let pages: NavigationLink[] = [];
+  if (navigationPages?.fields) {
+    const pagesField = navigationPages.fields.find((f: any) => f.key === 'pages');
+    if (pagesField) {
+      pages = extractLinks(pagesField);
+    }
+  }
+
+  return {
+    categories,
+    pages
+  };
 }
 
 export async function getPage(handle: string): Promise<Page> {

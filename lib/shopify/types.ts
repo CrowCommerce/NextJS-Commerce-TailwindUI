@@ -271,3 +271,57 @@ export type ShopifyProductsOperation = {
     sortKey?: string;
   };
 };
+
+export type NavigationLink = {
+  name: string;
+  href: string;
+};
+
+export type NavigationCategory = {
+  name: string;
+  featured: NavigationLink[];
+  categories: NavigationLink[];
+  collection: NavigationLink[];
+  brands: NavigationLink[];
+};
+
+export type Navigation = {
+  categories: NavigationCategory[];
+  pages: NavigationLink[];
+};
+
+export type ShopifyMetaobjectField = {
+  key: string;
+  value: string;
+  references?: {
+    edges: {
+      node: {
+        id: string;
+        fields: {
+          key: string;
+          value: string;
+        }[];
+      };
+    }[];
+  };
+};
+
+export type ShopifyMetaobject = {
+  id: string;
+  handle: string;
+  fields: ShopifyMetaobjectField[];
+};
+
+export type ShopifyNavigationOperation = {
+  data: {
+    navigationCategories: {
+      edges: {
+        node: ShopifyMetaobject;
+      }[];
+    };
+    navigationPages: {
+      id: string;
+      fields: ShopifyMetaobjectField[];
+    } | null;
+  };
+};

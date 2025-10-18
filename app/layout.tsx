@@ -1,4 +1,3 @@
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import { CartInitializer } from 'components/template-cart/cart-initializer';
 import { GeistSans } from 'geist/font/sans';
 import { getCart } from 'lib/shopify';
@@ -45,7 +44,6 @@ export default async function RootLayout({
         <TailwindCart />
         <main>
           {children}
-          <SpeedInsights />
         </main>
         <Footer />
       </body>

@@ -4,6 +4,7 @@ import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
 import { FunnelIcon } from '@heroicons/react/20/solid';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 export default function MobileFilters({
@@ -12,6 +13,7 @@ export default function MobileFilters({
   collections: Array<{ name: string; href: string }>;
 }) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <>
@@ -54,13 +56,19 @@ export default function MobileFilters({
             <div className="mt-4 border-t border-gray-200">
               <h3 className="sr-only">Collections</h3>
               <ul role="list" className="px-2 py-3 font-medium text-gray-900">
-                {collections.map((collection) => (
-                  <li key={collection.name}>
-                    <Link href={collection.href} className="block px-2 py-3">
-                      {collection.name}
-                    </Link>
-                  </li>
-                ))}
+                {collections.map((collection) => {
+                  const isActive = pathname === collection.href;
+                  return (
+                    <li key={collection.name}>
+                      <Link
+                        href={collection.href}
+                        className={`block px-2 py-3 ${isActive ? 'underline underline-offset-4' : ''}`}
+                      >
+                        {collection.name}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </DialogPanel>

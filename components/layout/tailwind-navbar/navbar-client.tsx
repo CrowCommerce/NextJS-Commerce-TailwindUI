@@ -19,12 +19,30 @@ import { Navigation } from 'lib/shopify/types'
 import { useCartStore } from 'lib/stores/cart-store'
 import { useSearchStore } from 'lib/stores/search-store'
 import Link from 'next/link'
-import { Fragment, useState } from 'react'
+import { usePathname, useSearchParams } from 'next/navigation'
+import { Fragment, useEffect, useState } from 'react'
 
 export default function TailwindNavbarClient({ navigation }: { navigation: Navigation }) {
   const [open, setOpen] = useState(false)
   const { cart, openCart } = useCartStore()
   const { openSearch } = useSearchStore()
+
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  // Close mobile menu on route or search param change
+  useEffect(() => {
+    if (open) setOpen(false)
+  }, [pathname, searchParams])
+
+  // Close mobile menu when viewport >= 1024px (lg)
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024 && open) setOpen(false)
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [open])
 
   return (
     <div className="bg-white">
@@ -81,7 +99,7 @@ export default function TailwindNavbarClient({ navigation }: { navigation: Navig
                           >
                             {category.featured.map((item) => (
                               <li key={item.name} className="flex">
-                                <Link href={item.href} className="text-gray-500">
+                                <Link prefetch={true} href={item.href} className="text-gray-500">
                                   {item.name}
                                 </Link>
                               </li>
@@ -95,7 +113,7 @@ export default function TailwindNavbarClient({ navigation }: { navigation: Navig
                           <ul role="list" aria-labelledby="mobile-categories-heading" className="mt-6 space-y-6">
                             {category.categories.map((item) => (
                               <li key={item.name} className="flex">
-                                <Link href={item.href} className="text-gray-500">
+                                <Link prefetch={true} href={item.href} className="text-gray-500">
                                   {item.name}
                                 </Link>
                               </li>
@@ -111,7 +129,7 @@ export default function TailwindNavbarClient({ navigation }: { navigation: Navig
                           <ul role="list" aria-labelledby="mobile-collection-heading" className="mt-6 space-y-6">
                             {category.collection.map((item) => (
                               <li key={item.name} className="flex">
-                                <Link href={item.href} className="text-gray-500">
+                                <Link prefetch={true} href={item.href} className="text-gray-500">
                                   {item.name}
                                 </Link>
                               </li>
@@ -126,7 +144,7 @@ export default function TailwindNavbarClient({ navigation }: { navigation: Navig
                           <ul role="list" aria-labelledby="mobile-brand-heading" className="mt-6 space-y-6">
                             {category.brands.map((item) => (
                               <li key={item.name} className="flex">
-                                <Link href={item.href} className="text-gray-500">
+                                <Link prefetch={true} href={item.href} className="text-gray-500">
                                   {item.name}
                                 </Link>
                               </li>
@@ -143,7 +161,7 @@ export default function TailwindNavbarClient({ navigation }: { navigation: Navig
             <div className="space-y-6 border-t border-gray-200 px-4 py-6">
               {navigation.pages.map((page) => (
                 <div key={page.name} className="flow-root">
-                  <Link href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
+                  <Link prefetch={true} href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
                     {page.name}
                   </Link>
                 </div>
@@ -216,7 +234,7 @@ export default function TailwindNavbarClient({ navigation }: { navigation: Navig
                                   >
                                     {category.featured.map((item) => (
                                       <li key={item.name} className="flex">
-                                        <Link href={item.href} className="hover:text-gray-800">
+                                        <Link prefetch={true} href={item.href} className="hover:text-gray-800">
                                           {item.name}
                                         </Link>
                                       </li>
@@ -234,7 +252,7 @@ export default function TailwindNavbarClient({ navigation }: { navigation: Navig
                                   >
                                     {category.categories.map((item) => (
                                       <li key={item.name} className="flex">
-                                        <Link href={item.href} className="hover:text-gray-800">
+                                        <Link prefetch={true} href={item.href} className="hover:text-gray-800">
                                           {item.name}
                                         </Link>
                                       </li>
@@ -254,7 +272,7 @@ export default function TailwindNavbarClient({ navigation }: { navigation: Navig
                                   >
                                     {category.collection.map((item) => (
                                       <li key={item.name} className="flex">
-                                        <Link href={item.href} className="hover:text-gray-800">
+                                        <Link prefetch={true} href={item.href} className="hover:text-gray-800">
                                           {item.name}
                                         </Link>
                                       </li>
@@ -273,7 +291,7 @@ export default function TailwindNavbarClient({ navigation }: { navigation: Navig
                                   >
                                     {category.brands.map((item) => (
                                       <li key={item.name} className="flex">
-                                        <Link href={item.href} className="hover:text-gray-800">
+                                        <Link prefetch={true} href={item.href} className="hover:text-gray-800">
                                           {item.name}
                                         </Link>
                                       </li>
@@ -291,6 +309,7 @@ export default function TailwindNavbarClient({ navigation }: { navigation: Navig
                     <Link
                       key={page.name}
                       href={page.href}
+                      prefetch={true}
                       className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
                     >
                       {page.name}
@@ -300,7 +319,7 @@ export default function TailwindNavbarClient({ navigation }: { navigation: Navig
               </PopoverGroup>
 
               {/* Logo */}
-              <Link href="/" className="flex">
+              <Link prefetch={true} href="/" className="flex">
                 <span className="sr-only">Your Company</span>
                 <img
                   alt=""

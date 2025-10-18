@@ -1,4 +1,4 @@
-import TailwindProductGrid from 'components/layout/tailwind-product-grid';
+import ProductGrid from 'components/layout/product-grid';
 import { defaultSort, sorting } from 'lib/constants';
 import { getProducts } from 'lib/shopify';
 import { Metadata } from 'next';
@@ -34,7 +34,7 @@ export default async function SearchPage(props: {
         <span className="font-bold">&quot;{searchValue}&quot;</span>
       </p>
       {products.length > 0 ? (
-        <TailwindProductGrid products={products} />
+        <ProductGrid products={products} />
       ) : null}
     </div>
   );

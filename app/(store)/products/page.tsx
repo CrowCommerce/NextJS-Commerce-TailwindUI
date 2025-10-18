@@ -1,4 +1,4 @@
-import TailwindProductGrid from 'components/layout/tailwind-product-grid';
+import ProductGrid from 'components/layout/product-grid';
 import { defaultSort, sorting } from 'lib/constants';
 import { getProducts } from 'lib/shopify';
 import { baseUrl } from 'lib/utils';
@@ -21,7 +21,7 @@ export default async function ProductsPage(props: {
 
   return (
     <div>
-      {products.length > 0 ? <TailwindProductGrid products={products} /> : null}
+      {products.length > 0 ? <ProductGrid products={products} /> : null}
       <script
         type="application/ld+json"
         suppressHydrationWarning

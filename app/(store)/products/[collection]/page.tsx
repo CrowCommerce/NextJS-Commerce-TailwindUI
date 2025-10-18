@@ -1,4 +1,4 @@
-import TailwindProductGrid from 'components/layout/tailwind-product-grid';
+import ProductGrid from 'components/layout/product-grid';
 import { defaultSort, sorting } from 'lib/constants';
 import { getCollection, getCollectionProducts } from 'lib/shopify';
 import { baseUrl } from 'lib/utils';
@@ -39,7 +39,7 @@ export default async function ProductsCollectionPage(props: {
       {products.length === 0 ? (
         <p className="py-3 text-lg">{`No products found in this collection`}</p>
       ) : (
-        <TailwindProductGrid products={products} />
+        <ProductGrid products={products} />
       )}
       <script
         type="application/ld+json"

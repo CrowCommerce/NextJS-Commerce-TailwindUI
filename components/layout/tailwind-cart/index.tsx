@@ -2,8 +2,8 @@
 
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import CartPrice from 'components/price/cart-price'
 import { EditItemQuantityButton } from 'components/template-cart/edit-item-quantity-button'
-import Price from 'components/template-price'
 import { useCartStore } from 'lib/stores/cart-store'
 import Link from 'next/link'
 
@@ -68,7 +68,7 @@ export default function TailwindCart() {
                                           {item.merchandise.product.title}
                                         </Link>
                                       </h3>
-                                      <Price
+                                      <CartPrice
                                         className="ml-4"
                                         amount={item.cost.totalAmount.amount}
                                         currencyCode={item.cost.totalAmount.currencyCode}
@@ -109,7 +109,7 @@ export default function TailwindCart() {
                       <p>Subtotal</p>
                       <div className="text-right">
                         {cart && cart.cost.totalAmount.amount !== '0' ? (
-                          <Price
+                          <CartPrice
                             amount={cart.cost.totalAmount.amount}
                             currencyCode={cart.cost.totalAmount.currencyCode}
                           />

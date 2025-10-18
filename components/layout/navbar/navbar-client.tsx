@@ -22,7 +22,7 @@ import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { Fragment, useEffect, useState } from 'react'
 
-export default function TailwindNavbarClient({ navigation }: { navigation: Navigation }) {
+export default function NavbarClient({ navigation }: { navigation: Navigation }) {
   const [open, setOpen] = useState(false)
   const { cart, openCart } = useCartStore()
   const { openSearch } = useSearchStore()
@@ -366,4 +366,5 @@ export default function TailwindNavbarClient({ navigation }: { navigation: Navig
     </div>
   )
 }
+
 

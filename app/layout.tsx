@@ -8,8 +8,8 @@ import { ReactNode, Suspense } from 'react';
 import './globals.css';
 
 import Footer from 'components/layout/footer';
+import Navbar from 'components/layout/navbar';
 import TailwindCart from 'components/layout/tailwind-cart';
-import TailwindNavbar from 'components/layout/tailwind-navbar';
 import { SearchCommand } from 'components/search-command';
 
 const { SITE_NAME } = process.env;
@@ -41,7 +41,7 @@ export default async function RootLayout({
           <CartInitializer cartPromise={cart} />
         </Suspense>
         <SearchCommand />
-        <TailwindNavbar />
+        <Navbar />
         <TailwindCart />
         <main>
           {children}

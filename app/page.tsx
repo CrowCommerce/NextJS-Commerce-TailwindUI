@@ -1,6 +1,6 @@
+import Collections from 'components/home/collections';
 import Hero from 'components/home/hero';
-import Collections from 'components/storefront/collections';
-import TrendingProducts from 'components/storefront/trending-products';
+import TrendingProducts from 'components/home/trending-products';
 import { getCollections, getProducts } from 'lib/shopify';
 import { transformShopifyCollectionToTailwind, transformShopifyProductToTailwind } from 'lib/utils';
 import { Metadata } from 'next';

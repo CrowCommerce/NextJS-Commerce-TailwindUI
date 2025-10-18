@@ -1,6 +1,7 @@
 import TailwindProductGrid from 'components/layout/tailwind-product-grid';
 import { defaultSort, sorting } from 'lib/constants';
 import { getCollection, getCollectionProducts } from 'lib/shopify';
+import { baseUrl } from 'lib/utils';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -15,7 +16,8 @@ export async function generateMetadata(props: {
   return {
     title: collection.seo?.title || collection.title,
     description:
-      collection.seo?.description || collection.description || `${collection.title} products`
+      collection.seo?.description || collection.description || `${collection.title} products`,
+    alternates: { canonical: `/products/${params.collection}` }
   };
 }
 
@@ -27,7 +29,10 @@ export default async function ProductsCollectionPage(props: {
   const params = await props.params;
   const { sort } = (searchParams || {}) as { [key: string]: string };
   const { sortKey, reverse } = sorting.find((item) => item.slug === sort) || defaultSort;
-  const products = await getCollectionProducts({ collection: params.collection, sortKey, reverse });
+  const [collection, products] = await Promise.all([
+    getCollection(params.collection),
+    getCollectionProducts({ collection: params.collection, sortKey, reverse })
+  ]);
 
   return (
     <div>
@@ -36,6 +41,36 @@ export default async function ProductsCollectionPage(props: {
       ) : (
         <TailwindProductGrid products={products} />
       )}
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: `${baseUrl}/` },
+              { '@type': 'ListItem', position: 2, name: 'Products', item: `${baseUrl}/products` },
+              { '@type': 'ListItem', position: 3, name: collection?.title || params.collection, item: `${baseUrl}/products/${params.collection}` }
+            ]
+          })
+        }}
+      />
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'ItemList',
+            itemListElement: products.map((p, i) => ({
+              '@type': 'ListItem',
+              position: i + 1,
+              url: `${baseUrl}/product/${p.handle}`
+            }))
+          })
+        }}
+      />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import type { Collection as TailwindCollection, Product as TailwindProduct } from 'components/storefront/types';
+import type { Collection as TailwindCollection, Product as TailwindProduct } from 'components/home/types';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import type { Collection, Menu, Product } from './shopify/types';
 

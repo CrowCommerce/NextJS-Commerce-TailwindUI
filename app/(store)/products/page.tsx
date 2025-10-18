@@ -1,11 +1,13 @@
 import TailwindProductGrid from 'components/layout/tailwind-product-grid';
 import { defaultSort, sorting } from 'lib/constants';
 import { getProducts } from 'lib/shopify';
+import { baseUrl } from 'lib/utils';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Products',
-  description: 'Browse all products.'
+  description: 'Browse all products.',
+  alternates: { canonical: '/products' }
 };
 
 export default async function ProductsPage(props: {
@@ -20,6 +22,21 @@ export default async function ProductsPage(props: {
   return (
     <div>
       {products.length > 0 ? <TailwindProductGrid products={products} /> : null}
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'ItemList',
+            itemListElement: products.map((p, i) => ({
+              '@type': 'ListItem',
+              position: i + 1,
+              url: `${baseUrl}/product/${p.handle}`
+            }))
+          })
+        }}
+      />
     </div>
   );
 }

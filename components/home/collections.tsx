@@ -1,6 +1,12 @@
 'use client'
 
-import { Collection } from './types'
+interface Collection {
+  name: string
+  description: string
+  imageSrc: string
+  imageAlt: string
+  href: string
+}
 
 interface CollectionsProps {
   collections: Collection[]
@@ -38,4 +44,5 @@ export default function Collections({ collections }: CollectionsProps) {
     </section>
   )
 }
+
 

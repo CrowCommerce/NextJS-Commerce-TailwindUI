@@ -1,11 +1,27 @@
 'use client'
 
 import Link from 'next/link'
-import { Product } from './types'
 
 interface TrendingProductsProps {
   products: Product[]
 }
+
+interface AvailableColor {
+  name: string
+  colorBg: string
+}
+
+interface Product {
+  id: number
+  name: string
+  color: string
+  price: string
+  href: string
+  imageSrc: string
+  imageAlt: string
+  availableColors: AvailableColor[]
+}
+
 
 export default function TrendingProducts({ products }: TrendingProductsProps) {
   return (
@@ -15,10 +31,10 @@ export default function TrendingProducts({ products }: TrendingProductsProps) {
           <h2 id="trending-heading" className="text-2xl font-bold tracking-tight text-gray-900">
             Trending products
           </h2>
-          <a href="#" className="hidden text-sm font-semibold text-indigo-600 hover:text-indigo-500 sm:block">
+          <Link href="/products" className="hidden text-sm font-semibold text-indigo-600 hover:text-indigo-500 sm:block">
             See everything
             <span aria-hidden="true"> &rarr;</span>
-          </a>
+          </Link>
         </div>
 
         <div className="relative mt-8">
@@ -66,13 +82,14 @@ export default function TrendingProducts({ products }: TrendingProductsProps) {
         </div>
 
         <div className="mt-12 px-4 sm:hidden">
-          <a href="#" className="text-sm font-semibold text-indigo-600 hover:text-indigo-500">
+          <Link href="/products" className="text-sm font-semibold text-indigo-600 hover:text-indigo-500">
             See everything
             <span aria-hidden="true"> &rarr;</span>
-          </a>
+          </Link>
         </div>
       </div>
     </section>
   )
 }
+
 

@@ -3,10 +3,10 @@ import Collections from 'components/layout/search/collections';
 import MobileFiltersWrapper from 'components/layout/search/mobile-filters-wrapper';
 import SortFilter from 'components/layout/search/sort-filter';
 import { Suspense } from 'react';
-import ChildrenWrapper from './children-wrapper';
-import SearchHeader from './search-header';
+import ChildrenWrapper from './shared/children-wrapper';
+import SearchHeader from './shared/search-header';
 
-export default function SearchLayout({
+export default function StoreLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -60,3 +60,5 @@ export default function SearchLayout({
     </div>
   );
 }
+
+

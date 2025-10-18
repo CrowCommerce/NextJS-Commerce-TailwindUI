@@ -9,3 +9,4 @@ export default function ChildrenWrapper({ children }: { children: React.ReactNod
   return <Fragment key={searchParams.get('q')}>{children}</Fragment>;
 }
 
+

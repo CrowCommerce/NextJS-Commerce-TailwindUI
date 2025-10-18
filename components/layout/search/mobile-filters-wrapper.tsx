@@ -6,7 +6,7 @@ async function MobileFiltersList() {
   const collections = await getCollections();
   const collectionsWithLinks = collections.map((collection) => ({
     name: collection.title,
-    href: collection.handle ? `/search/${collection.handle}` : '/search',
+    href: collection.handle ? `/products/${collection.handle}` : '/products',
   }));
   
   return <MobileFilters collections={collectionsWithLinks} />;

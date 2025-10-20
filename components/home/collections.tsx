@@ -1,12 +1,6 @@
 'use client'
 
-interface Collection {
-  name: string
-  description: string
-  imageSrc: string
-  imageAlt: string
-  href: string
-}
+import type { Collection } from './types'
 
 interface CollectionsProps {
   collections: Collection[]

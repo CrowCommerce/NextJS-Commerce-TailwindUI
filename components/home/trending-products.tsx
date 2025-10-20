@@ -1,25 +1,10 @@
 'use client'
 
 import Link from 'next/link'
+import type { Product } from './types'
 
 interface TrendingProductsProps {
   products: Product[]
-}
-
-interface AvailableColor {
-  name: string
-  colorBg: string
-}
-
-interface Product {
-  id: number
-  name: string
-  color: string
-  price: string
-  href: string
-  imageSrc: string
-  imageAlt: string
-  availableColors: AvailableColor[]
 }
 
 

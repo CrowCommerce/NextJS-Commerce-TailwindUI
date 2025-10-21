@@ -1,19 +1,19 @@
 'use client'
 
 import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Tab,
-  TabGroup,
-  TabList,
-  TabPanel,
-  TabPanels,
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+    Tab,
+    TabGroup,
+    TabList,
+    TabPanel,
+    TabPanels,
 } from '@headlessui/react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import {
-  MinusIcon,
-  PlusIcon
+    MinusIcon,
+    PlusIcon
 } from '@heroicons/react/24/outline'
 import Breadcrumbs from 'components/layout/breadcrumbs'
 import ProductDetailPrice from 'components/price/product-detail-price'
@@ -221,7 +221,7 @@ export default function ProductDetail({ product, options, variants, onAddToCart 
               {/* Colors */}
               {colorOption && colorOption.values.length > 0 && (
                 <div>
-                  <h3 className="text-sm text-gray-600">Color</h3>
+                  <h3 className="text-sm font-medium text-gray-900">Color</h3>
 
                   <fieldset aria-label="Choose a color" className="mt-2">
                     <div className="flex items-center gap-x-3">
@@ -270,9 +270,9 @@ export default function ProductDetail({ product, options, variants, onAddToCart 
                 <div className="mt-8">
                   <div className="flex items-center justify-between">
                     <h2 className="text-sm font-medium text-gray-900">Size</h2>
-                    <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                    {/* <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
                       See sizing chart
-                    </a>
+                    </a> */}
                   </div>
 
                   <fieldset aria-label="Choose a size" className="mt-2">
@@ -312,9 +312,9 @@ export default function ProductDetail({ product, options, variants, onAddToCart 
               <div className="mt-10 flex">
                 <button
                   type="submit"
-                  className="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-50 focus:outline-hidden sm:w-full"
+                  className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-50 focus:outline-hidden"
                 >
-                  Add to bag
+                  Add to cart
                 </button>
 
                 {/* <button

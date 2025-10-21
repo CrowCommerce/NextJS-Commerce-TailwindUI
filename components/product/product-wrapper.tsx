@@ -4,7 +4,7 @@ import type { Product, ProductVariant } from 'lib/shopify/types';
 import { useCartStore } from 'lib/stores/cart-store';
 import { useProductStore } from 'lib/stores/product-store';
 import type { TailwindProductDetail } from 'lib/utils';
-import TailwindProductDetailComponent from './tailwind-product-detail';
+import TailwindProductDetailComponent from './product-detail';
 
 interface TailwindProductWrapperProps {
   product: Product;

@@ -16,7 +16,7 @@ import { startTransition, useActionState, useEffect, useRef } from 'react'
 import { useFormStatus } from 'react-dom'
 
 export default function Cart() {
-  const { cart, isCartOpen, isInitialized, closeCart, updateCartItem } = useCartStore()
+  const { cart, isCartOpen, closeCart, updateCartItem } = useCartStore()
   const quantityRef = useRef(cart?.totalQuantity)
   const hasCheckedForCart = useRef(false)
   const [loadedCart, loadCartAction] = useActionState(loadCart, null)

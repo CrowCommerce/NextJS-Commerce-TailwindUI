@@ -453,10 +453,6 @@ export async function getNavigation(): Promise<Navigation> {
 }
 
 export async function getPage(handle: string): Promise<Page> {
-  'use cache';
-  cacheTag(TAGS.collections);
-  cacheLife('days');
-
   const res = await shopifyFetch<ShopifyPageOperation>({
     query: getPageQuery,
     variables: { handle }

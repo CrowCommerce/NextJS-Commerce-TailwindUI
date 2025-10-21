@@ -1,20 +1,19 @@
 'use client'
 
 import {
-    Disclosure,
-    DisclosureButton,
-    DisclosurePanel,
-    Tab,
-    TabGroup,
-    TabList,
-    TabPanel,
-    TabPanels,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Tab,
+  TabGroup,
+  TabList,
+  TabPanel,
+  TabPanels,
 } from '@headlessui/react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import {
-    HeartIcon,
-    MinusIcon,
-    PlusIcon,
+  MinusIcon,
+  PlusIcon
 } from '@heroicons/react/24/outline'
 import Breadcrumbs from 'components/layout/breadcrumbs'
 import ProductDetailPrice from 'components/price/product-detail-price'
@@ -32,7 +31,7 @@ interface ProductDetailProps {
 
 export default function ProductDetail({ product, onAddToCart }: ProductDetailProps) {
   return (
-    <main className="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8">
+    <main className="mx-auto max-w-7xl sm:px-6 sm:pt-12 lg:px-8">
       <div className="px-4 sm:px-0 mb-4 sm:mb-6 lg:mb-8">
         <Breadcrumbs
           items={[
@@ -165,13 +164,13 @@ export default function ProductDetail({ product, onAddToCart }: ProductDetailPro
                   Add to bag
                 </button>
 
-                <button
+                {/* <button
                   type="button"
                   className="ml-4 flex items-center justify-center rounded-md px-3 py-3 text-gray-400 hover:bg-gray-100 hover:text-gray-500"
                 >
                   <HeartIcon aria-hidden="true" className="size-6 shrink-0" />
                   <span className="sr-only">Add to favorites</span>
-                </button>
+                </button> */}
               </div>
             </form>
 

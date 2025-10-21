@@ -2,7 +2,7 @@
 
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { createCartAndSetCookie, loadCart, redirectToCheckout, removeItem } from 'components/cart/actions'
+import { loadCart, redirectToCheckout, removeItem } from 'components/cart/actions'
 import { EditItemQuantityButton } from 'components/cart/edit-item-quantity-button'
 import CartPrice from 'components/price/cart-price'
 import LoadingDots from 'components/template-loading-dots'
@@ -36,9 +36,6 @@ export default function Cart() {
     if (loadedCart !== null) {
       useCartStore.getState().setCart(loadedCart || undefined)
       useCartStore.getState().setInitialized(true)
-      if (!loadedCart) {
-        createCartAndSetCookie()
-      }
     }
   }, [loadedCart])
 

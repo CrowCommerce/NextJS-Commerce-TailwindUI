@@ -36,9 +36,9 @@ export default function RelatedProducts({ products }: RelatedProductsProps) {
 
       <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
         {products.map((product) => (
-          <div key={product.id}>
-            <div className="relative">
-              <Link href={product.href} className="relative block h-72 w-full overflow-hidden rounded-lg">
+          <div key={product.id} className="flex h-full flex-col">
+            <Link href={product.href} className="block group">
+              <div className="relative h-72 w-full overflow-hidden rounded-lg">
                 <Image
                   alt={product.imageAlt}
                   src={product.imageSrc}
@@ -46,20 +46,20 @@ export default function RelatedProducts({ products }: RelatedProductsProps) {
                   sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                   className="object-cover"
                 />
-              </Link>
-              <div className="relative mt-4">
+                <div className="pointer-events-none absolute inset-x-0 top-0 flex h-72 items-end justify-end rounded-lg p-4">
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black to-transparent opacity-50"
+                  />
+                  <p className="relative text-lg font-semibold text-white">{product.price}</p>
+                </div>
+              </div>
+              <div className="mt-4">
                 <h3 className="text-sm font-medium text-gray-900">{product.name}</h3>
                 {product.color && <p className="mt-1 text-sm text-gray-500">{product.color}</p>}
               </div>
-              <div className="absolute inset-x-0 top-0 flex h-72 items-end justify-end overflow-hidden rounded-lg p-4">
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black to-transparent opacity-50"
-                />
-                <p className="relative text-lg font-semibold text-white">{product.price}</p>
-              </div>
-            </div>
-            <div className="mt-6">
+            </Link>
+            <div className="mt-auto pt-6">
               <button
                 type="button"
                 onClick={() => {
@@ -81,7 +81,7 @@ export default function RelatedProducts({ products }: RelatedProductsProps) {
                   })
                   openCart()
                 }}
-                className="relative flex w-full items-center justify-center rounded-md border border-transparent bg-gray-100 px-8 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200"
+                className="cursor-pointer relative flex w-full items-center justify-center rounded-md border border-transparent bg-gray-100 px-8 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200"
               >
                 Add to bag<span className="sr-only">, {product.name}</span>
               </button>

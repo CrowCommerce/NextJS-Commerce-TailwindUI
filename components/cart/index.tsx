@@ -2,7 +2,7 @@
 
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { loadCart, redirectToCheckout, removeItem } from 'components/cart/actions'
+import { redirectToCheckout, removeItem } from 'components/cart/actions'
 import { EditItemQuantityButton } from 'components/cart/edit-item-quantity-button'
 import CartPrice from 'components/price/cart-price'
 import LoadingDots from 'components/template-loading-dots'
@@ -12,32 +12,12 @@ import { useCartStore } from 'lib/stores/cart-store'
 import { createUrl } from 'lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
-import { startTransition, useActionState, useEffect, useRef } from 'react'
+import { useActionState, useEffect, useRef } from 'react'
 import { useFormStatus } from 'react-dom'
 
 export default function Cart() {
   const { cart, isCartOpen, closeCart, updateCartItem } = useCartStore()
   const quantityRef = useRef(cart?.totalQuantity)
-  const hasCheckedForCart = useRef(false)
-  const [loadedCart, loadCartAction] = useActionState(loadCart, null)
-
-  // Initialize cart on first mount/open using server action (no API route)
-  useEffect(() => {
-    if (!hasCheckedForCart.current) {
-      hasCheckedForCart.current = true
-      startTransition(() => {
-        loadCartAction()
-      })
-    }
-  }, [loadCartAction])
-
-  // When server action returns, hydrate store and ensure initialized
-  useEffect(() => {
-    if (loadedCart !== null) {
-      useCartStore.getState().setCart(loadedCart || undefined)
-      useCartStore.getState().setInitialized(true)
-    }
-  }, [loadedCart])
 
   // Auto-open cart when quantity increases (not on initial hydration)
   useEffect(() => {

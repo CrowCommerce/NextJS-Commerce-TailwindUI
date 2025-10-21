@@ -5,6 +5,7 @@ import { ProductPageContent } from 'components/product/product-page-content';
 import RelatedProductsComponent from 'components/product/related-products';
 import { HIDDEN_PRODUCT_TAG } from 'lib/constants';
 import { getProduct, getProductRecommendations } from 'lib/shopify';
+import type { Product } from 'lib/shopify/types';
 import { transformShopifyProductsToRelatedProducts } from 'lib/utils';
 import { Suspense } from 'react';
 
@@ -62,16 +63,16 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
             </div>
           }
         >
-          <RelatedProducts handle={params.handle} />
+          <RelatedProducts productPromise={productPromise} />
         </Suspense>
       }
     />
   );
 }
 
-async function RelatedProducts({ handle }: { handle: string }) {
-  // Get product first to get its ID
-  const product = await getProduct(handle);
+async function RelatedProducts({ productPromise }: { productPromise: Promise<Product | undefined> }) {
+  // Await the product promise
+  const product = await productPromise;
   if (!product) return null;
 
   const relatedProducts = await getProductRecommendations(product.id);

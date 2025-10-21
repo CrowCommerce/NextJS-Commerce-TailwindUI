@@ -35,6 +35,13 @@ export default function ProductWrapper({ product, transformedProduct }: ProductW
     }
   };
 
-  return <ProductDetail product={transformedProduct} onAddToCart={handleAddToCart} />;
+  return (
+    <ProductDetail
+      product={transformedProduct}
+      options={product.options}
+      variants={product.variants}
+      onAddToCart={handleAddToCart}
+    />
+  );
 }
 

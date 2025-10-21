@@ -1,6 +1,6 @@
 'use client'
 
-import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, UserIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon } from '@heroicons/react/24/outline'
 import { Navigation } from 'lib/shopify/types'
 import { useCartStore } from 'lib/stores/cart-store'
 import { useNavbarStore } from 'lib/stores/navbar-store'
@@ -71,10 +71,10 @@ export default function NavbarClient({ navigation }: { navigation: Navigation })
                 </button>
 
                 {/* Account */}
-                <Link href="#" className="p-2 text-gray-400 hover:text-gray-500 lg:ml-4">
+                {/* <Link href="#" className="p-2 text-gray-400 hover:text-gray-500 lg:ml-4">
                   <span className="sr-only">Account</span>
                   <UserIcon aria-hidden="true" className="size-6" />
-                </Link>
+                </Link> */}
 
                 {/* Cart */}
                 <div className="ml-4 flow-root lg:ml-6">

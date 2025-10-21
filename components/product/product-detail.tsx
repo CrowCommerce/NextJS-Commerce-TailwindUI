@@ -17,19 +17,108 @@ import {
 } from '@heroicons/react/24/outline'
 import Breadcrumbs from 'components/layout/breadcrumbs'
 import ProductDetailPrice from 'components/price/product-detail-price'
+import type { ProductOption, ProductVariant } from 'lib/shopify/types'
+import { useProductStore } from 'lib/stores/product-store'
 import type { TailwindProductDetail } from 'lib/utils'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
+type Combination = {
+  id: string
+  availableForSale: boolean
+  [key: string]: string | boolean
+}
+
 interface ProductDetailProps {
   product: TailwindProductDetail
+  options: ProductOption[]
+  variants: ProductVariant[]
   onAddToCart?: () => void
 }
 
-export default function ProductDetail({ product, onAddToCart }: ProductDetailProps) {
+export default function ProductDetail({ product, options, variants, onAddToCart }: ProductDetailProps) {
+  const state = useProductStore((s) => s.state)
+  const updateOption = useProductStore((s) => s.updateOption)
+  const router = useRouter()
+
+  const combinations: Combination[] = variants.map((variant) => ({
+    id: variant.id,
+    availableForSale: variant.availableForSale,
+    ...variant.selectedOptions.reduce(
+      (acc, option) => ({ ...acc, [option.name.toLowerCase()]: option.value }),
+      {} as Record<string, string>
+    )
+  }))
+
+  const optionExists = (key: string, value: string) =>
+    options.find((o) => o.name.toLowerCase() === key && o.values.includes(value))
+
+  const isAvailable = (key: string, value: string) => {
+    const optionParams = { ...state, [key]: value }
+    const filtered = Object.entries(optionParams).filter(([k, v]) => optionExists(k, String(v)))
+    const match = combinations.find((combination) =>
+      filtered.every(([k, v]) => combination[k] === v && combination.availableForSale)
+    )
+    return Boolean(match)
+  }
+
+  const pushParam = (key: string, value: string) => {
+    const newParams = new URLSearchParams(window.location.search)
+    newParams.set(key, value)
+    router.push(`?${newParams.toString()}`, { scroll: false })
+  }
+
+  const getColorClasses = (value: string) => {
+    const color = product.colors.find((c) => c.name.toLowerCase() === value.toLowerCase())
+    return color?.classes || 'bg-gray-200'
+  }
+
+  // Extract hex color from Tailwind arbitrary class like bg-[#111827]
+  const getColorHexFromValue = (value: string): string => {
+    const classes = getColorClasses(value)
+    const match = classes.match(/bg-\[(#[^\]]+)\]/)
+    return match?.[1] ?? '#9CA3AF'
+  }
+
+  const colorOption = options.find((o) => o.name.toLowerCase() === 'color')
+  const sizeOption = options.find((o) => o.name.toLowerCase() === 'size')
+
+  // Select sensible defaults on first render (prefer available variant)
+  useEffect(() => {
+    const optionKeys = options.map((o) => o.name.toLowerCase())
+    const missingKeys = optionKeys.filter((k) => !state[k])
+    if (missingKeys.length === 0) return
+
+    // Filter variants by currently selected state (partial match)
+    const partiallyMatched = variants.filter((v) =>
+      v.selectedOptions.every((opt) => {
+        const key = opt.name.toLowerCase()
+        return !state[key] || state[key] === opt.value
+      })
+    )
+
+    const preferred =
+      partiallyMatched.find((v) => v.availableForSale) ||
+      partiallyMatched[0] ||
+      variants.find((v) => v.availableForSale) ||
+      variants[0]
+
+    if (!preferred) return
+
+    preferred.selectedOptions.forEach((opt) => {
+      const key = opt.name.toLowerCase()
+      if (!state[key]) {
+        updateOption(key, opt.value)
+        pushParam(key, opt.value)
+      }
+    })
+  }, [options, variants, state])
+
   return (
     <main className="mx-auto max-w-7xl sm:px-6 sm:pt-12 lg:px-8">
       <div className="px-4 sm:px-0 mb-4 sm:mb-6 lg:mb-8">
@@ -130,27 +219,91 @@ export default function ProductDetail({ product, onAddToCart }: ProductDetailPro
 
             <form className="mt-6" onSubmit={(e) => { e.preventDefault(); onAddToCart?.(); }}>
               {/* Colors */}
-              {product.colors.length > 0 && (
+              {colorOption && colorOption.values.length > 0 && (
                 <div>
                   <h3 className="text-sm text-gray-600">Color</h3>
 
                   <fieldset aria-label="Choose a color" className="mt-2">
                     <div className="flex items-center gap-x-3">
-                      {product.colors.map((color) => (
-                        <div key={color.id} className="flex rounded-full outline -outline-offset-1 outline-black/10">
-                          <input
-                            defaultValue={color.id}
-                            defaultChecked={color === product.colors[0]}
-                            name="color"
-                            type="radio"
-                            aria-label={color.name}
-                            className={classNames(
-                              color.classes,
-                              'size-8 appearance-none rounded-full forced-color-adjust-none checked:outline-2 checked:outline-offset-2 focus-visible:outline-3 focus-visible:outline-offset-3',
-                            )}
-                          />
-                        </div>
-                      ))}
+                      {colorOption.values.map((value) => {
+                        const isOptionAvailable = isAvailable('color', value)
+                        const isActive = state['color'] === value
+                        const hex = getColorHexFromValue(value)
+                        const isWhite = /^#fff(?:fff)?$/i.test(hex)
+                        const activeRing = isWhite ? '#4F46E5' : hex // indigo-600 ring for white
+                        return (
+                          <label key={value} className={classNames('flex cursor-pointer items-center', !isOptionAvailable ? 'opacity-40 cursor-not-allowed' : '')}>
+                            <input
+                              value={value}
+                              checked={Boolean(isActive)}
+                              onChange={() => {
+                                updateOption('color', value)
+                                pushParam('color', value)
+                              }}
+                              name="color"
+                              type="radio"
+                              aria-label={value}
+                              disabled={!isOptionAvailable}
+                              className="sr-only"
+                            />
+                            <span
+                              aria-hidden
+                              className="inline-block size-8 rounded-full"
+                              style={{
+                                backgroundColor: hex,
+                                boxShadow: isActive
+                                  ? `0 0 0 2px #fff, 0 0 0 4px ${activeRing}`
+                                  : '0 0 0 1px rgba(0,0,0,0.1)'
+                              }}
+                              title={`Color ${value}${!isOptionAvailable ? ' (Out of Stock)' : ''}`}
+                            />
+                          </label>
+                        )
+                      })}
+                    </div>
+                  </fieldset>
+                </div>
+              )}
+
+              {/* Size picker */}
+              {sizeOption && sizeOption.values.length > 0 && (
+                <div className="mt-8">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-sm font-medium text-gray-900">Size</h2>
+                    <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                      See sizing chart
+                    </a>
+                  </div>
+
+                  <fieldset aria-label="Choose a size" className="mt-2">
+                    <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+                      {sizeOption.values.map((value) => {
+                        const isOptionAvailable = isAvailable('size', value)
+                        const isActive = state['size'] === value
+                        return (
+                          <label
+                            key={value}
+                            aria-label={value}
+                            className="group relative flex items-center justify-center rounded-md border border-gray-300 bg-white p-3 has-checked:border-indigo-600 has-checked:bg-indigo-600 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-indigo-600 has-disabled:border-gray-400 has-disabled:bg-gray-200 has-disabled:opacity-25"
+                          >
+                            <input
+                              value={value}
+                              checked={Boolean(isActive)}
+                              name="size"
+                              type="radio"
+                              disabled={!isOptionAvailable}
+                              onChange={() => {
+                                updateOption('size', value)
+                                pushParam('size', value)
+                              }}
+                              className="absolute inset-0 appearance-none focus:outline-none disabled:cursor-not-allowed"
+                            />
+                            <span className="text-sm font-medium text-gray-900 uppercase group-has-checked:text-white">
+                              {value}
+                            </span>
+                          </label>
+                        )
+                      })}
                     </div>
                   </fieldset>
                 </div>

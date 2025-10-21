@@ -4,10 +4,18 @@ import { notFound } from 'next/navigation';
 import { ProductPageContent } from 'components/product/product-page-content';
 import RelatedProductsComponent from 'components/product/related-products';
 import { HIDDEN_PRODUCT_TAG } from 'lib/constants';
-import { getProduct, getProductRecommendations } from 'lib/shopify';
+import { getProduct, getProductRecommendations, getProducts } from 'lib/shopify';
 import type { Product } from 'lib/shopify/types';
 import { transformShopifyProductsToRelatedProducts } from 'lib/utils';
 import { Suspense } from 'react';
+
+export async function generateStaticParams() {
+  const products = await getProducts({});
+  
+  return products.map((product) => ({
+    handle: product.handle
+  }));
+}
 
 export async function generateMetadata(props: {
   params: Promise<{ handle: string }>;

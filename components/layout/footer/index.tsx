@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import FooterCopyright from './footer-copyright';
 import FooterNavigation from './footer-navigation';
-import FooterNewsletter from './footer-newsletter';
 
 const { COMPANY_NAME } = process.env;
 
@@ -61,7 +60,7 @@ export default function Footer() {
             </Suspense>
 
             {/* Newsletter section */}
-            <FooterNewsletter />
+            {/* <FooterNewsletter /> */}
           </div>
         </div>
 

@@ -1,9 +1,17 @@
 import ProductGrid from 'components/layout/product-grid';
 import { defaultSort, sorting } from 'lib/constants';
-import { getCollection, getCollectionProducts } from 'lib/shopify';
+import { getCollection, getCollectionProducts, getCollections } from 'lib/shopify';
 import { baseUrl } from 'lib/utils';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+
+export async function generateStaticParams() {
+  const collections = await getCollections();
+  
+  return collections.map((collection) => ({
+    collection: collection.handle
+  }));
+}
 
 export async function generateMetadata(props: {
   params: Promise<{ collection: string }>;

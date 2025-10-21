@@ -4,14 +4,14 @@ import type { Product, ProductVariant } from 'lib/shopify/types';
 import { useCartStore } from 'lib/stores/cart-store';
 import { useProductStore } from 'lib/stores/product-store';
 import type { TailwindProductDetail } from 'lib/utils';
-import TailwindProductDetailComponent from './product-detail';
+import ProductDetail from './product-detail';
 
-interface TailwindProductWrapperProps {
+interface ProductWrapperProps {
   product: Product;
   transformedProduct: TailwindProductDetail;
 }
 
-export default function TailwindProductWrapper({ product, transformedProduct }: TailwindProductWrapperProps) {
+export default function ProductWrapper({ product, transformedProduct }: ProductWrapperProps) {
   const addCartItem = useCartStore((state) => state.addCartItem);
   const openCart = useCartStore((state) => state.openCart);
   const productState = useProductStore((state) => state.state);
@@ -35,6 +35,6 @@ export default function TailwindProductWrapper({ product, transformedProduct }: 
     }
   };
 
-  return <TailwindProductDetailComponent product={transformedProduct} onAddToCart={handleAddToCart} />;
+  return <ProductDetail product={transformedProduct} onAddToCart={handleAddToCart} />;
 }
 

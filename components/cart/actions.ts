@@ -21,6 +21,13 @@ export async function addItem(
   }
 
   try {
+    // Ensure a cart exists before adding
+    const cartId = (await cookies()).get('cartId')?.value
+    if (!cartId) {
+      const newCart = await createCart();
+      (await cookies()).set('cartId', newCart.id!);
+    }
+
     await addToCart([{ merchandiseId: selectedVariantId, quantity: 1 }]);
     revalidateTag(TAGS.cart, "max");
   } catch (e) {

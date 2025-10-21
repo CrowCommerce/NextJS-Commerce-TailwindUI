@@ -13,6 +13,16 @@ interface CartState {
   closeCart: () => void;
   addCartItem: (variant: ProductVariant, product: Product) => void;
   updateCartItem: (merchandiseId: string, updateType: UpdateType) => void;
+  addCartItemOptimistic: (input: {
+    variantId: string;
+    productId: string;
+    handle: string;
+    title: string;
+    imageUrl: string;
+    imageAlt: string;
+    priceAmount: string;
+    currencyCode: string;
+  }) => void;
 }
 
 function calculateItemCost(quantity: number, price: string): string {
@@ -152,6 +162,62 @@ export const useCartStore = create<CartState>((set) => ({
         };
       }
 
+      return {
+        cart: {
+          ...currentCart,
+          ...updateCartTotals(updatedLines),
+          lines: updatedLines
+        }
+      };
+    })
+  ,
+  addCartItemOptimistic: (input) =>
+    set((state) => {
+      const currentCart = state.cart || createEmptyCart();
+      const existingItem = currentCart.lines.find((item) => item.merchandise.id === input.variantId);
+
+      if (existingItem) {
+        const updatedItem = updateCartItemHelper(existingItem, 'plus');
+        const updatedLines = currentCart.lines.map((item) =>
+          item.merchandise.id === input.variantId ? (updatedItem as CartItem) : item
+        );
+        return {
+          cart: {
+            ...currentCart,
+            ...updateCartTotals(updatedLines),
+            lines: updatedLines
+          }
+        };
+      }
+
+      const newItem: CartItem = {
+        id: undefined,
+        quantity: 1,
+        cost: {
+          totalAmount: {
+            amount: input.priceAmount,
+            currencyCode: input.currencyCode
+          }
+        },
+        merchandise: {
+          id: input.variantId,
+          title: 'Default Title',
+          selectedOptions: [],
+          product: {
+            id: input.productId,
+            handle: input.handle,
+            title: input.title,
+            featuredImage: {
+              url: input.imageUrl,
+              altText: input.imageAlt,
+              width: 600,
+              height: 600
+            }
+          }
+        }
+      };
+
+      const updatedLines = [...currentCart.lines, newItem];
       return {
         cart: {
           ...currentCart,

@@ -176,6 +176,7 @@ export type TailwindRelatedProduct = {
   imageSrc: string;
   imageAlt: string;
   price: string;
+  variantId: string;
 };
 
 // Transform Shopify Product to Tailwind Product Detail format
@@ -304,6 +305,7 @@ export const transformShopifyProductsToRelatedProducts = (products: Product[]): 
       imageSrc: product.images[0]?.url || 'https://via.placeholder.com/400',
       imageAlt: product.images[0]?.altText || product.title,
       price,
+      variantId: product.variants[0]?.id || '',
     };
   });
 };

@@ -39,7 +39,7 @@ export function ProductPageContent({
   const transformedProduct = transformShopifyProductToTailwindDetail(product);
 
   return (
-    <div className="bg-white">
+    <div className="bg-white pb-24">
       <ProductInitializer />
       <script
         type="application/ld+json"

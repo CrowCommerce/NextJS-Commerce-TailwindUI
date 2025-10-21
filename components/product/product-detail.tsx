@@ -1,20 +1,20 @@
 'use client'
 
 import {
-    Disclosure,
-    DisclosureButton,
-    DisclosurePanel,
-    Tab,
-    TabGroup,
-    TabList,
-    TabPanel,
-    TabPanels,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Tab,
+  TabGroup,
+  TabList,
+  TabPanel,
+  TabPanels,
 } from '@headlessui/react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import {
-    HeartIcon,
-    MinusIcon,
-    PlusIcon,
+  HeartIcon,
+  MinusIcon,
+  PlusIcon,
 } from '@heroicons/react/24/outline'
 import ProductDetailPrice from 'components/price/product-detail-price'
 import type { TailwindProductDetail } from 'lib/utils'
@@ -23,12 +23,12 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-interface TailwindProductDetailProps {
+interface ProductDetailProps {
   product: TailwindProductDetail
   onAddToCart?: () => void
 }
 
-export default function TailwindProductDetailComponent({ product, onAddToCart }: TailwindProductDetailProps) {
+export default function ProductDetail({ product, onAddToCart }: ProductDetailProps) {
   return (
     <main className="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8">
       <div className="mx-auto max-w-2xl lg:max-w-none">

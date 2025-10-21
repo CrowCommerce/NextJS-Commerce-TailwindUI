@@ -25,14 +25,7 @@ const ProductPageSkeleton = () => (
               <div className="h-4 w-full rounded bg-gray-200" />
               <div className="h-4 w-5/6 rounded bg-gray-200" />
             </div>
-            
-            {/* Color options */}
-            <div className="mb-4 h-4 w-16 rounded bg-gray-200" />
-            <div className="mb-10 flex gap-x-3">
-              <div className="size-8 rounded-full bg-gray-200" />
-              <div className="size-8 rounded-full bg-gray-200" />
-              <div className="size-8 rounded-full bg-gray-200" />
-            </div>
+  
             
             {/* Buttons */}
             <div className="flex gap-4">

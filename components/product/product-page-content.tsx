@@ -3,7 +3,7 @@
 import { ProductInitializer } from 'components/product/product-initializer';
 import ProductWrapper from 'components/product/product-wrapper';
 import { Product } from 'lib/shopify/types';
-import { transformShopifyProductToTailwindDetail } from 'lib/utils';
+import { baseUrl, transformShopifyProductToTailwindDetail } from 'lib/utils';
 import { notFound } from 'next/navigation';
 import { use, type ReactNode } from 'react';
 
@@ -35,6 +35,16 @@ export function ProductPageContent({
     }
   };
 
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${baseUrl}/` },
+      { '@type': 'ListItem', position: 2, name: 'Products', item: `${baseUrl}/products` },
+      { '@type': 'ListItem', position: 3, name: product.title, item: `${baseUrl}/product/${product.handle}` }
+    ]
+  };
+
   // Transform product for Tailwind component
   const transformedProduct = transformShopifyProductToTailwindDetail(product);
 
@@ -45,6 +55,12 @@ export function ProductPageContent({
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(productJsonLd)
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd)
         }}
       />
       <ProductWrapper product={product} transformedProduct={transformedProduct} />

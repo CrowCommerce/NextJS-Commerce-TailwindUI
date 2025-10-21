@@ -1,5 +1,8 @@
 'use client'
 
+import Image from 'next/image'
+import Link from 'next/link'
+
 export default function Hero() {
     return (
         <>
@@ -7,10 +10,13 @@ export default function Hero() {
       <div className="relative bg-gray-900">
       {/* Decorative image and overlay */}
       <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
-        <img
-          alt=""
+        <Image
           src="https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-01-hero-full-width.jpg"
-          className="size-full object-cover"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
         />
       </div>
       <div aria-hidden="true" className="absolute inset-0 bg-gray-900 opacity-50" />
@@ -22,12 +28,12 @@ export default function Hero() {
           The new arrivals have, well, newly arrived. Check out the latest options from our summer small-batch release
           while they're still in stock.
         </p>
-        <a
-          href="#"
+        <Link
+          href="/products?sort=latest-desc"
           className="mt-8 inline-block rounded-md border border-transparent bg-white px-8 py-3 text-base font-medium text-gray-900 hover:bg-gray-100"
         >
           Shop New Arrivals
-        </a>
+        </Link>
       </div>
     </div>
     </>

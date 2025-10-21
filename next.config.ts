@@ -15,6 +15,11 @@ export default {
       {
         protocol: 'https',
         hostname: 'via.placeholder.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'tailwindcss.com',
+        pathname: '/plus-assets/**'
       }
     ]
   }

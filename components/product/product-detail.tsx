@@ -1,21 +1,22 @@
 'use client'
 
 import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Tab,
-  TabGroup,
-  TabList,
-  TabPanel,
-  TabPanels,
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+    Tab,
+    TabGroup,
+    TabList,
+    TabPanel,
+    TabPanels,
 } from '@headlessui/react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import {
-  HeartIcon,
-  MinusIcon,
-  PlusIcon,
+    HeartIcon,
+    MinusIcon,
+    PlusIcon,
 } from '@heroicons/react/24/outline'
+import Breadcrumbs from 'components/layout/breadcrumbs'
 import ProductDetailPrice from 'components/price/product-detail-price'
 import type { TailwindProductDetail } from 'lib/utils'
 import Image from 'next/image'
@@ -32,6 +33,15 @@ interface ProductDetailProps {
 export default function ProductDetail({ product, onAddToCart }: ProductDetailProps) {
   return (
     <main className="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8">
+      <div className="px-4 sm:px-0 mb-4 sm:mb-6 lg:mb-8">
+        <Breadcrumbs
+          items={[
+            { name: 'Home', href: '/' },
+            { name: 'Products', href: '/products' },
+            { name: product.name },
+          ]}
+        />
+      </div>
       <div className="mx-auto max-w-2xl lg:max-w-none">
         {/* Product */}
         <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">

@@ -121,16 +121,16 @@ export default function ProductDetail({ product, options, variants, onAddToCart 
 
   return (
     <main className="mx-auto max-w-7xl sm:px-6 sm:pt-12 lg:px-8">
-      <div className="px-4 sm:px-0 mb-4 sm:mb-6 lg:mb-8">
-        <Breadcrumbs
-          items={[
-            { name: 'Home', href: '/' },
-            { name: 'Products', href: '/products' },
-            { name: product.name },
-          ]}
-        />
-      </div>
       <div className="mx-auto max-w-2xl lg:max-w-none">
+        <div className="px-4 pt-6 pb-4 sm:px-0 sm:pt-0 sm:pb-6 lg:pb-8">
+          <Breadcrumbs
+            items={[
+              { name: 'Home', href: '/' },
+              { name: 'Products', href: '/products' },
+              { name: product.name },
+            ]}
+          />
+        </div>
         {/* Product */}
         <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
           {/* Image gallery */}

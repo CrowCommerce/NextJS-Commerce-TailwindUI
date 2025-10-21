@@ -137,9 +137,7 @@ export default function Cart() {
                                             currencyCode={item.cost.totalAmount.currencyCode}
                                           />
                                         </div>
-                                        {item.merchandise.title !== 'Default Title' && (
-                                          <p className="mt-1 text-sm text-gray-500">{item.merchandise.title}</p>
-                                        )}
+                                        
                                       </div>
                                       <div className="flex flex-1 items-end justify-between text-sm">
                                         <div className="ml-0 flex h-7 flex-row items-center rounded-full border border-gray-200 bg-white">

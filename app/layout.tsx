@@ -35,7 +35,7 @@ export default async function RootLayout({
         <Navbar />
         <Cart />
         <main>
-          {children}
+            {children}
         </main>
         <Footer />
       </body>

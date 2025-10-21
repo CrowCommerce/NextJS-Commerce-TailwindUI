@@ -1,11 +1,10 @@
 import { Suspense } from 'react';
 import NavbarData from './navbar-data';
-import NavbarSkeleton from './navbar-skeleton';
 
 export default async function Navbar() {
+  'use cache'
   return (
-    <Suspense fallback={<NavbarSkeleton />}>
-      {/* The async fetch happens inside this child server component */}
+    <Suspense fallback={null}>
       <NavbarData />
     </Suspense>
   );

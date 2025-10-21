@@ -28,8 +28,9 @@ export async function addItem(
       (await cookies()).set('cartId', newCart.id!);
     }
 
-    await addToCart([{ merchandiseId: selectedVariantId, quantity: 1 }]);
+    const updatedCart = await addToCart([{ merchandiseId: selectedVariantId, quantity: 1 }]);
     revalidateTag(TAGS.cart, "max");
+    return updatedCart;
   } catch (e) {
     return 'Error adding item to cart';
   }
@@ -48,8 +49,9 @@ export async function removeItem(prevState: any, merchandiseId: string) {
     );
 
     if (lineItem && lineItem.id) {
-      await removeFromCart([lineItem.id]);
+      const updatedCart = await removeFromCart([lineItem.id]);
       revalidateTag(TAGS.cart, "max");
+      return updatedCart;
     } else {
       return 'Item not found in cart';
     }
@@ -78,11 +80,12 @@ export async function updateItemQuantity(
       (line) => line.merchandise.id === merchandiseId
     );
 
+    let updatedCart;
     if (lineItem && lineItem.id) {
       if (quantity === 0) {
-        await removeFromCart([lineItem.id]);
+        updatedCart = await removeFromCart([lineItem.id]);
       } else {
-        await updateCart([
+        updatedCart = await updateCart([
           {
             id: lineItem.id,
             merchandiseId,
@@ -92,10 +95,11 @@ export async function updateItemQuantity(
       }
     } else if (quantity > 0) {
       // If the item doesn't exist in the cart and quantity > 0, add it
-      await addToCart([{ merchandiseId, quantity }]);
+      updatedCart = await addToCart([{ merchandiseId, quantity }]);
     }
 
     revalidateTag(TAGS.cart, "max");
+    return updatedCart;
   } catch (e) {
     console.error(e);
     return 'Error updating item quantity';

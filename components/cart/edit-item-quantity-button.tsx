@@ -4,6 +4,7 @@ import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { updateItemQuantity } from 'components/cart/actions';
 import type { CartItem } from 'lib/shopify/types';
+import { useCartStore } from 'lib/stores/cart-store';
 import { useActionState } from 'react';
 
 function SubmitButton({ type, size = 'md' }: { type: 'plus' | 'minus'; size?: 'xs' | 'sm' | 'md' }) {
@@ -39,6 +40,7 @@ export function EditItemQuantityButton({
   size?: 'xs' | 'sm' | 'md';
 }) {
   const [message, formAction] = useActionState(updateItemQuantity, null);
+  const setCart = useCartStore((state) => state.setCart);
   const payload = {
     merchandiseId: item.merchandise.id,
     quantity: type === 'plus' ? item.quantity + 1 : item.quantity - 1
@@ -49,7 +51,11 @@ export function EditItemQuantityButton({
     <form
       action={async () => {
         optimisticUpdate(payload.merchandiseId, type);
-        updateItemQuantityAction();
+        const result = await updateItemQuantityAction();
+        // If result is a cart object (not an error string), update the store
+        if (result && typeof result === 'object' && 'lines' in result) {
+          setCart(result);
+        }
       }}
     >
       <SubmitButton type={type} size={size} />

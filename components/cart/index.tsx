@@ -207,6 +207,7 @@ export default function Cart() {
 
 function RemoveItemTextButton({ item, optimisticUpdate }: { item: CartItem; optimisticUpdate: any }) {
   const [message, formAction] = useActionState(removeItem, null)
+  const setCart = useCartStore((state) => state.setCart)
   const merchandiseId = item.merchandise.id
   const removeItemAction = formAction.bind(null, merchandiseId)
 
@@ -214,7 +215,11 @@ function RemoveItemTextButton({ item, optimisticUpdate }: { item: CartItem; opti
     <form
       action={async () => {
         optimisticUpdate(merchandiseId, 'delete')
-        removeItemAction()
+        const result = await removeItemAction()
+        // If result is a cart object (not an error string), update the store
+        if (result && typeof result === 'object' && 'lines' in result) {
+          setCart(result)
+        }
       }}
     >
       <button

@@ -60,6 +60,7 @@ function SubmitButton({
 export function AddToCart({ product }: { product: Product }) {
   const { variants, availableForSale } = product;
   const addCartItem = useCartStore((state) => state.addCartItem);
+  const setCart = useCartStore((state) => state.setCart);
   const productState = useProductStore((state) => state.state);
   const [message, formAction] = useActionState(addItem, null);
 
@@ -79,7 +80,11 @@ export function AddToCart({ product }: { product: Product }) {
     <form
       action={async () => {
         addCartItem(finalVariant, product);
-        addItemAction();
+        const result = await addItemAction();
+        // If result is a cart object (not an error string), update the store
+        if (result && typeof result === 'object' && 'lines' in result) {
+          setCart(result);
+        }
       }}
     >
       <SubmitButton

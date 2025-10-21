@@ -2,11 +2,11 @@
 
 import { TAGS } from 'lib/constants';
 import {
-  addToCart,
-  createCart,
-  getCart,
-  removeFromCart,
-  updateCart
+    addToCart,
+    createCart,
+    getCart,
+    removeFromCart,
+    updateCart
 } from 'lib/shopify';
 import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
@@ -103,4 +103,9 @@ export async function redirectToCheckout() {
 export async function createCartAndSetCookie() {
   let cart = await createCart();
   (await cookies()).set('cartId', cart.id!);
+}
+
+export async function loadCart(prevState: any) {
+  const cart = await getCart();
+  return cart ?? null;
 }

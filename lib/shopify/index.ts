@@ -1,65 +1,65 @@
 import {
-    HIDDEN_PRODUCT_TAG,
-    SHOPIFY_GRAPHQL_API_ENDPOINT,
-    TAGS
+  HIDDEN_PRODUCT_TAG,
+  SHOPIFY_GRAPHQL_API_ENDPOINT,
+  TAGS
 } from 'lib/constants';
 import { isShopifyError } from 'lib/type-guards';
 import { ensureStartsWith } from 'lib/utils';
 import {
-    unstable_cacheLife as cacheLife,
-    unstable_cacheTag as cacheTag,
-    revalidateTag
+  unstable_cacheLife as cacheLife,
+  unstable_cacheTag as cacheTag,
+  revalidateTag
 } from 'next/cache';
 import { cookies, headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import {
-    addToCartMutation,
-    createCartMutation,
-    editCartItemsMutation,
-    removeFromCartMutation
+  addToCartMutation,
+  createCartMutation,
+  editCartItemsMutation,
+  removeFromCartMutation
 } from './mutations/cart';
 import { getCartQuery } from './queries/cart';
 import {
-    getCollectionProductsQuery,
-    getCollectionQuery,
-    getCollectionsQuery
+  getCollectionProductsQuery,
+  getCollectionQuery,
+  getCollectionsQuery
 } from './queries/collection';
 import { getMenuQuery } from './queries/menu';
 import { getNavigationQuery } from './queries/navigation';
 import { getPageQuery, getPagesQuery } from './queries/page';
 import {
-    getProductQuery,
-    getProductRecommendationsQuery,
-    getProductsQuery
+  getProductQuery,
+  getProductRecommendationsQuery,
+  getProductsQuery
 } from './queries/product';
 import {
-    Cart,
-    Collection,
-    Connection,
-    Image,
-    Menu,
-    Navigation,
-    NavigationLink,
-    Page,
-    Product,
-    ShopifyAddToCartOperation,
-    ShopifyCart,
-    ShopifyCartOperation,
-    ShopifyCollection,
-    ShopifyCollectionOperation,
-    ShopifyCollectionProductsOperation,
-    ShopifyCollectionsOperation,
-    ShopifyCreateCartOperation,
-    ShopifyMenuOperation,
-    ShopifyNavigationOperation,
-    ShopifyPageOperation,
-    ShopifyPagesOperation,
-    ShopifyProduct,
-    ShopifyProductOperation,
-    ShopifyProductRecommendationsOperation,
-    ShopifyProductsOperation,
-    ShopifyRemoveFromCartOperation,
-    ShopifyUpdateCartOperation
+  Cart,
+  Collection,
+  Connection,
+  Image,
+  Menu,
+  Navigation,
+  NavigationLink,
+  Page,
+  Product,
+  ShopifyAddToCartOperation,
+  ShopifyCart,
+  ShopifyCartOperation,
+  ShopifyCollection,
+  ShopifyCollectionOperation,
+  ShopifyCollectionProductsOperation,
+  ShopifyCollectionsOperation,
+  ShopifyCreateCartOperation,
+  ShopifyMenuOperation,
+  ShopifyNavigationOperation,
+  ShopifyPageOperation,
+  ShopifyPagesOperation,
+  ShopifyProduct,
+  ShopifyProductOperation,
+  ShopifyProductRecommendationsOperation,
+  ShopifyProductsOperation,
+  ShopifyRemoveFromCartOperation,
+  ShopifyUpdateCartOperation
 } from './types';
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN
@@ -215,6 +215,72 @@ const reshapeProducts = (products: ShopifyProduct[]) => {
   }
 
   return reshapedProducts;
+};
+
+// Default navigation fallback used when Shopify navigation metaobjects are empty
+const DEFAULT_NAVIGATION: Navigation = {
+  categories: [
+    {
+      name: 'Women',
+      featured: [
+        { name: 'Sleep', href: '/products' },
+        { name: 'Swimwear', href: '/products' },
+        { name: 'Underwear', href: '/products' }
+      ],
+      categories: [
+        { name: 'Basic Tees', href: '/products' },
+        { name: 'Artwork Tees', href: '/products' },
+        { name: 'Bottoms', href: '/products' },
+        { name: 'Underwear', href: '/products' },
+        { name: 'Accessories', href: '/products' }
+      ],
+      collection: [
+        { name: 'Everything', href: '/products' },
+        { name: 'Core', href: '/products' },
+        { name: 'New Arrivals', href: '/products' },
+        { name: 'Sale', href: '/products' }
+      ],
+      brands: [
+        { name: 'Full Nelson', href: '/products' },
+        { name: 'My Way', href: '/products' },
+        { name: 'Re-Arranged', href: '/products' },
+        { name: 'Counterfeit', href: '/products' },
+        { name: 'Significant Other', href: '/products' }
+      ]
+    },
+    {
+      name: 'Men',
+      featured: [
+        { name: 'Casual', href: '/products' },
+        { name: 'Boxers', href: '/products' },
+        { name: 'Outdoor', href: '/products' }
+      ],
+      categories: [
+        { name: 'Artwork Tees', href: '/products' },
+        { name: 'Pants', href: '/products' },
+        { name: 'Accessories', href: '/products' },
+        { name: 'Boxers', href: '/products' },
+        { name: 'Basic Tees', href: '/products' }
+      ],
+      collection: [
+        { name: 'Everything', href: '/products' },
+        { name: 'Core', href: '/products' },
+        { name: 'New Arrivals', href: '/products' },
+        { name: 'Sale', href: '/products' }
+      ],
+      brands: [
+        { name: 'Significant Other', href: '/products' },
+        { name: 'My Way', href: '/products' },
+        { name: 'Counterfeit', href: '/products' },
+        { name: 'Re-Arranged', href: '/products' },
+        { name: 'Full Nelson', href: '/products' }
+      ]
+    }
+  ],
+  pages: [
+    { name: 'Company', href: '/company' },
+    { name: 'Stores', href: '/stores' }
+  ]
 };
 
 export async function createCart(): Promise<Cart> {
@@ -446,9 +512,12 @@ export async function getNavigation(): Promise<Navigation> {
     }
   }
 
+  const hasCategories = Array.isArray(categories) && categories.length > 0;
+  const hasPages = Array.isArray(pages) && pages.length > 0;
+
   return {
-    categories,
-    pages
+    categories: hasCategories ? categories : DEFAULT_NAVIGATION.categories,
+    pages: hasPages ? pages : DEFAULT_NAVIGATION.pages
   };
 }
 

@@ -18,6 +18,7 @@ import {
 } from '@heroicons/react/24/outline'
 import ProductDetailPrice from 'components/price/product-detail-price'
 import type { TailwindProductDetail } from 'lib/utils'
+import Image from 'next/image'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -46,7 +47,13 @@ export default function ProductDetail({ product, onAddToCart }: ProductDetailPro
                   >
                     <span className="sr-only">{image.name}</span>
                     <span className="absolute inset-0 overflow-hidden rounded-md">
-                      <img alt="" src={image.src} className="size-full object-cover" />
+                      <Image
+                        alt={image.name || ''}
+                        src={image.src}
+                        fill
+                        sizes="96px"
+                        className="object-cover"
+                      />
                     </span>
                     <span
                       aria-hidden="true"
@@ -60,7 +67,15 @@ export default function ProductDetail({ product, onAddToCart }: ProductDetailPro
             <TabPanels>
               {product.images.map((image) => (
                 <TabPanel key={image.id}>
-                  <img alt={image.alt} src={image.src} className="aspect-square w-full object-cover sm:rounded-lg" />
+                  <div className="relative aspect-square w-full overflow-hidden sm:rounded-lg">
+                    <Image
+                      alt={image.alt}
+                      src={image.src}
+                      fill
+                      sizes="(min-width: 1024px) 50vw, 100vw"
+                      className="object-cover"
+                    />
+                  </div>
                 </TabPanel>
               ))}
             </TabPanels>

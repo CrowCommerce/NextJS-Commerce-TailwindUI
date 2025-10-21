@@ -80,7 +80,7 @@ export function AddToCart({ product }: { product: Product }) {
     <form
       action={async () => {
         addCartItem(finalVariant, product);
-        const result = await addItemAction();
+        const result = await addItem(null, selectedVariantId);
         // If result is a cart object (not an error string), update the store
         if (result && typeof result === 'object' && 'lines' in result) {
           setCart(result);
@@ -92,7 +92,7 @@ export function AddToCart({ product }: { product: Product }) {
         selectedVariantId={selectedVariantId}
       />
       <p aria-live="polite" className="sr-only" role="status">
-        {message}
+        {typeof message === 'string' ? message : ''}
       </p>
     </form>
   );

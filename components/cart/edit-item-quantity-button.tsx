@@ -51,7 +51,7 @@ export function EditItemQuantityButton({
     <form
       action={async () => {
         optimisticUpdate(payload.merchandiseId, type);
-        const result = await updateItemQuantityAction();
+        const result = await updateItemQuantity(null, payload);
         // If result is a cart object (not an error string), update the store
         if (result && typeof result === 'object' && 'lines' in result) {
           setCart(result);
@@ -60,7 +60,7 @@ export function EditItemQuantityButton({
     >
       <SubmitButton type={type} size={size} />
       <p aria-live="polite" className="sr-only" role="status">
-        {message}
+        {typeof message === 'string' ? message : ''}
       </p>
     </form>
   );

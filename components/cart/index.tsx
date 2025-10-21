@@ -215,7 +215,7 @@ function RemoveItemTextButton({ item, optimisticUpdate }: { item: CartItem; opti
     <form
       action={async () => {
         optimisticUpdate(merchandiseId, 'delete')
-        const result = await removeItemAction()
+        const result = await removeItem(null, merchandiseId)
         // If result is a cart object (not an error string), update the store
         if (result && typeof result === 'object' && 'lines' in result) {
           setCart(result)
@@ -229,7 +229,7 @@ function RemoveItemTextButton({ item, optimisticUpdate }: { item: CartItem; opti
         Remove
       </button>
       <p aria-live="polite" className="sr-only" role="status">
-        {message}
+        {typeof message === 'string' ? message : ''}
       </p>
     </form>
   )

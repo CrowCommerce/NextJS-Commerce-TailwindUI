@@ -37,7 +37,6 @@ export default function TrendingProducts({ products }: TrendingProductsProps) {
                       className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75"
                     />
                     <div className="mt-6">
-                      <p className="text-sm text-gray-500">{product.color}</p>
                       <h3 className="mt-1 font-semibold text-gray-900">
                         <Link href={product.href}>
                           <span className="absolute inset-0" />

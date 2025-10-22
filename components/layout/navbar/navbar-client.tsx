@@ -261,7 +261,7 @@ export default function NavbarClient({
                   ref={hamburgerButtonRef}
                   type="button"
                   onClick={() => setOpen(true)}
-                  className="relative z-10 -ml-2 min-h-[44px] min-w-[44px] touch-manipulation cursor-pointer rounded-md bg-white p-2 text-gray-400 active:bg-gray-100 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2"
+                  className="relative z-10 -ml-2 min-h-[44px] min-w-[44px] touch-manipulation cursor-pointer rounded-md bg-white p-2 text-gray-400 hover:text-gray-500 active:bg-gray-100 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2"
                   aria-expanded={open}
                   aria-controls="mobile-menu"
                   aria-label="Open main menu"

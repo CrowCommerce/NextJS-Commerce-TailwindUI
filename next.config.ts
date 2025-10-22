@@ -2,25 +2,25 @@ export default {
   experimental: {
     cacheComponents: true,
     inlineCss: true,
-    useCache: true
+    useCache: true,
   },
   images: {
-    formats: ['image/avif', 'image/webp'],
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'cdn.shopify.com',
-        pathname: '/s/files/**'
+        protocol: "https",
+        hostname: "cdn.shopify.com",
+        pathname: "/s/files/**",
       },
       {
-        protocol: 'https',
-        hostname: 'via.placeholder.com'
+        protocol: "https",
+        hostname: "via.placeholder.com",
       },
       {
-        protocol: 'https',
-        hostname: 'tailwindcss.com',
-        pathname: '/plus-assets/**'
-      }
-    ]
-  }
+        protocol: "https",
+        hostname: "tailwindcss.com",
+        pathname: "/plus-assets/**",
+      },
+    ],
+  },
 };

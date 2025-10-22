@@ -1,15 +1,19 @@
-'use cache';
+"use cache";
 
-import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
-import { ProductPageContent } from 'components/product/product-page-content';
-import RelatedProductsComponent from 'components/product/related-products';
-import { HIDDEN_PRODUCT_TAG } from 'lib/constants';
-import { getProduct, getProductRecommendations, getProducts } from 'lib/shopify';
-import type { Product } from 'lib/shopify/types';
-import { transformShopifyProductsToRelatedProducts } from 'lib/utils';
-import { Suspense } from 'react';
+import { ProductPageContent } from "components/product/product-page-content";
+import RelatedProductsComponent from "components/product/related-products";
+import { HIDDEN_PRODUCT_TAG } from "lib/constants";
+import {
+  getProduct,
+  getProductRecommendations,
+  getProducts,
+} from "lib/shopify";
+import type { Product } from "lib/shopify/types";
+import { transformShopifyProductsToRelatedProducts } from "lib/utils";
+import { Suspense } from "react";
 
 export async function generateMetadata(props: {
   params: Promise<{ handle: string }>;
@@ -30,8 +34,8 @@ export async function generateMetadata(props: {
       follow: indexable,
       googleBot: {
         index: indexable,
-        follow: indexable
-      }
+        follow: indexable,
+      },
     },
     openGraph: url
       ? {
@@ -40,11 +44,11 @@ export async function generateMetadata(props: {
               url,
               width,
               height,
-              alt
-            }
-          ]
+              alt,
+            },
+          ],
         }
-      : null
+      : null,
   };
 }
 
@@ -52,16 +56,18 @@ export async function generateStaticParams() {
   const products = await getProducts({});
 
   return products.map((product) => ({
-    handle: product.handle
+    handle: product.handle,
   }));
 }
 
-export default async function ProductPage(props: { params: Promise<{ handle: string }> }) {
+export default async function ProductPage(props: {
+  params: Promise<{ handle: string }>;
+}) {
   const params = await props.params;
   // Don't await the fetch, pass the Promise to the client component
   const productPromise = getProduct(params.handle);
 
-  if(!productPromise) return notFound();
+  if (!productPromise) return notFound();
 
   return (
     <ProductPageContent
@@ -70,7 +76,9 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
         <Suspense
           fallback={
             <div className="mx-auto max-w-7xl px-4 py-8">
-              <h2 className="mb-4 text-xl font-bold text-gray-900">Customers also bought</h2>
+              <h2 className="mb-4 text-xl font-bold text-gray-900">
+                Customers also bought
+              </h2>
               <div className="h-24 animate-pulse rounded bg-gray-200" />
             </div>
           }
@@ -82,7 +90,11 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
   );
 }
 
-async function RelatedProducts({ productPromise }: { productPromise: Promise<Product | undefined> }) {
+async function RelatedProducts({
+  productPromise,
+}: {
+  productPromise: Promise<Product | undefined>;
+}) {
   // Await the product promise
   const product = await productPromise;
   if (!product) return null;
@@ -92,10 +104,11 @@ async function RelatedProducts({ productPromise }: { productPromise: Promise<Pro
   if (!relatedProducts.length) return null;
 
   // Transform products for Tailwind component
-  const transformedRelatedProducts = transformShopifyProductsToRelatedProducts(relatedProducts);
+  const transformedRelatedProducts =
+    transformShopifyProductsToRelatedProducts(relatedProducts);
 
   return (
-    <RelatedProductsComponent 
+    <RelatedProductsComponent
       products={transformedRelatedProducts}
       fullProducts={relatedProducts}
     />

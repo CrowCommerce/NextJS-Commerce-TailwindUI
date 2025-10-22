@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
+import Link from "next/link";
 
 type BreadcrumbItem = {
   name: string;
@@ -23,8 +23,8 @@ export default function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
                 </Link>
               ) : (
                 <span
-                  className={isLast ? 'text-gray-900' : ''}
-                  aria-current={isLast ? 'page' : undefined}
+                  className={isLast ? "text-gray-900" : ""}
+                  aria-current={isLast ? "page" : undefined}
                 >
                   {item.name}
                 </span>
@@ -41,5 +41,3 @@ export default function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
     </nav>
   );
 }
-
-

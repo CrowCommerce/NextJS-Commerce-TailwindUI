@@ -1,34 +1,34 @@
-'use client';
+"use client";
 
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import { sorting } from 'lib/constants';
-import { createUrl } from 'lib/utils';
-import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { sorting } from "lib/constants";
+import { createUrl } from "lib/utils";
+import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
 
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function SortFilterMenu() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  
-  const currentSort = searchParams.get('sort');
-  const q = searchParams.get('q');
-  
+
+  const currentSort = searchParams.get("sort");
+  const q = searchParams.get("q");
+
   const sortOptions = sorting.map((item) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (q) params.set('q', q);
+    if (q) params.set("q", q);
     if (item.slug) {
-      params.set('sort', item.slug);
+      params.set("sort", item.slug);
     } else {
-      params.delete('sort');
+      params.delete("sort");
     }
-    
+
     const href = createUrl(pathname, params);
-    
+
     return {
       name: item.title,
       href,
@@ -56,8 +56,10 @@ export default function SortFilterMenu() {
               <Link
                 href={option.href}
                 className={classNames(
-                  option.current ? 'font-medium text-gray-900' : 'text-gray-500',
-                  'block px-4 py-2 text-sm data-focus:bg-indigo-50 data-focus:outline-hidden',
+                  option.current
+                    ? "font-medium text-gray-900"
+                    : "text-gray-500",
+                  "block px-4 py-2 text-sm data-focus:bg-indigo-50 data-focus:outline-hidden",
                 )}
               >
                 {option.name}
@@ -69,4 +71,3 @@ export default function SortFilterMenu() {
     </Menu>
   );
 }
-

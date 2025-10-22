@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 interface SearchButtonProps {
   onClick: () => void;
@@ -21,4 +21,3 @@ export function SearchButton({ onClick }: SearchButtonProps) {
     </button>
   );
 }
-

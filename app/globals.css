@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @plugin "@tailwindcss/container-queries";
 @plugin "@tailwindcss/typography";
@@ -14,7 +14,10 @@
 }
 
 /* Remove all focus visuals (outline/ring) globally */
-:is(button,[role="button"],a,input,select,textarea,summary):is(:focus,:focus-visible) {
+:is(button, [role="button"], a, input, select, textarea, summary):is(
+    :focus,
+    :focus-visible
+  ) {
   outline: none !important;
   box-shadow: none !important;
 }
@@ -26,7 +29,7 @@
 }
 
 @supports (font: -apple-system-body) and (-webkit-appearance: none) {
-  img[loading='lazy'] {
+  img[loading="lazy"] {
     clip-path: inset(0.6px);
   }
 }

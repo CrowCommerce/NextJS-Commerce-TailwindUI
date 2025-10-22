@@ -5,6 +5,7 @@
 This is a production-ready, server-rendered Next.js 16 ecommerce application built on Vercel's Commerce template and enhanced with premium Tailwind UI components. The project demonstrates modern e-commerce best practices with a focus on performance, accessibility, and developer experience.
 
 **Key Statistics:**
+
 - **Framework:** Next.js 16 (canary) with App Router
 - **React Version:** React 19 with Server Components and Server Actions
 - **Styling:** Tailwind CSS v4 with @tailwindcss plugins
@@ -18,6 +19,7 @@ This is a production-ready, server-rendered Next.js 16 ecommerce application bui
 ## 1. ROUTING ARCHITECTURE
 
 ### Router Type: **App Router (Next.js 16)**
+
 The project uses Next.js App Router with a structured directory organization strategy.
 
 ### Route Structure
@@ -60,37 +62,44 @@ app/
 ### Route Patterns and Key Features
 
 #### 1. **Root Layout** (`app/layout.tsx`)
+
 - Applies global providers: `CartProvider`, `SearchProvider`
 - Renders global components: `Navbar`, `Footer`, `SearchDialog`
 - Uses GeistSans font from Vercel
 - Sets up metadata with `metadataBase` for SEO
 
 #### 2. **Store Route Group** (`app/(store)/`)
+
 - Logical organization without affecting URL structure
 - Shares store-specific layout across products and search routes
 - Follows Tailwind UI design system throughout
 
 #### 3. **Product Pages** (`app/product/[handle]/`)
+
 - **Static Generation Strategy**: Uses `generateStaticParams()` to pre-render all products at build time
 - Dramatically improves performance vs. dynamic generation
 - Fetches product promise without awaiting (lazy loading pattern)
 - Suspense boundary for related products section
 
 #### 4. **Collections/Filtering** (`app/(store)/products/[collection]/`)
+
 - Maps Shopify collections to `/products/[collection]` routes
 - Supports sorting (via `?sort=slug` query param)
 - Revalidates via Shopify webhooks to `/api/revalidate`
 
 #### 5. **Search Routes** (`app/(store)/search/`)
+
 - Query-based search with `?q=` parameter
 - Optional collection filtering: `/search/[collection]?q=query`
 - Client-side search component with command palette
 
 #### 6. **Dynamic Pages** (`app/[page]/`)
+
 - Catch-all for Shopify pages (About, Contact, Terms, etc.)
 - Used for dynamic content pages from Shopify
 
 #### 7. **API Routes** (`app/api/`)
+
 - **POST /api/revalidate** - Shopify webhook handler
   - Validates webhook secret
   - Triggers cache revalidation for products/collections
@@ -222,10 +231,13 @@ Each context uses a different price component to maintain design consistency:
 
 ```typescript
 // In cart-context.tsx
-const [optimisticCart, addOptimisticItem] = useOptimistic(cart, (state, newItem) => ({
-  ...state,
-  lines: [...state.lines, newItem]
-}));
+const [optimisticCart, addOptimisticItem] = useOptimistic(
+  cart,
+  (state, newItem) => ({
+    ...state,
+    lines: [...state.lines, newItem],
+  }),
+);
 ```
 
 #### Pattern 4: Variant Selection State Management
@@ -264,15 +276,16 @@ updateURL(newState); // Pushes to ?color=black&size=M
 async function shopifyFetch<T>({
   headers,
   query,
-  variables
+  variables,
 }: {
   headers?: HeadersInit;
   query: string;
   variables?: ExtractVariables<T>;
-}): Promise<{ status: number; body: T }>
+}): Promise<{ status: number; body: T }>;
 ```
 
 **Key Features:**
+
 - Generic type inference from GraphQL operation types
 - Automatic token injection via `X-Shopify-Storefront-Access-Token` header
 - Error handling with custom error shape
@@ -284,25 +297,26 @@ async function shopifyFetch<T>({
 
 ```typescript
 export async function getProduct(handle: string): Promise<Product | undefined> {
-  'use cache';                           // Enable caching
-  cacheTag(TAGS.products);               // Tag for revalidation
-  cacheLife('days');                     // Cache duration
-  
+  "use cache"; // Enable caching
+  cacheTag(TAGS.products); // Tag for revalidation
+  cacheLife("days"); // Cache duration
+
   const res = await shopifyFetch<ShopifyProductOperation>({
     query: getProductQuery,
-    variables: { handle }
+    variables: { handle },
   });
-  
+
   return reshapeProduct(res.body.data.product, false);
 }
 ```
 
 **Cache Tags Defined** (`lib/constants.ts`):
+
 ```typescript
 export const TAGS = {
-  collections: 'collections',
-  products: 'products',
-  cart: 'cart'
+  collections: "collections",
+  products: "products",
+  cart: "cart",
 };
 ```
 
@@ -310,15 +324,15 @@ export const TAGS = {
 
 ```typescript
 export async function getCart(): Promise<Cart | undefined> {
-  const cartId = (await cookies()).get('cartId')?.value;
-  
+  const cartId = (await cookies()).get("cartId")?.value;
+
   if (!cartId) return undefined;
-  
+
   const res = await shopifyFetch<ShopifyCartOperation>({
     query: getCartQuery,
-    variables: { cartId }
+    variables: { cartId },
   });
-  
+
   return reshapeCart(res.body.data.cart);
 }
 ```
@@ -327,34 +341,37 @@ export async function getCart(): Promise<Cart | undefined> {
 
 ```typescript
 // components/cart/actions.ts
-'use server';
+"use server";
 
 export async function addItem(
   prevState: any,
-  selectedVariantId: string | undefined
+  selectedVariantId: string | undefined,
 ) {
   try {
     await addToCart([{ merchandiseId: selectedVariantId, quantity: 1 }]);
-    revalidateTag(TAGS.cart, 'max');      // Invalidate cart cache
-    revalidatePath('/', 'layout');        // Revalidate layout (critical!)
+    revalidateTag(TAGS.cart, "max"); // Invalidate cart cache
+    revalidatePath("/", "layout"); // Revalidate layout (critical!)
   } catch (e) {
-    return 'Error adding item to cart';
+    return "Error adding item to cart";
   }
 }
 ```
 
 **Critical Pattern:** Cart actions call **both**:
+
 - `revalidateTag()` - Clears cached cart data
 - `revalidatePath('/', 'layout')` - Forces root layout re-render for cart count update
 
 ### GraphQL Query Organization
 
 **Structure:**
+
 - `lib/shopify/fragments/` - Reusable GraphQL fragments
 - `lib/shopify/queries/` - Data fetching queries
 - `lib/shopify/mutations/` - Data mutations (cart operations)
 
 **Example Fragment** (`lib/shopify/fragments/product.ts`):
+
 ```typescript
 const productFragment = `
   fragment product on Product {
@@ -411,21 +428,27 @@ const productFragment = `
 
 ```typescript
 // Shopify → Grid Product format
-export function transformShopifyProductToTailwind(product: Product): TailwindProduct {
+export function transformShopifyProductToTailwind(
+  product: Product,
+): TailwindProduct {
   // Extracts color variants
   // Maps to Tailwind color swatches
   // Returns grid-friendly structure
 }
 
 // Shopify → Detail Page format
-export function transformShopifyProductToTailwindDetail(product: Product): TailwindProductDetail {
+export function transformShopifyProductToTailwindDetail(
+  product: Product,
+): TailwindProductDetail {
   // Full product data for detail view
   // Includes images, colors, descriptions
   // Pre-populates details sections
 }
 
 // Shopify → Related Products format
-export function transformShopifyProductsToRelatedProducts(products: Product[]): TailwindRelatedProduct[] {
+export function transformShopifyProductsToRelatedProducts(
+  products: Product[],
+): TailwindRelatedProduct[] {
   // First 4 products only
   // Minimal fields for carousel display
 }
@@ -434,6 +457,7 @@ export function transformShopifyProductsToRelatedProducts(products: Product[]): 
 ### Caching Strategy
 
 **Experimental Next.js 16 Features:**
+
 ```typescript
 // next.config.ts
 experimental: {
@@ -444,6 +468,7 @@ experimental: {
 ```
 
 **Revalidation Triggers:**
+
 1. **Webhook Handler** (`/api/revalidate`) triggered by Shopify webhooks
 2. **On-demand** via `revalidateTag()` in Server Actions
 3. **Time-based** via `cacheLife('days')`
@@ -465,12 +490,13 @@ experimental: {
 ```
 
 **Usage:**
+
 ```typescript
 const { state, updateOption, updateImage } = useProduct();
 // state = { color: 'black', size: 'M', image: '2' }
 
 // Update with instant UI feedback
-const newState = updateOption('color', 'red');
+const newState = updateOption("color", "red");
 updateURL(newState); // Sync to URL
 ```
 
@@ -485,15 +511,17 @@ updateURL(newState); // Sync to URL
 ```
 
 **Key Methods:**
+
 ```typescript
 const { cart, updateCartItem, addCartItem } = useCart();
 
 // Optimistic operations
-updateCartItem(merchandiseId, 'plus');  // Instantly increment
-addCartItem(variant, product);           // Add with UI feedback
+updateCartItem(merchandiseId, "plus"); // Instantly increment
+addCartItem(variant, product); // Add with UI feedback
 ```
 
 **Cart Structure:**
+
 ```typescript
 type Cart = {
   id: string;
@@ -511,15 +539,17 @@ type Cart = {
 #### Layer 3: Server State (Cookies + Database)
 
 **Cart ID Storage:**
+
 ```typescript
 // Set on cart creation
-(await cookies()).set('cartId', cart.id);
+(await cookies()).set("cartId", cart.id);
 
 // Read on subsequent requests
-const cartId = (await cookies()).get('cartId')?.value;
+const cartId = (await cookies()).get("cartId")?.value;
 ```
 
 **Shopify handles:**
+
 - Persistent cart state server-side
 - Checkout URL generation
 - Tax/shipping calculations
@@ -527,6 +557,7 @@ const cartId = (await cookies()).get('cartId')?.value;
 #### Layer 4: URL State (Search Params)
 
 **Used for:**
+
 - Product variant selections: `?color=black&size=M`
 - Sorting/filtering: `?sort=price-asc`
 - Search queries: `?q=blue+shoes`
@@ -537,6 +568,7 @@ const cartId = (await cookies()).get('cartId')?.value;
 ### No External State Management
 
 The project does **not** use Redux, Zustand (despite being in package.json), or Jotai. Instead:
+
 - React Context for cross-cutting state (Product, Cart)
 - Server Actions for mutations
 - URL for navigation state
@@ -553,18 +585,19 @@ This minimalist approach reduces complexity while leveraging React 19's built-in
 ### Configuration Files
 
 #### PostCSS Config (`postcss.config.mjs`)
+
 ```javascript
 export default {
   plugins: {
-    '@tailwindcss/postcss': {},
-  }
+    "@tailwindcss/postcss": {},
+  },
 };
 ```
 
 #### Global Styles (`app/globals.css`)
 
 ```css
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @plugin "@tailwindcss/container-queries";
 @plugin "@tailwindcss/typography";
@@ -580,15 +613,22 @@ export default {
 }
 
 /* Remove all focus visuals globally */
-:is(button,[role="button"],a,input,select,textarea,summary):is(:focus,:focus-visible) {
+:is(button, [role="button"], a, input, select, textarea, summary):is(
+    :focus,
+    :focus-visible
+  ) {
   outline: none !important;
   box-shadow: none !important;
 }
 
 /* Fade in animation for product grids */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .animate-fadeIn {
@@ -607,6 +647,7 @@ export default {
 #### Color System
 
 **Palette:**
+
 - `bg-gray-50` - Lightest backgrounds
 - `bg-gray-500/75` - Semi-transparent overlays
 - `bg-blue-600` - Primary action buttons
@@ -616,13 +657,14 @@ export default {
 - `text-gray-400` - Tertiary/disabled text
 
 **Neutral Color Mapping** (`lib/utils.ts`):
+
 ```typescript
 const colorMap: Record<string, string> = {
-  black: '#111827',
-  white: '#FFFFFF',
-  gray: '#6B7280',
-  blue: '#2563EB',
-  indigo: '#4F46E5',
+  black: "#111827",
+  white: "#FFFFFF",
+  gray: "#6B7280",
+  blue: "#2563EB",
+  indigo: "#4F46E5",
   // ... 20+ colors mapped for product variant swatches
 };
 ```
@@ -630,6 +672,7 @@ const colorMap: Record<string, string> = {
 #### Spacing System
 
 Consistent use of Tailwind spacing scale:
+
 - `px-4 sm:px-6 lg:px-8` - Responsive padding
 - `gap-3`, `gap-8` - Component spacing
 - `py-6 sm:py-8` - Vertical rhythm
@@ -644,23 +687,26 @@ Consistent use of Tailwind spacing scale:
 #### Focus Management
 
 **Global Focus Removal** (per design):
+
 ```css
 /* Removes default focus rings */
-:is(button,[role="button"],a):is(:focus,:focus-visible) {
+:is(button, [role="button"], a):is(:focus, :focus-visible) {
   outline: none !important;
   box-shadow: none !important;
 }
 ```
 
 **Custom Focus Styles:**
+
 ```typescript
 // Applied explicitly where needed
-className="focus-visible:outline-2 focus-visible:outline-indigo-600"
+className = "focus-visible:outline-2 focus-visible:outline-indigo-600";
 ```
 
 #### Responsive Breakpoints
 
 Standard Tailwind breakpoints:
+
 - `hidden lg:block` - Desktop only
 - `sm:px-6` - Small screens up
 - `lg:grid lg:grid-cols-4` - Large screens up
@@ -669,33 +715,36 @@ Standard Tailwind breakpoints:
 ### Custom Components Using Tailwind
 
 **Button Patterns:**
+
 ```typescript
 // Primary action
-className="rounded-full bg-blue-600 px-4 py-3 text-white hover:opacity-90"
+className = "rounded-full bg-blue-600 px-4 py-3 text-white hover:opacity-90";
 
 // Secondary action
-className="border border-gray-300 px-4 py-2 hover:bg-gray-50"
+className = "border border-gray-300 px-4 py-2 hover:bg-gray-50";
 
 // Disabled state
-className="cursor-not-allowed opacity-60 hover:opacity-60"
+className = "cursor-not-allowed opacity-60 hover:opacity-60";
 ```
 
 **Card Patterns:**
+
 ```typescript
 // Product card
-className="rounded-lg border border-gray-200 hover:shadow-lg transition"
+className = "rounded-lg border border-gray-200 hover:shadow-lg transition";
 
 // Dialog panel
-className="rounded-lg bg-white shadow-xl"
+className = "rounded-lg bg-white shadow-xl";
 ```
 
 **Form Patterns:**
+
 ```typescript
 // Input
-className="block w-full px-4 py-2 border border-gray-300 rounded-lg"
+className = "block w-full px-4 py-2 border border-gray-300 rounded-lg";
 
 // Checkbox
-className="h-4 w-4 rounded border-gray-300"
+className = "h-4 w-4 rounded border-gray-300";
 ```
 
 ---
@@ -705,6 +754,7 @@ className="h-4 w-4 rounded border-gray-300"
 ### Architecture Overview
 
 The cart system combines:
+
 1. **Server State** - Shopify-managed (persistent)
 2. **Cookie Storage** - Cart ID persistence across sessions
 3. **React Context** - Optimistic UI updates
@@ -753,6 +803,7 @@ const { cart, updateCartItem, addCartItem } = useCart();
 **Key Methods:**
 
 1. **updateCartItem()** - Optimistic quantity updates
+
 ```typescript
 const optimisticCart = useOptimistic(cart, (state, action) => {
   // Instantly updates UI before server confirmation
@@ -760,6 +811,7 @@ const optimisticCart = useOptimistic(cart, (state, action) => {
 ```
 
 2. **addCartItem()** - Adds item to optimistic state
+
 ```typescript
 addCartItem(variant, product); // Adds to optimistic state
 // Then Server Action confirms
@@ -770,6 +822,7 @@ addCartItem(variant, product); // Adds to optimistic state
 **File:** `components/cart/index.tsx` (256 lines)
 
 **Features:**
+
 - **Headless UI Dialog** for accessible modal
 - **Auto-open on add** - Opens when totalQuantity increases
 - **Slide-in animation** - Enters from right with transition
@@ -777,6 +830,7 @@ addCartItem(variant, product); // Adds to optimistic state
 - **Checkout redirect** - Button links to Shopify checkout
 
 **Key Pattern:**
+
 ```typescript
 // Auto-open on quantity increase
 useEffect(() => {
@@ -798,44 +852,51 @@ useEffect(() => {
 **File:** `components/cart/actions.ts` (110 lines)
 
 #### 1. Add Item
+
 ```typescript
 export async function addItem(
   prevState: any,
-  selectedVariantId: string | undefined
+  selectedVariantId: string | undefined,
 ) {
   await addToCart([{ merchandiseId: selectedVariantId, quantity: 1 }]);
-  revalidateTag(TAGS.cart, 'max');
-  revalidatePath('/', 'layout');
+  revalidateTag(TAGS.cart, "max");
+  revalidatePath("/", "layout");
 }
 ```
 
 #### 2. Remove Item
+
 ```typescript
 export async function removeItem(prevState: any, merchandiseId: string) {
   const cart = await getCart();
-  const lineItem = cart.lines.find(line => line.merchandise.id === merchandiseId);
+  const lineItem = cart.lines.find(
+    (line) => line.merchandise.id === merchandiseId,
+  );
   await removeFromCart([lineItem.id]);
-  revalidateTag(TAGS.cart, 'max');
-  revalidatePath('/', 'layout');
+  revalidateTag(TAGS.cart, "max");
+  revalidatePath("/", "layout");
 }
 ```
 
 #### 3. Update Quantity
+
 ```typescript
 export async function updateItemQuantity(
   prevState: any,
-  payload: { merchandiseId: string; quantity: number }
+  payload: { merchandiseId: string; quantity: number },
 ) {
-  const lineItem = cart.lines.find(line => line.merchandise.id === payload.merchandiseId);
-  
+  const lineItem = cart.lines.find(
+    (line) => line.merchandise.id === payload.merchandiseId,
+  );
+
   if (payload.quantity === 0) {
     await removeFromCart([lineItem.id]);
   } else {
     await updateCart([{ id: lineItem.id, merchandiseId, quantity }]);
   }
-  
-  revalidateTag(TAGS.cart, 'max');
-  revalidatePath('/', 'layout');
+
+  revalidateTag(TAGS.cart, "max");
+  revalidatePath("/", "layout");
 }
 ```
 
@@ -851,7 +912,7 @@ const cartPromise = getCart();
 // On cart creation (actions.ts)
 export async function createCartAndSetCookie() {
   let cart = await createCart();
-  (await cookies()).set('cartId', cart.id!);
+  (await cookies()).set("cartId", cart.id!);
 }
 
 // Cookie automatically sent with all requests
@@ -865,18 +926,19 @@ export async function createCartAndSetCookie() {
 ### Variant Architecture
 
 **Shopify Product Structure:**
+
 ```typescript
 type Product = {
   id: string;
   title: string;
-  options: ProductOption[];           // "Color", "Size", etc.
-  variants: ProductVariant[];         // All combinations
+  options: ProductOption[]; // "Color", "Size", etc.
+  variants: ProductVariant[]; // All combinations
 };
 
 type ProductOption = {
   id: string;
   name: string;
-  values: string[];                   // ["Red", "Blue", "Green"]
+  values: string[]; // ["Red", "Blue", "Green"]
 };
 
 type ProductVariant = {
@@ -902,12 +964,12 @@ export function VariantSelector({
 }) {
   const { state, updateOption } = useProduct();
   const updateURL = useUpdateURL();
-  
+
   // Skip if no options or only one option with one value
   if (options.length <= 1 && options[0]?.values.length <= 1) {
     return null;
   }
-  
+
   // Build combination map for availability checking
   const combinations = variants.map((variant) => ({
     id: variant.id,
@@ -917,7 +979,7 @@ export function VariantSelector({
       {}
     )
   }));
-  
+
   return options.map((option) => (
     <form key={option.id}>
       <dl className="mb-8">
@@ -926,22 +988,22 @@ export function VariantSelector({
           {option.values.map((value) => {
             // Build new state with this value
             const optionParams = { ...state, [optionNameLowerCase]: value };
-            
+
             // Check if combination exists and is available
             const filtered = Object.entries(optionParams).filter(([key, value]) =>
               options.find(
                 (option) => option.name.toLowerCase() === key && option.values.includes(value)
               )
             );
-            
+
             const isAvailableForSale = combinations.find((combination) =>
               filtered.every(
                 ([key, value]) => combination[key] === value && combination.availableForSale
               )
             );
-            
+
             const isActive = state[optionNameLowerCase] === value;
-            
+
             return (
               <button
                 formAction={() => {
@@ -975,10 +1037,12 @@ export function VariantSelector({
 **Button States:**
 
 1. **Active** - Selected option
+
    - `ring-2 ring-blue-600`
    - `cursor-default`
 
 2. **Available** - Can be selected
+
    - `ring-1 ring-transparent`
    - `hover:ring-blue-600` with transition
    - Clickable
@@ -999,17 +1063,17 @@ export function AddToCart({ product }: { product: Product }) {
   const { addCartItem } = useCart();
   const { state: productState } = useProduct();
   const [message, formAction] = useActionState(addItem, null);
-  
+
   // Find variant matching current selections
   const variant = variants.find((variant: ProductVariant) =>
     variant.selectedOptions.every(
       (option) => option.value === productState[option.name.toLowerCase()]
     )
   );
-  
+
   const defaultVariantId = variants.length === 1 ? variants[0]?.id : undefined;
   const selectedVariantId = variant?.id || defaultVariantId;
-  
+
   return (
     <form
       action={async () => {
@@ -1039,10 +1103,12 @@ export function AddToCart({ product }: { product: Product }) {
 ### Collection Architecture
 
 **Routes:**
+
 - `/products` - All products
 - `/products/[collection]` - Collection filtered
 
 **Filtering Strategy:**
+
 - **Server-side** via Shopify query with `collection` parameter
 - **Sorting** via URL params (`?sort=price-asc`)
 - **Mobile filters** - Drawer UI for collection/sort selection
@@ -1052,6 +1118,7 @@ export function AddToCart({ product }: { product: Product }) {
 **File:** `components/layout/search/sort-filter-menu.tsx`
 
 **Features:**
+
 - Collections sidebar - Switch between collections
 - Sort dropdown - 5 sort options:
   1. Relevance (default)
@@ -1061,20 +1128,41 @@ export function AddToCart({ product }: { product: Product }) {
   5. Price: High to low
 
 **Sort Configuration** (`lib/constants.ts`):
+
 ```typescript
 export const defaultSort = {
-  title: 'Relevance',
+  title: "Relevance",
   slug: null,
-  sortKey: 'RELEVANCE',
-  reverse: false
+  sortKey: "RELEVANCE",
+  reverse: false,
 };
 
 export const sorting = [
   defaultSort,
-  { title: 'Trending', slug: 'trending-desc', sortKey: 'BEST_SELLING', reverse: false },
-  { title: 'Latest arrivals', slug: 'latest-desc', sortKey: 'CREATED_AT', reverse: true },
-  { title: 'Price: Low to high', slug: 'price-asc', sortKey: 'PRICE', reverse: false },
-  { title: 'Price: High to low', slug: 'price-desc', sortKey: 'PRICE', reverse: true }
+  {
+    title: "Trending",
+    slug: "trending-desc",
+    sortKey: "BEST_SELLING",
+    reverse: false,
+  },
+  {
+    title: "Latest arrivals",
+    slug: "latest-desc",
+    sortKey: "CREATED_AT",
+    reverse: true,
+  },
+  {
+    title: "Price: Low to high",
+    slug: "price-asc",
+    sortKey: "PRICE",
+    reverse: false,
+  },
+  {
+    title: "Price: High to low",
+    slug: "price-desc",
+    sortKey: "PRICE",
+    reverse: true,
+  },
 ];
 ```
 
@@ -1120,6 +1208,7 @@ export const getCollectionProductsQuery = `
 ```
 
 **Supported Sort Keys:**
+
 - `RELEVANCE` - Search relevance
 - `BEST_SELLING` - Best selling products
 - `CREATED` - Newest (maps from `CREATED_AT`)
@@ -1132,6 +1221,7 @@ export const getCollectionProductsQuery = `
 ### Current Implementation Status
 
 **The template does NOT currently implement:**
+
 - User accounts/login
 - Order history
 - Saved addresses
@@ -1139,6 +1229,7 @@ export const getCollectionProductsQuery = `
 - Account dashboard
 
 **Why:**
+
 - Focuses on product discovery and cart
 - Shopify handles checkout (Liquid)
 - Account management typically handled post-checkout
@@ -1146,17 +1237,19 @@ export const getCollectionProductsQuery = `
 **To Add (Pattern Guide):**
 
 1. **User Authentication**
+
    - Use Shopify Customer API or third-party (Auth0, Firebase)
    - Create `app/(account)/` route group
    - Implement login/signup pages
 
 2. **Order History**
+
    ```typescript
    // Server component fetching customer orders
    export async function OrderHistory({ customerId }) {
      const orders = await shopifyFetch<CustomerOrdersQuery>({
        query: getCustomerOrdersQuery,
-       variables: { customerId }
+       variables: { customerId },
      });
    }
    ```
@@ -1179,9 +1272,13 @@ export const getCollectionProductsQuery = `
 ### Global Accessibility Configuration
 
 **Disabled Focus Rings** (`app/globals.css`):
+
 ```css
 /* Removes default focus indicators globally */
-:is(button,[role="button"],a,input,select,textarea,summary):is(:focus,:focus-visible) {
+:is(button, [role="button"], a, input, select, textarea, summary):is(
+    :focus,
+    :focus-visible
+  ) {
   outline: none !important;
   box-shadow: none !important;
 }
@@ -1194,6 +1291,7 @@ export const getCollectionProductsQuery = `
 #### 1. **ARIA Attributes**
 
 **Semantic HTML:**
+
 ```typescript
 // Product Grid
 <ul role="list"> {/* Explicit list semantics */}
@@ -1209,6 +1307,7 @@ export const getCollectionProductsQuery = `
 ```
 
 **Aria Labels:**
+
 ```typescript
 <section aria-labelledby="trending-heading">
   <h2 id="trending-heading">Trending products</h2>
@@ -1236,26 +1335,29 @@ export const getCollectionProductsQuery = `
 #### 3. **Keyboard Navigation**
 
 **Search Dialog (Cmd+K):**
+
 ```typescript
 useEffect(() => {
   const down = (e: KeyboardEvent) => {
-    if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+    if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
       e.preventDefault();
-      setIsOpen(prev => !prev);
+      setIsOpen((prev) => !prev);
     }
   };
-  document.addEventListener('keydown', down);
-  return () => document.removeEventListener('keydown', down);
+  document.addEventListener("keydown", down);
+  return () => document.removeEventListener("keydown", down);
 }, []);
 ```
 
 **Variant Selection:**
+
 - Tab through variant buttons
 - Space/Enter to select
 - Disabled variants get `aria-disabled="true"` + `disabled`
 - Title attribute provides context: `"Color Red (Out of Stock)"`
 
 **Product Detail Tabs:**
+
 ```typescript
 <TabGroup>
   <TabList>
@@ -1274,6 +1376,7 @@ useEffect(() => {
 #### 4. **Focus Management**
 
 **Dialog Focus Trap** (Headless UI Dialog):
+
 ```typescript
 <Dialog open={isOpen} onClose={closeCart}>
   <DialogBackdrop /> {/* Prevents interaction with content behind */}
@@ -1286,6 +1389,7 @@ useEffect(() => {
 #### 5. **Color Accessibility**
 
 **Variant Color Swatches:**
+
 ```typescript
 // Provides visual color + text label
 <li
@@ -1298,6 +1402,7 @@ useEffect(() => {
 ```
 
 **Alternative for Better Contrast:**
+
 ```typescript
 // Light colors get dark outline
 className={`bg-[${hex}] ${isLight ? 'checked:outline-gray-400' : 'checked:outline-gray-700'}`}
@@ -1346,11 +1451,13 @@ className={`bg-[${hex}] ${isLight ? 'checked:outline-gray-400' : 'checked:outlin
 ### Accessibility Gaps & Recommendations
 
 **Current Limitations:**
+
 1. Custom focus styles removed globally (requires reintroduction)
 2. No explicit color contrast ratios tested
 3. Navigation dropdown might need better keyboard support
 
 **Recommended Improvements:**
+
 ```typescript
 // Restore focus management while keeping design
 button:focus-visible {
@@ -1368,34 +1475,38 @@ button:focus-visible {
 **File:** `lib/utils.ts`
 
 #### Price Formatting
+
 ```typescript
 // Format price with currency
 export function formatPrice(amount: string, currencyCode: string): string {
   return new Intl.NumberFormat(undefined, {
-    style: 'currency',
+    style: "currency",
     currency: currencyCode,
-    currencyDisplay: 'narrowSymbol'
+    currencyDisplay: "narrowSymbol",
   }).format(parseFloat(amount));
 }
 ```
 
 #### Product Transformations
+
 ```typescript
-transformShopifyProductToTailwind(product)     // Grid format
-transformShopifyProductToTailwindDetail(product) // Detail format
-transformShopifyProductsToRelatedProducts(products) // Carousel format
-transformShopifyCollectionToTailwind(collection) // Collection card format
-transformMenuToFooterNav(menu)               // Footer navigation
-transformCollectionsToFooterProducts(collections) // Footer products
+transformShopifyProductToTailwind(product); // Grid format
+transformShopifyProductToTailwindDetail(product); // Detail format
+transformShopifyProductsToRelatedProducts(products); // Carousel format
+transformShopifyCollectionToTailwind(collection); // Collection card format
+transformMenuToFooterNav(menu); // Footer navigation
+transformCollectionsToFooterProducts(collections); // Footer products
 ```
 
 #### Color Mapping
+
 ```typescript
 getColorHex(colorName: string): string  // Convert "Red" → "#DC2626"
 isLightColor(hex: string): boolean      // Determine contrast color
 ```
 
 #### URL & Routing
+
 ```typescript
 createUrl(pathname: string, params: URLSearchParams): string
 // Creates: "/products?color=black&size=M"
@@ -1408,6 +1519,7 @@ baseUrl: string
 ```
 
 #### Environment Variables
+
 ```typescript
 validateEnvironmentVariables(): void
 // Throws if required env vars missing
@@ -1419,6 +1531,7 @@ validateEnvironmentVariables(): void
 **File:** `lib/shopify/index.ts`
 
 #### Data Reshaping
+
 ```typescript
 reshapeCart(cart: ShopifyCart): Cart
 // Flattens edges/nodes structure
@@ -1437,6 +1550,7 @@ removeEdgesAndNodes<T>(connection: Connection<T>): T[]
 ```
 
 #### Navigation Management
+
 ```typescript
 // Default navigation fallback
 const DEFAULT_NAVIGATION: Navigation = {
@@ -1467,11 +1581,13 @@ isShopifyError(error: unknown): error is ShopifyError
 ### Code Quality Tools
 
 **Configured:**
+
 - **Prettier 3.5.3** - Code formatting
 - **TypeScript 5.8.2** - Type checking
 - **ESLint** (via Next.js) - Linting
 
 **Scripts:**
+
 ```bash
 pnpm prettier        # Format all files
 pnpm prettier:check  # Check formatting
@@ -1482,24 +1598,29 @@ pnpm dev --turbopack # Dev with Turbopack bundler
 ### Performance Features
 
 1. **Static Generation**
+
    - All product pages pre-rendered at build time
    - `generateStaticParams()` fetches all products
 
 2. **Image Optimization**
+
    - Next.js Image component with AVIF/WebP
    - Remote patterns configured for Shopify CDN
    - Lazy loading with clip-path fix (iOS)
 
 3. **Code Splitting**
+
    - Route-based automatic splitting
    - Dynamic imports for heavy components
 
 4. **Caching Strategy**
+
    - Server-side caching with `'use cache'`
    - `cacheLife('days')` for long-lived data
    - Granular revalidation via `cacheTag()`
 
 5. **Optimistic Updates**
+
    - `useOptimistic` for instant UI feedback
    - No loading states for cart operations
 
@@ -1510,8 +1631,9 @@ pnpm dev --turbopack # Dev with Turbopack bundler
 ### Monitoring
 
 **Vercel Speed Insights:**
+
 ```typescript
-import { SpeedInsights } from '@vercel/speed-insights/next';
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 // Automatically tracking:
 // - Web Vitals (LCP, FID, CLS)
@@ -1526,6 +1648,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 ### Pattern 1: Data Transformation Layer
 
 **Applicable to:** Any headless CMS → component framework
+
 ```typescript
 // Raw API data → Component-specific format
 export function transform[Source]To[Target](data: Source): Target {
@@ -1538,6 +1661,7 @@ export function transform[Source]To[Target](data: Source): Target {
 ```
 
 **Benefits:**
+
 - Decouples data source from components
 - Easy to maintain multiple UI contexts
 - Simple to add new formats
@@ -1545,10 +1669,10 @@ export function transform[Source]To[Target](data: Source): Target {
 ### Pattern 2: Optimistic Updates with useOptimistic
 
 **Applicable to:** Any React 19 mutation (cart, wishlist, etc.)
+
 ```typescript
-const [optimistic, action] = useOptimistic(
-  initial,
-  (state, update) => applyUpdate(state, update)
+const [optimistic, action] = useOptimistic(initial, (state, update) =>
+  applyUpdate(state, update),
 );
 
 // Instant UI feedback
@@ -1558,6 +1682,7 @@ await serverMutation(newData);
 ```
 
 **Benefits:**
+
 - No loading states needed
 - Instant visual feedback
 - Fallback on error
@@ -1565,6 +1690,7 @@ await serverMutation(newData);
 ### Pattern 3: Context for Cross-Cutting State
 
 **Applicable to:** Product selections, user preferences, theme
+
 ```typescript
 const Context = createContext();
 
@@ -1579,6 +1705,7 @@ export function useMyContext() {
 ```
 
 **Benefits:**
+
 - Cleaner than prop drilling
 - Lighter than Redux
 - Combines well with Server Components
@@ -1586,6 +1713,7 @@ export function useMyContext() {
 ### Pattern 4: URL as State Management
 
 **Applicable to:** Filters, sorts, variant selection
+
 ```typescript
 // Persist state to URL for:
 const updateURL = (state) => {
@@ -1603,14 +1731,15 @@ const updateURL = (state) => {
 ### Pattern 5: Server Actions for Mutations
 
 **Applicable to:** Any data modification
+
 ```typescript
-'use server';
+"use server";
 
 export async function addItem(prevState, selectedId) {
   // Server-side mutation
   await db.mutation();
   // Revalidate
-  revalidateTag('items');
+  revalidateTag("items");
 }
 
 // Benefits:
@@ -1622,6 +1751,7 @@ export async function addItem(prevState, selectedId) {
 ### Pattern 6: Suspense for Async Components
 
 **Applicable to:** Any slow async operation
+
 ```typescript
 <Suspense fallback={<Skeleton />}>
   <AsyncComponent />
@@ -1635,6 +1765,7 @@ export async function AsyncComponent() {
 ```
 
 **Benefits:**
+
 - Progressive rendering
 - No loading state boilerplate
 - Clean component code
@@ -1642,6 +1773,7 @@ export async function AsyncComponent() {
 ### Pattern 7: Route Groups for Organization
 
 **Applicable to:** Logical grouping without URL impact
+
 ```
 app/
 ├── (store)/           // Store pages share layout
@@ -1650,6 +1782,7 @@ app/
 ```
 
 **Benefits:**
+
 - Separate layouts per section
 - Cleaner route organization
 - No URL complexity
@@ -1657,8 +1790,9 @@ app/
 ### Pattern 8: Headless UI for Accessible Components
 
 **Applicable to:** Any complex interactive component
+
 ```typescript
-import { Dialog, Tab, Popover } from '@headlessui/react';
+import { Dialog, Tab, Popover } from "@headlessui/react";
 
 // Use Headless UI instead of custom hooks:
 // ✓ Keyboard navigation built-in
@@ -1672,6 +1806,7 @@ import { Dialog, Tab, Popover } from '@headlessui/react';
 ## Summary: Key Takeaways for Architecture
 
 ### What Works Well
+
 1. **Server Components** - Reduces client bundle
 2. **Optimistic Updates** - Responsive UX without loading states
 3. **URL State** - Shareable, bookmarkable product pages
@@ -1680,6 +1815,7 @@ import { Dialog, Tab, Popover } from '@headlessui/react';
 6. **Static Generation** - Lightning-fast product pages
 
 ### Tradeoffs Made
+
 1. **No Account System** - Shopify handles post-checkout
 2. **No Wishlist** - Prioritizes core commerce
 3. **No Reviews** - Would require additional backend
@@ -1687,6 +1823,7 @@ import { Dialog, Tab, Popover } from '@headlessui/react';
 5. **Global Focus Styles Removed** - Design choice, but impacts accessibility
 
 ### Scalability Considerations
+
 - **Data Fetching**: Current patterns scale to 1000+ products
 - **Cart**: Shopify handles state, local optimistic updates scale
 - **Images**: Shopify CDN with Next.js Image optimization
@@ -1696,19 +1833,19 @@ import { Dialog, Tab, Popover } from '@headlessui/react';
 
 ## Technology Stack Summary
 
-| Layer | Technology | Version |
-|-------|-----------|---------|
-| **Framework** | Next.js | 16.0.0-canary.6 |
-| **React** | React | 19.0.0 |
-| **UI Components** | Headless UI | 2.2.0 |
-| **Icons** | Hero Icons | 2.2.0 |
-| **Styling** | Tailwind CSS | 4.0.14 |
-| **Commerce** | Shopify Storefront API | 2023-01 |
-| **Language** | TypeScript | 5.8.2 |
-| **Fonts** | Geist | 1.3.1 |
-| **Utils** | clsx | 2.1.1 |
-| **Speed Insights** | @vercel/speed-insights | 1.2.0 |
-| **Formatting** | Prettier | 3.5.3 |
+| Layer              | Technology             | Version         |
+| ------------------ | ---------------------- | --------------- |
+| **Framework**      | Next.js                | 16.0.0-canary.6 |
+| **React**          | React                  | 19.0.0          |
+| **UI Components**  | Headless UI            | 2.2.0           |
+| **Icons**          | Hero Icons             | 2.2.0           |
+| **Styling**        | Tailwind CSS           | 4.0.14          |
+| **Commerce**       | Shopify Storefront API | 2023-01         |
+| **Language**       | TypeScript             | 5.8.2           |
+| **Fonts**          | Geist                  | 1.3.1           |
+| **Utils**          | clsx                   | 2.1.1           |
+| **Speed Insights** | @vercel/speed-insights | 1.2.0           |
+| **Formatting**     | Prettier               | 3.5.3           |
 
 ---
 

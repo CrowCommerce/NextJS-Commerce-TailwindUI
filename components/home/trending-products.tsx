@@ -1,22 +1,27 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import type { Product } from './types'
+import Link from "next/link";
+import type { Product } from "./types";
 
 interface TrendingProductsProps {
-  products: Product[]
+  products: Product[];
 }
-
 
 export default function TrendingProducts({ products }: TrendingProductsProps) {
   return (
     <section aria-labelledby="trending-heading" className="bg-neutral-200">
       <div className="py-16 sm:py-24 lg:mx-auto lg:max-w-7xl lg:px-8 lg:py-32">
         <div className="flex items-center justify-between px-4 sm:px-6 lg:px-0">
-          <h2 id="trending-heading" className="text-2xl font-bold tracking-tight text-gray-900">
+          <h2
+            id="trending-heading"
+            className="text-2xl font-bold tracking-tight text-gray-900"
+          >
             Trending products
           </h2>
-          <Link href="/products" className="hidden text-sm font-semibold text-indigo-600 hover:text-indigo-500 sm:block">
+          <Link
+            href="/products"
+            className="hidden text-sm font-semibold text-indigo-600 hover:text-indigo-500 sm:block"
+          >
             See everything
             <span aria-hidden="true"> &rarr;</span>
           </Link>
@@ -29,7 +34,10 @@ export default function TrendingProducts({ products }: TrendingProductsProps) {
               className="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-x-8 lg:space-x-0"
             >
               {products.map((product) => (
-                <li key={product.id} className="inline-flex w-64 flex-col text-center lg:w-auto">
+                <li
+                  key={product.id}
+                  className="inline-flex w-64 flex-col text-center lg:w-auto"
+                >
                   <div className="group relative">
                     <img
                       alt={product.imageAlt}
@@ -48,7 +56,10 @@ export default function TrendingProducts({ products }: TrendingProductsProps) {
                   </div>
 
                   <h4 className="sr-only">Available colors</h4>
-                  <ul role="list" className="mt-auto flex items-center justify-center space-x-3 pt-6">
+                  <ul
+                    role="list"
+                    className="mt-auto flex items-center justify-center space-x-3 pt-6"
+                  >
                     {product.availableColors.map((color) => (
                       <li
                         key={color.name}
@@ -66,14 +77,15 @@ export default function TrendingProducts({ products }: TrendingProductsProps) {
         </div>
 
         <div className="mt-12 px-4 sm:hidden">
-          <Link href="/products" className="text-sm font-semibold text-indigo-600 hover:text-indigo-500">
+          <Link
+            href="/products"
+            className="text-sm font-semibold text-indigo-600 hover:text-indigo-500"
+          >
             See everything
             <span aria-hidden="true"> &rarr;</span>
           </Link>
         </div>
       </div>
     </section>
-  )
+  );
 }
-
-

@@ -1,8 +1,8 @@
-import OpengraphImage from 'components/template-opengraph-image';
-import { getCollection } from 'lib/shopify';
+import OpengraphImage from "components/template-opengraph-image";
+import { getCollection } from "lib/shopify";
 
 export default async function Image({
-  params
+  params,
 }: {
   params: { collection: string };
 }) {
@@ -11,5 +11,3 @@ export default async function Image({
 
   return await OpengraphImage({ title });
 }
-
-

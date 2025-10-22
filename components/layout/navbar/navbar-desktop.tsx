@@ -1,12 +1,21 @@
-'use client'
+"use client";
 
-import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/react'
-import { Navigation } from 'lib/shopify/types'
-import Link from 'next/link'
+import {
+  Popover,
+  PopoverButton,
+  PopoverGroup,
+  PopoverPanel,
+} from "@headlessui/react";
+import { Navigation } from "lib/shopify/types";
+import Link from "next/link";
 
-export default function NavbarDesktop({ navigation }: { navigation: Navigation }) {
+export default function NavbarDesktop({
+  navigation,
+}: {
+  navigation: Navigation;
+}) {
   return (
-    <PopoverGroup className="hidden lg:block lg:flex-1 lg:self-stretch">
+    <PopoverGroup className="hidden lg:block lg:flex-1 lg:self-stretch max-lg:pointer-events-none">
       <div className="flex h-full space-x-8">
         {navigation.categories.map((category, categoryIdx) => (
           <Popover key={category.name} className="flex">
@@ -23,13 +32,19 @@ export default function NavbarDesktop({ navigation }: { navigation: Navigation }
               transition
               className="absolute inset-x-0 top-full z-20 w-full bg-white text-sm text-gray-500 transition data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
             >
-              <div aria-hidden="true" className="absolute inset-0 top-1/2 bg-white shadow-sm" />
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 top-1/2 bg-white shadow-sm"
+              />
               <div className="relative bg-white">
                 <div className="mx-auto max-w-7xl px-8">
                   <div className="grid grid-cols-2 items-start gap-x-8 gap-y-10 pt-10 pb-12">
                     <div className="grid grid-cols-2 gap-x-8 gap-y-10">
                       <div>
-                        <p id={`desktop-featured-heading-${categoryIdx}`} className="font-medium text-gray-900">
+                        <p
+                          id={`desktop-featured-heading-${categoryIdx}`}
+                          className="font-medium text-gray-900"
+                        >
                           Featured
                         </p>
                         <ul
@@ -39,7 +54,11 @@ export default function NavbarDesktop({ navigation }: { navigation: Navigation }
                         >
                           {category.featured.map((item) => (
                             <li key={item.name} className="flex">
-                              <Link prefetch={true} href={item.href} className="hover:text-gray-800">
+                              <Link
+                                prefetch={true}
+                                href={item.href}
+                                className="hover:text-gray-800"
+                              >
                                 {item.name}
                               </Link>
                             </li>
@@ -47,13 +66,24 @@ export default function NavbarDesktop({ navigation }: { navigation: Navigation }
                         </ul>
                       </div>
                       <div>
-                        <p id="desktop-categories-heading" className="font-medium text-gray-900">
+                        <p
+                          id="desktop-categories-heading"
+                          className="font-medium text-gray-900"
+                        >
                           Categories
                         </p>
-                        <ul role="list" aria-labelledby="desktop-categories-heading" className="mt-6 space-y-6 sm:mt-4 sm:space-y-4">
+                        <ul
+                          role="list"
+                          aria-labelledby="desktop-categories-heading"
+                          className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
+                        >
                           {category.categories.map((item) => (
                             <li key={item.name} className="flex">
-                              <Link prefetch={true} href={item.href} className="hover:text-gray-800">
+                              <Link
+                                prefetch={true}
+                                href={item.href}
+                                className="hover:text-gray-800"
+                              >
                                 {item.name}
                               </Link>
                             </li>
@@ -63,13 +93,24 @@ export default function NavbarDesktop({ navigation }: { navigation: Navigation }
                     </div>
                     <div className="grid grid-cols-2 gap-x-8 gap-y-10">
                       <div>
-                        <p id="desktop-collection-heading" className="font-medium text-gray-900">
+                        <p
+                          id="desktop-collection-heading"
+                          className="font-medium text-gray-900"
+                        >
                           Collection
                         </p>
-                        <ul role="list" aria-labelledby="desktop-collection-heading" className="mt-6 space-y-6 sm:mt-4 sm:space-y-4">
+                        <ul
+                          role="list"
+                          aria-labelledby="desktop-collection-heading"
+                          className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
+                        >
                           {category.collection.map((item) => (
                             <li key={item.name} className="flex">
-                              <Link prefetch={true} href={item.href} className="hover:text-gray-800">
+                              <Link
+                                prefetch={true}
+                                href={item.href}
+                                className="hover:text-gray-800"
+                              >
                                 {item.name}
                               </Link>
                             </li>
@@ -77,13 +118,24 @@ export default function NavbarDesktop({ navigation }: { navigation: Navigation }
                         </ul>
                       </div>
                       <div>
-                        <p id="desktop-brand-heading" className="font-medium text-gray-900">
+                        <p
+                          id="desktop-brand-heading"
+                          className="font-medium text-gray-900"
+                        >
                           Brands
                         </p>
-                        <ul role="list" aria-labelledby="desktop-brand-heading" className="mt-6 space-y-6 sm:mt-4 sm:space-y-4">
+                        <ul
+                          role="list"
+                          aria-labelledby="desktop-brand-heading"
+                          className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
+                        >
                           {category.brands.map((item) => (
                             <li key={item.name} className="flex">
-                              <Link prefetch={true} href={item.href} className="hover:text-gray-800">
+                              <Link
+                                prefetch={true}
+                                href={item.href}
+                                className="hover:text-gray-800"
+                              >
                                 {item.name}
                               </Link>
                             </li>
@@ -109,5 +161,5 @@ export default function NavbarDesktop({ navigation }: { navigation: Navigation }
         ))}
       </div>
     </PopoverGroup>
-  )
+  );
 }

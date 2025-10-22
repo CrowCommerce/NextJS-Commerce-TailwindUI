@@ -1,14 +1,14 @@
-import { getCollections } from 'lib/shopify';
-import { Suspense } from 'react';
-import MobileFilters from './mobile-filters';
+import { getCollections } from "lib/shopify";
+import { Suspense } from "react";
+import MobileFilters from "./mobile-filters";
 
 async function MobileFiltersList() {
   const collections = await getCollections();
   const collectionsWithLinks = collections.map((collection) => ({
     name: collection.title,
-    href: collection.handle ? `/products/${collection.handle}` : '/products',
+    href: collection.handle ? `/products/${collection.handle}` : "/products",
   }));
-  
+
   return <MobileFilters collections={collectionsWithLinks} />;
 }
 
@@ -19,4 +19,3 @@ export default function MobileFiltersWrapper() {
     </Suspense>
   );
 }
-

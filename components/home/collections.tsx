@@ -1,9 +1,9 @@
-'use client'
+"use client";
 
-import type { Collection } from './types'
+import type { Collection } from "./types";
 
 interface CollectionsProps {
-  collections: Collection[]
+  collections: Collection[];
 }
 
 export default function Collections({ collections }: CollectionsProps) {
@@ -11,7 +11,10 @@ export default function Collections({ collections }: CollectionsProps) {
     <section aria-labelledby="collections-heading" className="bg-gray-100">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl py-16 sm:py-24 lg:max-w-none lg:py-32">
-          <h2 id="collections-heading" className="text-2xl font-bold text-gray-900">
+          <h2
+            id="collections-heading"
+            className="text-2xl font-bold text-gray-900"
+          >
             Collections
           </h2>
 
@@ -29,14 +32,14 @@ export default function Collections({ collections }: CollectionsProps) {
                     {collection.name}
                   </a>
                 </h3>
-                <p className="text-base font-semibold text-gray-900">{collection.description}</p>
+                <p className="text-base font-semibold text-gray-900">
+                  {collection.description}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }
-
-

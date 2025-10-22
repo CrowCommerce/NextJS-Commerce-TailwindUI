@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation';
+import { redirect } from "next/navigation";
 
 export default async function LegacyCollectionRedirect(props: {
   params: Promise<{ collection: string }>;
@@ -6,5 +6,3 @@ export default async function LegacyCollectionRedirect(props: {
   const { collection } = await props.params;
   redirect(`/products/${collection}`);
 }
-
-

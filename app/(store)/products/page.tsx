@@ -1,13 +1,13 @@
-import ProductGrid from 'components/layout/product-grid';
-import { defaultSort, sorting } from 'lib/constants';
-import { getProducts } from 'lib/shopify';
-import { baseUrl } from 'lib/utils';
-import { Metadata } from 'next';
+import ProductGrid from "components/layout/product-grid";
+import { defaultSort, sorting } from "lib/constants";
+import { getProducts } from "lib/shopify";
+import { baseUrl } from "lib/utils";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Products',
-  description: 'Browse all products.',
-  alternates: { canonical: '/products' }
+  title: "Products",
+  description: "Browse all products.",
+  alternates: { canonical: "/products" },
 };
 
 export default async function ProductsPage(props: {
@@ -15,7 +15,8 @@ export default async function ProductsPage(props: {
 }) {
   const searchParams = await props.searchParams;
   const { sort } = (searchParams || {}) as { [key: string]: string };
-  const { sortKey, reverse } = sorting.find((item) => item.slug === sort) || defaultSort;
+  const { sortKey, reverse } =
+    sorting.find((item) => item.slug === sort) || defaultSort;
 
   const products = await getProducts({ sortKey, reverse });
 
@@ -27,18 +28,16 @@ export default async function ProductsPage(props: {
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'ItemList',
+            "@context": "https://schema.org",
+            "@type": "ItemList",
             itemListElement: products.map((p, i) => ({
-              '@type': 'ListItem',
+              "@type": "ListItem",
               position: i + 1,
-              url: `${baseUrl}/product/${p.handle}`
-            }))
-          })
+              url: `${baseUrl}/product/${p.handle}`,
+            })),
+          }),
         }}
       />
     </div>
   );
 }
-
-

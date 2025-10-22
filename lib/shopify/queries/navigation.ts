@@ -25,7 +25,9 @@ export const getNavigationQuery = /* GraphQL */ `
         }
       }
     }
-    navigationPages: metaobject(handle: { type: "navigation_pages", handle: "main-pages" }) {
+    navigationPages: metaobject(
+      handle: { type: "navigation_pages", handle: "main-pages" }
+    ) {
       id
       fields {
         key
@@ -46,4 +48,3 @@ export const getNavigationQuery = /* GraphQL */ `
     }
   }
 `;
-

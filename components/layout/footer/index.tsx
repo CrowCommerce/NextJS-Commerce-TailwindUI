@@ -1,6 +1,6 @@
-import { Suspense } from 'react';
-import FooterCopyright from './footer-copyright';
-import FooterNavigation from './footer-navigation';
+import { Suspense } from "react";
+import FooterCopyright from "./footer-copyright";
+import FooterNavigation from "./footer-navigation";
 
 const { COMPANY_NAME } = process.env;
 
@@ -12,7 +12,10 @@ const NavigationSkeleton = () => (
         <div className="h-4 w-20 animate-pulse rounded-sm bg-gray-200" />
         <div className="space-y-4">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-3 w-24 animate-pulse rounded-sm bg-gray-200" />
+            <div
+              key={i}
+              className="h-3 w-24 animate-pulse rounded-sm bg-gray-200"
+            />
           ))}
         </div>
       </div>
@@ -20,7 +23,10 @@ const NavigationSkeleton = () => (
         <div className="h-4 w-20 animate-pulse rounded-sm bg-gray-200" />
         <div className="space-y-4">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-3 w-24 animate-pulse rounded-sm bg-gray-200" />
+            <div
+              key={i}
+              className="h-3 w-24 animate-pulse rounded-sm bg-gray-200"
+            />
           ))}
         </div>
       </div>
@@ -29,7 +35,10 @@ const NavigationSkeleton = () => (
       <div className="h-4 w-28 animate-pulse rounded-sm bg-gray-200" />
       <div className="space-y-4">
         {[...Array(5)].map((_, i) => (
-          <div key={i} className="h-3 w-24 animate-pulse rounded-sm bg-gray-200" />
+          <div
+            key={i}
+            className="h-3 w-24 animate-pulse rounded-sm bg-gray-200"
+          />
         ))}
       </div>
     </div>
@@ -65,7 +74,11 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-100 py-10 text-center">
-          <Suspense fallback={<div className="h-4 w-20 animate-pulse rounded-sm bg-gray-200" />}>
+          <Suspense
+            fallback={
+              <div className="h-4 w-20 animate-pulse rounded-sm bg-gray-200" />
+            }
+          >
             <FooterCopyright companyName={COMPANY_NAME} />
           </Suspense>
         </div>

@@ -1,27 +1,55 @@
-'use client';
+"use client";
 
-import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
-import clsx from 'clsx';
-import { updateItemQuantity } from 'components/cart/actions';
-import type { CartItem } from 'lib/shopify/types';
-import { useActionState } from 'react';
+import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
+import clsx from "clsx";
+import { updateItemQuantity } from "components/cart/actions";
+import type { CartItem } from "lib/shopify/types";
+import { useActionState } from "react";
 
-function SubmitButton({ type, size = 'md' }: { type: 'plus' | 'minus'; size?: 'xs' | 'sm' | 'md' }) {
+function SubmitButton({
+  type,
+  size = "md",
+}: {
+  type: "plus" | "minus";
+  size?: "xs" | "sm" | "md";
+}) {
   return (
     <button
       type="submit"
       aria-label={
-        type === 'plus' ? 'Increase item quantity' : 'Reduce item quantity'
+        type === "plus" ? "Increase item quantity" : "Reduce item quantity"
       }
       className={clsx(
-        'ease flex h-full flex-none items-center justify-center rounded-full transition-all duration-200 hover:border-neutral-800 hover:opacity-80 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2',
-        size === 'xs' ? 'min-w-[28px] max-w-[28px] p-1' : size === 'sm' ? 'min-w-[32px] max-w-[32px] p-1.5' : 'min-w-[36px] max-w-[36px] p-2'
+        "ease flex h-full flex-none items-center justify-center rounded-full transition-all duration-200 hover:border-neutral-800 hover:opacity-80 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2",
+        size === "xs"
+          ? "min-w-[28px] max-w-[28px] p-1"
+          : size === "sm"
+            ? "min-w-[32px] max-w-[32px] p-1.5"
+            : "min-w-[36px] max-w-[36px] p-2",
       )}
     >
-      {type === 'plus' ? (
-        <PlusIcon className={clsx(size === 'xs' ? 'h-3 w-3' : size === 'sm' ? 'h-3.5 w-3.5' : 'h-4 w-4', 'dark:text-neutral-500')} />
+      {type === "plus" ? (
+        <PlusIcon
+          className={clsx(
+            size === "xs"
+              ? "h-3 w-3"
+              : size === "sm"
+                ? "h-3.5 w-3.5"
+                : "h-4 w-4",
+            "dark:text-neutral-500",
+          )}
+        />
       ) : (
-        <MinusIcon className={clsx(size === 'xs' ? 'h-3 w-3' : size === 'sm' ? 'h-3.5 w-3.5' : 'h-4 w-4', 'dark:text-neutral-500')} />
+        <MinusIcon
+          className={clsx(
+            size === "xs"
+              ? "h-3 w-3"
+              : size === "sm"
+                ? "h-3.5 w-3.5"
+                : "h-4 w-4",
+            "dark:text-neutral-500",
+          )}
+        />
       )}
     </button>
   );
@@ -31,17 +59,17 @@ export function EditItemQuantityButton({
   item,
   type,
   optimisticUpdate,
-  size = 'md'
+  size = "md",
 }: {
   item: CartItem;
-  type: 'plus' | 'minus';
+  type: "plus" | "minus";
   optimisticUpdate: any;
-  size?: 'xs' | 'sm' | 'md';
+  size?: "xs" | "sm" | "md";
 }) {
   const [message, formAction] = useActionState(updateItemQuantity, null);
   const payload = {
     merchandiseId: item.merchandise.id,
-    quantity: type === 'plus' ? item.quantity + 1 : item.quantity - 1
+    quantity: type === "plus" ? item.quantity + 1 : item.quantity - 1,
   };
   const updateItemQuantityAction = formAction.bind(null, payload);
 

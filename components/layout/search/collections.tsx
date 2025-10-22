@@ -1,14 +1,14 @@
-import { getCollections } from 'lib/shopify';
-import { Suspense } from 'react';
-import CollectionsList from './collections-list';
+import { getCollections } from "lib/shopify";
+import { Suspense } from "react";
+import CollectionsList from "./collections-list";
 
 async function CollectionList() {
   const collections = await getCollections();
   const collectionsWithLinks = collections.map((collection) => ({
     name: collection.title,
-    href: collection.handle ? `/products/${collection.handle}` : '/products',
+    href: collection.handle ? `/products/${collection.handle}` : "/products",
   }));
-  
+
   return <CollectionsList collections={collectionsWithLinks} />;
 }
 
@@ -34,4 +34,3 @@ export default function Collections() {
     </Suspense>
   );
 }
-

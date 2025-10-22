@@ -1,12 +1,15 @@
-import { getCollections, getMenu } from 'lib/shopify';
-import { transformCollectionsToFooterProducts, transformMenuToFooterNav } from 'lib/utils';
-import Link from 'next/link';
+import { getCollections, getMenu } from "lib/shopify";
+import {
+  transformCollectionsToFooterProducts,
+  transformMenuToFooterNav,
+} from "lib/utils";
+import Link from "next/link";
 
 export default async function FooterNavigation() {
   // Fetch data from Shopify
   const collections = await getCollections();
-  const companyMenu = await getMenu('footer-company');
-  const customerServiceMenu = await getMenu('footer-customer-service');
+  const companyMenu = await getMenu("footer-company");
+  const customerServiceMenu = await getMenu("footer-customer-service");
 
   // Transform data to footer format
   const footerNavigation = {
@@ -23,7 +26,10 @@ export default async function FooterNavigation() {
           <ul role="list" className="mt-6 space-y-6">
             {footerNavigation.products.map((item) => (
               <li key={item.name} className="text-sm">
-                <Link href={item.href} className="text-gray-500 hover:text-gray-600">
+                <Link
+                  href={item.href}
+                  className="text-gray-500 hover:text-gray-600"
+                >
                   {item.name}
                 </Link>
               </li>
@@ -35,7 +41,10 @@ export default async function FooterNavigation() {
           <ul role="list" className="mt-6 space-y-6">
             {footerNavigation.company.map((item) => (
               <li key={item.name} className="text-sm">
-                <Link href={item.href} className="text-gray-500 hover:text-gray-600">
+                <Link
+                  href={item.href}
+                  className="text-gray-500 hover:text-gray-600"
+                >
                   {item.name}
                 </Link>
               </li>
@@ -48,7 +57,10 @@ export default async function FooterNavigation() {
         <ul role="list" className="mt-6 space-y-6">
           {footerNavigation.customerService.map((item) => (
             <li key={item.name} className="text-sm">
-              <Link href={item.href} className="text-gray-500 hover:text-gray-600">
+              <Link
+                href={item.href}
+                className="text-gray-500 hover:text-gray-600"
+              >
                 {item.name}
               </Link>
             </li>
@@ -58,4 +70,3 @@ export default async function FooterNavigation() {
     </div>
   );
 }
-

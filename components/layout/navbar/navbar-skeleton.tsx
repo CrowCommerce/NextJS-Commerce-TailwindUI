@@ -1,14 +1,45 @@
+"use client";
+
+import { Bars3Icon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
+
 export default function NavbarSkeleton() {
+  // Even in skeleton, we can have a functional hamburger button
+  const [, setIsOpen] = useState(false);
+
   return (
     <div className="bg-white">
       <header className="relative bg-white">
-        <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <nav
+          aria-label="Top"
+          className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
+        >
           <div className="border-b border-gray-200">
             <div className="flex h-16 items-center justify-between">
-              {/* Mobile menu button skeleton */}
-              <div className="flex flex-1 items-center lg:hidden">
-                <div className="h-10 w-10 animate-pulse rounded-md bg-gray-200" />
-                <div className="ml-2 h-10 w-10 animate-pulse rounded-md bg-gray-200" />
+              {/* Mobile menu button - FUNCTIONAL even while loading */}
+              <div className="relative z-50 flex flex-1 items-center lg:hidden">
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(true)}
+                  onTouchStart={(e) => {
+                    e.preventDefault();
+                    setIsOpen(true);
+                  }}
+                  className="relative z-10 -ml-2 min-h-[44px] min-w-[44px] touch-manipulation cursor-pointer rounded-md bg-white p-2 text-gray-400 active:bg-gray-100"
+                  aria-label="Open main menu"
+                  style={{ WebkitTapHighlightColor: "transparent" }}
+                >
+                  <span className="sr-only">Open menu</span>
+                  <Bars3Icon aria-hidden="true" className="size-6" />
+                </button>
+                <button
+                  type="button"
+                  className="ml-2 rounded-md p-2 text-gray-400"
+                  aria-label="Search"
+                >
+                  <span className="sr-only">Search</span>
+                  <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
+                </button>
               </div>
 
               {/* Desktop menu skeleton */}
@@ -36,7 +67,5 @@ export default function NavbarSkeleton() {
         </nav>
       </header>
     </div>
-  )
+  );
 }
-
-

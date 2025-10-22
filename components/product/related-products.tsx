@@ -24,9 +24,9 @@ export default function RelatedProducts({
   return (
     <section
       aria-labelledby="related-heading"
-      className="mx-auto max-w-7xl mt-10 border-t border-gray-200 px-4 py-16 sm:px-0"
+      className="mx-auto max-w-7xl mt-10 border-t border-gray-200 px-4 py-16"
     >
-      <h2 id="related-heading" className="text-xl font-bold text-gray-900">
+      <h2 id="related-heading" className="px-4 sm:px-6 text-xl font-bold text-gray-900">
         Customers also bought
       </h2>
 

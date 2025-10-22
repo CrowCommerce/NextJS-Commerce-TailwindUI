@@ -1,26 +1,25 @@
 'use client'
 
-import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon } from '@heroicons/react/24/outline'
+import Cart from 'components/cart'
+import { SearchButton } from 'components/search-command'
 import { Navigation } from 'lib/shopify/types'
-import { useCartStore } from 'lib/stores/cart-store'
-import { useNavbarStore } from 'lib/stores/navbar-store'
-import { useSearchStore } from 'lib/stores/search-store'
 import Link from 'next/link'
+import { Suspense, useState } from 'react'
 import NavbarDesktop from './navbar-desktop'
-import NavbarInitializer from './navbar-initializer'
 import NavbarMobile from './navbar-mobile'
 
 export default function NavbarClient({ navigation }: { navigation: Navigation }) {
-  const { cart, openCart } = useCartStore()
-  const { openSearch } = useSearchStore()
-  const openMobile = useNavbarStore((s) => s.open)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   return (
     <div className="bg-white">
-      <NavbarInitializer />
-
       {/* Mobile menu */}
-      <NavbarMobile navigation={navigation} />
+      <NavbarMobile 
+        navigation={navigation} 
+        isOpen={isMobileMenuOpen} 
+        onClose={() => setIsMobileMenuOpen(false)} 
+      />
 
       <header className="relative bg-white">
         <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -29,21 +28,14 @@ export default function NavbarClient({ navigation }: { navigation: Navigation })
               <div className="flex flex-1 items-center lg:hidden">
                 <button
                   type="button"
-                  onClick={openMobile}
+                  onClick={() => setIsMobileMenuOpen(true)}
                   className="-ml-2 rounded-md bg-white p-2 text-gray-400 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2"
                 >
                   <span className="sr-only">Open menu</span>
                   <Bars3Icon aria-hidden="true" className="size-6" />
                 </button>
 
-                <button
-                  onClick={openSearch}
-                  type="button"
-                  className="ml-2 rounded-md p-2 text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2"
-                >
-                  <span className="sr-only">Search</span>
-                  <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
-                </button>
+                <SearchButton className="ml-2 rounded-md p-2 text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2" />
               </div>
 
               {/* Flyout menus */}
@@ -61,34 +53,20 @@ export default function NavbarClient({ navigation }: { navigation: Navigation })
 
               <div className="flex flex-1 items-center justify-end">
                 {/* Search */}
-                <button
-                  onClick={openSearch}
-                  type="button"
-                  className="hidden rounded-md p-2 text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2 lg:block"
-                >
-                  <span className="sr-only">Search</span>
-                  <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
-                </button>
+                <SearchButton className="hidden rounded-md p-2 text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2 lg:block" />
 
-                {/* Account */}
-                {/* <Link href="#" className="p-2 text-gray-400 hover:text-gray-500 lg:ml-4">
-                  <span className="sr-only">Account</span>
-                  <UserIcon aria-hidden="true" className="size-6" />
-                </Link> */}
+              {/* Account */}
+              {/* <Link href="#" className="p-2 text-gray-400 hover:text-gray-500 lg:ml-4">
+                <span className="sr-only">Account</span>
+                <UserIcon aria-hidden="true" className="size-6" />
+              </Link> */}
 
-                {/* Cart */}
-                <div className="ml-4 flow-root lg:ml-6">
-                  <button onClick={openCart} className="group -m-2 flex items-center rounded-md p-2 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2">
-                    <ShoppingBagIcon
-                      aria-hidden="true"
-                      className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
-                    />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                      {cart?.totalQuantity ?? 0}
-                    </span>
-                    <span className="sr-only">items in cart, view bag</span>
-                  </button>
-                </div>
+              {/* Cart */}
+              <div className="ml-4 flow-root lg:ml-6">
+                <Suspense fallback={null}>
+                  <Cart />
+                </Suspense>
+              </div>
               </div>
             </div>
           </div>

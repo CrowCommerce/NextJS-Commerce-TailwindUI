@@ -12,15 +12,36 @@ import {
 } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Navigation } from 'lib/shopify/types'
-import { useNavbarStore } from 'lib/stores/navbar-store'
 import Link from 'next/link'
+import { usePathname, useSearchParams } from 'next/navigation'
+import { useEffect } from 'react'
 
-export default function NavbarMobile({ navigation }: { navigation: Navigation }) {
-  const isOpen = useNavbarStore((s) => s.isMobileOpen)
-  const close = useNavbarStore((s) => s.close)
+export default function NavbarMobile({ 
+  navigation, 
+  isOpen, 
+  onClose 
+}: { 
+  navigation: Navigation
+  isOpen: boolean
+  onClose: () => void
+}) {
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    onClose()
+  }, [pathname, searchParams, onClose])
+
+  useEffect(() => {
+    const onResize = () => {
+      if (typeof window !== 'undefined' && window.innerWidth >= 1024) onClose()
+    }
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [onClose])
 
   return (
-    <Dialog open={isOpen} onClose={close} className="relative z-40 lg:hidden">
+    <Dialog open={isOpen} onClose={onClose} className="relative z-40 lg:hidden">
       <DialogBackdrop
         transition
         className="fixed inset-0 bg-black/25 transition-opacity duration-300 ease-linear data-closed:opacity-0"
@@ -33,7 +54,7 @@ export default function NavbarMobile({ navigation }: { navigation: Navigation })
           <div className="flex px-4 pt-5 pb-2">
             <button
               type="button"
-              onClick={close}
+              onClick={onClose}
               className="relative -m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"
             >
               <span className="absolute -inset-0.5" />

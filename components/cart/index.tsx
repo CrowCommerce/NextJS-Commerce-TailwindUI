@@ -1,38 +1,74 @@
 'use client'
 
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import { redirectToCheckout, removeItem } from 'components/cart/actions'
+import { ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { redirectToCheckout } from 'components/cart/actions'
+import { useCart } from 'components/cart/cart-context'
 import { EditItemQuantityButton } from 'components/cart/edit-item-quantity-button'
 import CartPrice from 'components/price/cart-price'
 import LoadingDots from 'components/template-loading-dots'
 import { DEFAULT_OPTION } from 'lib/constants'
-import type { CartItem } from 'lib/shopify/types'
-import { useCartStore } from 'lib/stores/cart-store'
 import { createUrl } from 'lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useActionState, useEffect, useRef } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { useFormStatus } from 'react-dom'
+import { createCartAndSetCookie } from './actions'
+import { DeleteItemButton } from './delete-item-button'
+
+function CartCount() {
+  const { cart } = useCart()
+  return <>{cart?.totalQuantity ?? 0}</>
+}
 
 export default function Cart() {
-  const { cart, isCartOpen, closeCart, updateCartItem } = useCartStore()
+  const { cart, updateCartItem } = useCart()
+  const [isOpen, setIsOpen] = useState(false)
   const quantityRef = useRef(cart?.totalQuantity)
+  const openCart = () => setIsOpen(true)
+  const closeCart = () => setIsOpen(false)
 
-  // Auto-open cart when quantity increases (not on initial hydration)
   useEffect(() => {
-    // Skip the initial hydration by checking if quantityRef was already set
-    if (quantityRef.current !== undefined && cart?.totalQuantity && cart.totalQuantity > quantityRef.current) {
-      if (!isCartOpen) {
-        useCartStore.getState().openCart()
-      }
+    if (!cart) {
+      createCartAndSetCookie();
     }
-    quantityRef.current = cart?.totalQuantity
-  }, [isCartOpen, cart?.totalQuantity])
+  }, [cart]);
+
+  // Auto-open cart when quantity increases
+  useEffect(() => {
+    if (
+      cart?.totalQuantity &&
+      cart?.totalQuantity !== quantityRef.current &&
+      cart?.totalQuantity > 0
+    ) {
+      if (!isOpen) {
+        setIsOpen(true)
+      }
+      quantityRef.current = cart?.totalQuantity
+    }
+  }, [isOpen, cart?.totalQuantity])
 
   return (
     <>
-      <Dialog open={isCartOpen} onClose={closeCart} className="relative z-10">
+      {/* Cart Button */}
+      <button 
+        onClick={openCart} 
+        className="group -m-2 flex items-center rounded-md p-2 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2"
+      >
+        <ShoppingBagIcon
+          aria-hidden="true"
+          className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
+        />
+        <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+          <Suspense fallback="0">
+            <CartCount />
+          </Suspense>
+        </span>
+        <span className="sr-only">items in cart, view bag</span>
+      </button>
+
+      {/* Cart Dialog */}
+      <Dialog open={isOpen} onClose={closeCart} className="relative z-10">
         <DialogBackdrop
           transition
           className="fixed inset-0 bg-gray-500/75 transition-opacity duration-500 ease-in-out data-closed:opacity-0"
@@ -124,7 +160,7 @@ export default function Cart() {
                                         </div>
 
                                         <div className="flex">
-                                          <RemoveItemTextButton item={item} optimisticUpdate={updateCartItem} />
+                                          <DeleteItemButton item={item} optimisticUpdate={updateCartItem} />
                                         </div>
                                       </div>
                                     </div>
@@ -202,36 +238,6 @@ export default function Cart() {
         </div>
       </Dialog>
     </>
-  )
-}
-
-function RemoveItemTextButton({ item, optimisticUpdate }: { item: CartItem; optimisticUpdate: any }) {
-  const [message, formAction] = useActionState(removeItem, null)
-  const setCart = useCartStore((state) => state.setCart)
-  const merchandiseId = item.merchandise.id
-  const removeItemAction = formAction.bind(null, merchandiseId)
-
-  return (
-    <form
-      action={async () => {
-        optimisticUpdate(merchandiseId, 'delete')
-        const result = await removeItem(null, merchandiseId)
-        // If result is a cart object (not an error string), update the store
-        if (result && typeof result === 'object' && 'lines' in result) {
-          setCart(result)
-        }
-      }}
-    >
-      <button
-        type="submit"
-        className="rounded font-medium text-indigo-600 hover:text-indigo-500 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2"
-      >
-        Remove
-      </button>
-      <p aria-live="polite" className="sr-only" role="status">
-        {typeof message === 'string' ? message : ''}
-      </p>
-    </form>
   )
 }
 

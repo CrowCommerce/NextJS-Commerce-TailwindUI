@@ -1,24 +1,25 @@
 'use client'
 
 import {
-    Disclosure,
-    DisclosureButton,
-    DisclosurePanel,
-    Tab,
-    TabGroup,
-    TabList,
-    TabPanel,
-    TabPanels,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Tab,
+  TabGroup,
+  TabList,
+  TabPanel,
+  TabPanels,
 } from '@headlessui/react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import {
-    MinusIcon,
-    PlusIcon
+  MinusIcon,
+  PlusIcon
 } from '@heroicons/react/24/outline'
+import { AddToCart } from 'components/cart/add-to-cart'
 import Breadcrumbs from 'components/layout/breadcrumbs'
 import ProductDetailPrice from 'components/price/product-detail-price'
-import type { ProductOption, ProductVariant } from 'lib/shopify/types'
-import { useProductStore } from 'lib/stores/product-store'
+import { useProduct, useUpdateURL } from 'components/product/product-context'
+import type { Product, ProductOption, ProductVariant } from 'lib/shopify/types'
 import type { TailwindProductDetail } from 'lib/utils'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -36,14 +37,14 @@ type Combination = {
 
 interface ProductDetailProps {
   product: TailwindProductDetail
+  shopifyProduct: Product
   options: ProductOption[]
   variants: ProductVariant[]
-  onAddToCart?: () => void
 }
 
-export default function ProductDetail({ product, options, variants, onAddToCart }: ProductDetailProps) {
-  const state = useProductStore((s) => s.state)
-  const updateOption = useProductStore((s) => s.updateOption)
+export default function ProductDetail({ product, shopifyProduct, options, variants }: ProductDetailProps) {
+  const { state, updateOption: updateOptionContext } = useProduct()
+  const updateURL = useUpdateURL()
   const router = useRouter()
 
   const combinations: Combination[] = variants.map((variant) => ({
@@ -68,9 +69,8 @@ export default function ProductDetail({ product, options, variants, onAddToCart 
   }
 
   const pushParam = (key: string, value: string) => {
-    const newParams = new URLSearchParams(window.location.search)
-    newParams.set(key, value)
-    router.push(`?${newParams.toString()}`, { scroll: false })
+    const newState = updateOptionContext(key, value)
+    updateURL(newState)
   }
 
   const getColorClasses = (value: string) => {
@@ -113,8 +113,8 @@ export default function ProductDetail({ product, options, variants, onAddToCart 
     preferred.selectedOptions.forEach((opt) => {
       const key = opt.name.toLowerCase()
       if (!state[key]) {
-        updateOption(key, opt.value)
-        pushParam(key, opt.value)
+        const newState = updateOptionContext(key, opt.value)
+        updateURL(newState)
       }
     })
   }, [options, variants, state])
@@ -217,75 +217,73 @@ export default function ProductDetail({ product, options, variants, onAddToCart 
               />
             </div>
 
-            <form className="mt-6" onSubmit={(e) => { e.preventDefault(); onAddToCart?.(); }}>
-              {/* Colors */}
-              {colorOption && colorOption.values.length > 0 && (
-                <div>
-                  <h3 className="text-sm font-medium text-gray-900">Color</h3>
+            {/* Colors */}
+            {colorOption && colorOption.values.length > 0 && (
+              <div className="mt-6">
+                <h3 className="text-sm font-medium text-gray-900">Color</h3>
 
-                  <fieldset aria-label="Choose a color" className="mt-2">
-                    <div className="flex items-center gap-x-3">
-                      {colorOption.values.map((value) => {
-                        const isOptionAvailable = isAvailable('color', value)
-                        const isActive = state['color'] === value
-                        const hex = getColorHexFromValue(value)
-                        const isWhite = /^#fff(?:fff)?$/i.test(hex)
-                        const activeRing = isWhite ? '#4F46E5' : hex // indigo-600 ring for white
-                        return (
-                          <label key={value} className={classNames('flex cursor-pointer items-center', !isOptionAvailable ? 'opacity-40 cursor-not-allowed' : '')}>
-                            <input
-                              value={value}
-                              checked={Boolean(isActive)}
-                              onChange={() => {
-                                updateOption('color', value)
-                                pushParam('color', value)
-                              }}
-                              name="color"
-                              type="radio"
-                              aria-label={value}
-                              disabled={!isOptionAvailable}
-                              className="sr-only"
-                            />
-                            <span
-                              aria-hidden
-                              className="inline-block size-8 rounded-full"
-                              style={{
-                                backgroundColor: hex,
-                                boxShadow: isActive
-                                  ? `0 0 0 2px #fff, 0 0 0 4px ${activeRing}`
-                                  : '0 0 0 1px rgba(0,0,0,0.1)'
-                              }}
-                              title={`Color ${value}${!isOptionAvailable ? ' (Out of Stock)' : ''}`}
-                            />
-                          </label>
-                        )
-                      })}
-                    </div>
-                  </fieldset>
-                </div>
-              )}
-
-              {/* Size picker */}
-              {sizeOption && sizeOption.values.length > 0 && (
-                <div className="mt-8">
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-sm font-medium text-gray-900">Size</h2>
-                    {/* <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
-                      See sizing chart
-                    </a> */}
-                  </div>
-
-                  <fieldset aria-label="Choose a size" className="mt-2">
-                    <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-                      {sizeOption.values.map((value) => {
-                        const isOptionAvailable = isAvailable('size', value)
-                        const isActive = state['size'] === value
-                        return (
-                          <label
-                            key={value}
+                <fieldset aria-label="Choose a color" className="mt-2">
+                  <div className="flex items-center gap-x-3">
+                    {colorOption.values.map((value) => {
+                      const isOptionAvailable = isAvailable('color', value)
+                      const isActive = state['color'] === value
+                      const hex = getColorHexFromValue(value)
+                      const isWhite = /^#fff(?:fff)?$/i.test(hex)
+                      const activeRing = isWhite ? '#4F46E5' : hex // indigo-600 ring for white
+                      return (
+                        <label key={value} className={classNames('flex cursor-pointer items-center', !isOptionAvailable ? 'opacity-40 cursor-not-allowed' : '')}>
+                          <input
+                            value={value}
+                            checked={Boolean(isActive)}
+                            onChange={() => {
+                              pushParam('color', value)
+                            }}
+                            name="color"
+                            type="radio"
                             aria-label={value}
-                            className="group relative flex items-center justify-center rounded-md border border-gray-300 bg-white p-3 has-checked:border-indigo-600 has-checked:bg-indigo-600 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-indigo-600 has-disabled:border-gray-400 has-disabled:bg-gray-200 has-disabled:opacity-25"
-                          >
+                            disabled={!isOptionAvailable}
+                            className="sr-only"
+                          />
+                          <span
+                            aria-hidden
+                            className="inline-block size-8 rounded-full"
+                            style={{
+                              backgroundColor: hex,
+                              boxShadow: isActive
+                                ? `0 0 0 2px #fff, 0 0 0 4px ${activeRing}`
+                                : '0 0 0 1px rgba(0,0,0,0.1)'
+                            }}
+                            title={`Color ${value}${!isOptionAvailable ? ' (Out of Stock)' : ''}`}
+                          />
+                        </label>
+                      )
+                    })}
+                  </div>
+                </fieldset>
+              </div>
+            )}
+
+            {/* Size picker */}
+            {sizeOption && sizeOption.values.length > 0 && (
+              <div className="mt-8">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-sm font-medium text-gray-900">Size</h2>
+                  {/* <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                    See sizing chart
+                  </a> */}
+                </div>
+
+                <fieldset aria-label="Choose a size" className="mt-2">
+                  <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+                    {sizeOption.values.map((value) => {
+                      const isOptionAvailable = isAvailable('size', value)
+                      const isActive = state['size'] === value
+                      return (
+                        <label
+                          key={value}
+                          aria-label={value}
+                          className="group relative flex items-center justify-center rounded-md border border-gray-300 bg-white p-3 has-checked:border-indigo-600 has-checked:bg-indigo-600 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-indigo-600 has-disabled:border-gray-400 has-disabled:bg-gray-200 has-disabled:opacity-25"
+                        >
                             <input
                               value={value}
                               checked={Boolean(isActive)}
@@ -293,39 +291,27 @@ export default function ProductDetail({ product, options, variants, onAddToCart 
                               type="radio"
                               disabled={!isOptionAvailable}
                               onChange={() => {
-                                updateOption('size', value)
                                 pushParam('size', value)
                               }}
                               className="absolute inset-0 appearance-none focus:outline-none disabled:cursor-not-allowed"
                             />
-                            <span className="text-sm font-medium text-gray-900 uppercase group-has-checked:text-white">
-                              {value}
-                            </span>
-                          </label>
-                        )
-                      })}
-                    </div>
-                  </fieldset>
-                </div>
-              )}
-
-              <div className="mt-10 flex">
-                <button
-                  type="submit"
-                  className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-50 focus:outline-hidden"
-                >
-                  Add to cart
-                </button>
-
-                {/* <button
-                  type="button"
-                  className="ml-4 flex items-center justify-center rounded-md px-3 py-3 text-gray-400 hover:bg-gray-100 hover:text-gray-500"
-                >
-                  <HeartIcon aria-hidden="true" className="size-6 shrink-0" />
-                  <span className="sr-only">Add to favorites</span>
-                </button> */}
+                          <span className="text-sm font-medium text-gray-900 uppercase group-has-checked:text-white">
+                            {value}
+                          </span>
+                        </label>
+                      )
+                    })}
+                  </div>
+                </fieldset>
               </div>
-            </form>
+            )}
+
+            <div className="mt-10 flex">
+              <AddToCart 
+                product={shopifyProduct}
+                className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-50 focus:outline-hidden"
+              />
+            </div>
 
             <section aria-labelledby="details-heading" className="mt-12">
               <h2 id="details-heading" className="sr-only">

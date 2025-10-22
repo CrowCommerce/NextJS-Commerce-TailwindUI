@@ -9,14 +9,6 @@ import type { Product } from 'lib/shopify/types';
 import { transformShopifyProductsToRelatedProducts } from 'lib/utils';
 import { Suspense } from 'react';
 
-export async function generateStaticParams() {
-  const products = await getProducts({});
-  
-  return products.map((product) => ({
-    handle: product.handle
-  }));
-}
-
 export async function generateMetadata(props: {
   params: Promise<{ handle: string }>;
 }): Promise<Metadata> {
@@ -54,10 +46,17 @@ export async function generateMetadata(props: {
   };
 }
 
+export async function generateStaticParams() {
+  const products = await getProducts({});
+  return products.map((product: Product) => ({ handle: product.handle }));
+}
+
 export default async function ProductPage(props: { params: Promise<{ handle: string }> }) {
   const params = await props.params;
   // Don't await the fetch, pass the Promise to the client component
   const productPromise = getProduct(params.handle);
+
+  if(!productPromise) return notFound();
 
   return (
     <ProductPageContent
@@ -90,5 +89,10 @@ async function RelatedProducts({ productPromise }: { productPromise: Promise<Pro
   // Transform products for Tailwind component
   const transformedRelatedProducts = transformShopifyProductsToRelatedProducts(relatedProducts);
 
-  return <RelatedProductsComponent products={transformedRelatedProducts} />;
+  return (
+    <RelatedProductsComponent 
+      products={transformedRelatedProducts}
+      fullProducts={relatedProducts}
+    />
+  );
 }

@@ -1,11 +1,11 @@
 'use client';
 
-import { ProductInitializer } from 'components/product/product-initializer';
+import { ProductProvider } from 'components/product/product-context';
 import ProductWrapper from 'components/product/product-wrapper';
 import { Product } from 'lib/shopify/types';
 import { baseUrl, transformShopifyProductToTailwindDetail } from 'lib/utils';
 import { notFound } from 'next/navigation';
-import { use, type ReactNode } from 'react';
+import { Suspense, use, type ReactNode } from 'react';
 
 export function ProductPageContent({
   productPromise,
@@ -45,12 +45,10 @@ export function ProductPageContent({
     ]
   };
 
-  // Transform product for Tailwind component
   const transformedProduct = transformShopifyProductToTailwindDetail(product);
 
   return (
     <div className="bg-white pb-24">
-      <ProductInitializer />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -63,7 +61,11 @@ export function ProductPageContent({
           __html: JSON.stringify(breadcrumbJsonLd)
         }}
       />
-      <ProductWrapper product={product} transformedProduct={transformedProduct} />
+      <Suspense fallback={null}>
+        <ProductProvider>
+          <ProductWrapper product={product} transformedProduct={transformedProduct} />
+        </ProductProvider>
+      </Suspense>
       {relatedProductsSlot}
     </div>
   );

@@ -3,20 +3,23 @@
 import { PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { addItem } from 'components/cart/actions';
+import { useCart } from 'components/cart/cart-context';
+import { useProduct } from 'components/product/product-context';
 import { Product, ProductVariant } from 'lib/shopify/types';
-import { useCartStore } from 'lib/stores/cart-store';
-import { useProductStore } from 'lib/stores/product-store';
 import { useActionState } from 'react';
 
 function SubmitButton({
   availableForSale,
-  selectedVariantId
+  selectedVariantId,
+  className
 }: {
   availableForSale: boolean;
   selectedVariantId: string | undefined;
+  className?: string;
 }) {
-  const buttonClasses =
+  const defaultClasses =
     'relative flex w-full items-center justify-center rounded-full bg-blue-600 p-4 tracking-wide text-white';
+  const buttonClasses = className || defaultClasses;
   const disabledClasses = 'cursor-not-allowed opacity-60 hover:opacity-60';
 
   if (!availableForSale) {
@@ -34,9 +37,11 @@ function SubmitButton({
         disabled
         className={clsx(buttonClasses, disabledClasses)}
       >
-        <div className="absolute left-0 ml-4">
-          <PlusIcon className="h-5" />
-        </div>
+        {!className && (
+          <div className="absolute left-0 ml-4">
+            <PlusIcon className="h-5" />
+          </div>
+        )}
         Add To Cart
       </button>
     );
@@ -46,22 +51,29 @@ function SubmitButton({
     <button
       aria-label="Add to cart"
       className={clsx(buttonClasses, {
-        'hover:opacity-90': true
+        'hover:opacity-90': !className
       })}
     >
-      <div className="absolute left-0 ml-4">
-        <PlusIcon className="h-5" />
-      </div>
+      {!className && (
+        <div className="absolute left-0 ml-4">
+          <PlusIcon className="h-5" />
+        </div>
+      )}
       Add To Cart
     </button>
   );
 }
 
-export function AddToCart({ product }: { product: Product }) {
+export function AddToCart({ 
+  product, 
+  className 
+}: { 
+  product: Product; 
+  className?: string;
+}) {
   const { variants, availableForSale } = product;
-  const addCartItem = useCartStore((state) => state.addCartItem);
-  const setCart = useCartStore((state) => state.setCart);
-  const productState = useProductStore((state) => state.state);
+  const { addCartItem } = useCart();
+  const { state: productState } = useProduct();
   const [message, formAction] = useActionState(addItem, null);
 
   const variant = variants.find((variant: ProductVariant) =>
@@ -80,19 +92,16 @@ export function AddToCart({ product }: { product: Product }) {
     <form
       action={async () => {
         addCartItem(finalVariant, product);
-        const result = await addItem(null, selectedVariantId);
-        // If result is a cart object (not an error string), update the store
-        if (result && typeof result === 'object' && 'lines' in result) {
-          setCart(result);
-        }
+        addItemAction();
       }}
     >
       <SubmitButton
         availableForSale={availableForSale}
         selectedVariantId={selectedVariantId}
+        className={className}
       />
       <p aria-live="polite" className="sr-only" role="status">
-        {typeof message === 'string' ? message : ''}
+        {message}
       </p>
     </form>
   );

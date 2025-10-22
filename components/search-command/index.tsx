@@ -2,11 +2,60 @@
 
 import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions, Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useSearchStore } from 'lib/stores/search-store';
 import { useRouter } from 'next/navigation';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, ReactNode, createContext, useContext, useEffect, useRef, useState } from 'react';
 import { ProductResult } from './product-result';
 import { useSearch } from './use-search';
+
+const SearchContext = createContext<{
+  isOpen: boolean
+  openSearch: () => void
+  closeSearch: () => void
+  toggleSearch: () => void
+} | null>(null);
+
+export function SearchProvider({ children }: { children: ReactNode }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Cmd+K handler
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setIsOpen(prev => !prev);
+      }
+    };
+    document.addEventListener('keydown', down);
+    return () => document.removeEventListener('keydown', down);
+  }, []);
+
+  return (
+    <SearchContext.Provider value={{
+      isOpen,
+      openSearch: () => setIsOpen(true),
+      closeSearch: () => setIsOpen(false),
+      toggleSearch: () => setIsOpen(prev => !prev)
+    }}>
+      {children}
+    </SearchContext.Provider>
+  );
+}
+
+export function SearchButton({ className }: { className?: string }) {
+  const context = useContext(SearchContext);
+  if (!context) throw new Error('SearchButton must be within SearchProvider');
+  
+  return (
+    <button
+      onClick={context.openSearch}
+      type="button"
+      className={className}
+    >
+      <span className="sr-only">Search</span>
+      <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
+    </button>
+  );
+}
 
 // SeeAllResultsOption component
 function SeeAllResultsOption({ query, totalCount, active }: { query: string; totalCount: number; active: boolean }) {
@@ -45,23 +94,14 @@ function SeeAllResultsOption({ query, totalCount, active }: { query: string; tot
   );
 }
 
-export function SearchCommand() {
-  const { isOpen, closeSearch, toggleSearch } = useSearchStore();
+export function SearchDialog() {
+  const context = useContext(SearchContext);
+  if (!context) throw new Error('SearchDialog must be within SearchProvider');
+  
+  const { isOpen, closeSearch } = context;
   const [query, setQuery] = useState('');
   const router = useRouter();
   const { results, totalCount, loading } = useSearch(query, isOpen);
-  
-  // Command+K handler
-  useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        toggleSearch();
-      }
-    };
-    document.addEventListener('keydown', down);
-    return () => document.removeEventListener('keydown', down);
-  }, [toggleSearch]);
   
   // Reset on close
   useEffect(() => {

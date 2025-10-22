@@ -1,9 +1,8 @@
 'use client';
 
 import clsx from 'clsx';
+import { useProduct, useUpdateURL } from 'components/product/product-context';
 import { ProductOption, ProductVariant } from 'lib/shopify/types';
-import { useProductStore } from 'lib/stores/product-store';
-import { useRouter } from 'next/navigation';
 
 type Combination = {
   id: string;
@@ -18,9 +17,8 @@ export function VariantSelector({
   options: ProductOption[];
   variants: ProductVariant[];
 }) {
-  const state = useProductStore((state) => state.state);
-  const updateOption = useProductStore((state) => state.updateOption);
-  const router = useRouter();
+  const { state, updateOption } = useProduct();
+  const updateURL = useUpdateURL();
   const hasNoOptionsOrJustOneOption =
     !options.length || (options.length === 1 && options[0]?.values.length === 1);
 
@@ -66,10 +64,8 @@ export function VariantSelector({
             return (
               <button
                 formAction={() => {
-                  updateOption(optionNameLowerCase, value);
-                  const newParams = new URLSearchParams(window.location.search);
-                  newParams.set(optionNameLowerCase, value);
-                  router.push(`?${newParams.toString()}`, { scroll: false });
+                  const newState = updateOption(optionNameLowerCase, value);
+                  updateURL(newState);
                 }}
                 key={value}
                 aria-disabled={!isAvailableForSale}

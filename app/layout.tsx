@@ -1,14 +1,13 @@
 import { GeistSans } from 'geist/font/sans';
 import { baseUrl } from 'lib/utils';
 import { Metadata } from 'next';
-import { ReactNode, Suspense } from 'react';
+import { ReactNode } from 'react';
 import './globals.css';
 
-import Cart from 'components/cart';
-import { CartInitializer } from 'components/cart/cart-initializer';
+import { CartProvider } from 'components/cart/cart-context';
 import Footer from 'components/layout/footer';
 import Navbar from 'components/layout/navbar';
-import { SearchCommand } from 'components/search-command';
+import { SearchDialog, SearchProvider } from 'components/search-command';
 import { getCart } from 'lib/shopify';
 
 const { SITE_NAME } = process.env;
@@ -35,16 +34,16 @@ export default async function RootLayout({
   return (
     <html lang="en" className={GeistSans.variable}>
       <body className="bg-neutral-50 ">
-        <Suspense fallback={null}>
-          <CartInitializer cartPromise={cartPromise} />
-        </Suspense>
-        <SearchCommand />
-        <Navbar />
-        <Cart />
-        <main>
-            {children}
-        </main>
-        <Footer />
+        <CartProvider cartPromise={cartPromise}>
+          <SearchProvider>
+            <SearchDialog />
+            <Navbar />
+            <main>
+              {children}
+            </main>
+            <Footer />
+          </SearchProvider>
+        </CartProvider>
       </body>
     </html>
   );

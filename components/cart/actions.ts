@@ -2,11 +2,11 @@
 
 import { TAGS } from 'lib/constants';
 import {
-    addToCart,
-    createCart,
-    getCart,
-    removeFromCart,
-    updateCart
+  addToCart,
+  createCart,
+  getCart,
+  removeFromCart,
+  updateCart
 } from 'lib/shopify';
 import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
@@ -21,16 +21,8 @@ export async function addItem(
   }
 
   try {
-    // Ensure a cart exists before adding
-    const cartId = (await cookies()).get('cartId')?.value
-    if (!cartId) {
-      const newCart = await createCart();
-      (await cookies()).set('cartId', newCart.id!);
-    }
-
-    const updatedCart = await addToCart([{ merchandiseId: selectedVariantId, quantity: 1 }]);
-    revalidateTag(TAGS.cart, "max");
-    return updatedCart;
+    await addToCart([{ merchandiseId: selectedVariantId, quantity: 1 }]);
+    revalidateTag(TAGS.cart, 'max');
   } catch (e) {
     return 'Error adding item to cart';
   }
@@ -49,9 +41,8 @@ export async function removeItem(prevState: any, merchandiseId: string) {
     );
 
     if (lineItem && lineItem.id) {
-      const updatedCart = await removeFromCart([lineItem.id]);
-      revalidateTag(TAGS.cart, "max");
-      return updatedCart;
+      await removeFromCart([lineItem.id]);
+      revalidateTag(TAGS.cart, 'max');
     } else {
       return 'Item not found in cart';
     }
@@ -80,12 +71,11 @@ export async function updateItemQuantity(
       (line) => line.merchandise.id === merchandiseId
     );
 
-    let updatedCart;
     if (lineItem && lineItem.id) {
       if (quantity === 0) {
-        updatedCart = await removeFromCart([lineItem.id]);
+        await removeFromCart([lineItem.id]);
       } else {
-        updatedCart = await updateCart([
+        await updateCart([
           {
             id: lineItem.id,
             merchandiseId,
@@ -95,11 +85,10 @@ export async function updateItemQuantity(
       }
     } else if (quantity > 0) {
       // If the item doesn't exist in the cart and quantity > 0, add it
-      updatedCart = await addToCart([{ merchandiseId, quantity }]);
+      await addToCart([{ merchandiseId, quantity }]);
     }
 
-    revalidateTag(TAGS.cart, "max");
-    return updatedCart;
+    revalidateTag(TAGS.cart, 'max');
   } catch (e) {
     console.error(e);
     return 'Error updating item quantity';
@@ -114,9 +103,4 @@ export async function redirectToCheckout() {
 export async function createCartAndSetCookie() {
   let cart = await createCart();
   (await cookies()).set('cartId', cart.id!);
-}
-
-export async function loadCart(prevState: any) {
-  const cart = await getCart();
-  return cart ?? null;
 }

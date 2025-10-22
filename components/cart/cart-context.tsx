@@ -11,7 +11,8 @@ import React, {
   use,
   useContext,
   useMemo,
-  useOptimistic
+  useOptimistic,
+  useTransition
 } from 'react';
 
 type UpdateType = 'plus' | 'minus' | 'delete';
@@ -215,16 +216,21 @@ export function useCart() {
     initialCart,
     cartReducer
   );
+  const [, startTransition] = useTransition();
 
   const updateCartItem = (merchandiseId: string, updateType: UpdateType) => {
-    updateOptimisticCart({
-      type: 'UPDATE_ITEM',
-      payload: { merchandiseId, updateType }
+    startTransition(() => {
+      updateOptimisticCart({
+        type: 'UPDATE_ITEM',
+        payload: { merchandiseId, updateType }
+      });
     });
   };
 
   const addCartItem = (variant: ProductVariant, product: Product) => {
-    updateOptimisticCart({ type: 'ADD_ITEM', payload: { variant, product } });
+    startTransition(() => {
+      updateOptimisticCart({ type: 'ADD_ITEM', payload: { variant, product } });
+    });
   };
 
   return useMemo(

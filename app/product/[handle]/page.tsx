@@ -1,3 +1,5 @@
+'use cache';
+
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -48,7 +50,10 @@ export async function generateMetadata(props: {
 
 export async function generateStaticParams() {
   const products = await getProducts({});
-  return products.map((product: Product) => ({ handle: product.handle }));
+
+  return products.map((product) => ({
+    handle: product.handle
+  }));
 }
 
 export default async function ProductPage(props: { params: Promise<{ handle: string }> }) {

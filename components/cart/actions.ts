@@ -8,7 +8,7 @@ import {
   removeFromCart,
   updateCart
 } from 'lib/shopify';
-import { revalidateTag } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -23,6 +23,7 @@ export async function addItem(
   try {
     await addToCart([{ merchandiseId: selectedVariantId, quantity: 1 }]);
     revalidateTag(TAGS.cart, 'max');
+    revalidatePath('/', 'layout');
   } catch (e) {
     return 'Error adding item to cart';
   }
@@ -43,6 +44,7 @@ export async function removeItem(prevState: any, merchandiseId: string) {
     if (lineItem && lineItem.id) {
       await removeFromCart([lineItem.id]);
       revalidateTag(TAGS.cart, 'max');
+      revalidatePath('/', 'layout');
     } else {
       return 'Item not found in cart';
     }
@@ -89,6 +91,7 @@ export async function updateItemQuantity(
     }
 
     revalidateTag(TAGS.cart, 'max');
+    revalidatePath('/', 'layout');
   } catch (e) {
     console.error(e);
     return 'Error updating item quantity';

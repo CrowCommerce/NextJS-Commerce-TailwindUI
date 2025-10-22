@@ -29,21 +29,8 @@ export default function NavbarClient({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Debug: Verify component mounting
-  useEffect(() => {
-    console.log("[NavbarClient] Component mounted");
-    console.log("[NavbarClient] Button in DOM:", !!hamburgerButtonRef.current);
-    console.log("[NavbarClient] Window width:", window.innerWidth);
-  }, []);
-
-  // Debug: Log menu state changes
-  useEffect(() => {
-    console.log("[NavbarClient] Menu open state:", open);
-  }, [open]);
-
   // Auto-close menu on navigation
   useEffect(() => {
-    console.log("[NavbarClient] Navigation changed, closing menu");
     setOpen(false);
   }, [pathname, searchParams]);
 
@@ -51,7 +38,6 @@ export default function NavbarClient({
   useEffect(() => {
     const onResize = () => {
       if (typeof window !== "undefined" && window.innerWidth >= 1024) {
-        console.log("[NavbarClient] Resized to desktop, closing menu");
         setOpen(false);
       }
     };
@@ -274,10 +260,7 @@ export default function NavbarClient({
                 <button
                   ref={hamburgerButtonRef}
                   type="button"
-                  onClick={() => {
-                    console.log("[NavbarClient] Hamburger clicked");
-                    setOpen(true);
-                  }}
+                  onClick={() => setOpen(true)}
                   className="relative z-10 -ml-2 min-h-[44px] min-w-[44px] touch-manipulation cursor-pointer rounded-md bg-white p-2 text-gray-400 active:bg-gray-100 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2"
                   aria-expanded={open}
                   aria-controls="mobile-menu"

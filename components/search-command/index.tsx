@@ -3,7 +3,7 @@
 import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions, Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
-import { Fragment, ReactNode, createContext, useContext, useEffect, useRef, useState } from 'react';
+import { Fragment, ReactNode, createContext, forwardRef, useContext, useEffect, useRef, useState } from 'react';
 import { ProductResult } from './product-result';
 import { useSearch } from './use-search';
 
@@ -58,41 +58,55 @@ export function SearchButton({ className }: { className?: string }) {
 }
 
 // SeeAllResultsOption component
-function SeeAllResultsOption({ query, totalCount, active }: { query: string; totalCount: number; active: boolean }) {
-  const itemRef = useRef<HTMLDivElement>(null);
-  
-  // Auto-scroll active item into view
-  useEffect(() => {
-    if (active && itemRef.current) {
-      itemRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'nearest'
-      });
-    }
-  }, [active]);
-  
-  return (
-    <div
-      ref={itemRef}
-      className={`flex cursor-pointer select-none items-center rounded-lg px-3 py-2 ${
-        active ? 'bg-indigo-600 text-white' : 'bg-gray-50 text-gray-900 hover:bg-gray-100'
-      }`}
-    >
-      <MagnifyingGlassIcon className={`h-5 w-5 ${active ? 'text-white' : 'text-gray-400'}`} />
-      <div className="ml-3 flex-auto">
-        <p className={`text-sm font-medium ${active ? 'text-white' : 'text-gray-900'}`}>
-          See all {totalCount} products matching &quot;{query}&quot;
-        </p>
+const SeeAllResultsOption = forwardRef<HTMLDivElement, { query: string; totalCount: number; active: boolean } & React.HTMLAttributes<HTMLDivElement>>(
+  ({ query, totalCount, active, ...props }, ref) => {
+    const itemRef = useRef<HTMLDivElement>(null);
+    
+    // Auto-scroll active item into view
+    useEffect(() => {
+      if (active && itemRef.current) {
+        itemRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'nearest'
+        });
+      }
+    }, [active]);
+    
+    const setRef = (node: HTMLDivElement | null) => {
+      itemRef.current = node;
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        (ref as any).current = node;
+      }
+    };
+    
+    return (
+      <div
+        ref={setRef}
+        {...props}
+        className={`flex cursor-pointer select-none items-center rounded-lg px-3 py-2 ${
+          active ? 'bg-indigo-600 text-white' : 'bg-gray-50 text-gray-900 hover:bg-gray-100'
+        }`}
+      >
+        <MagnifyingGlassIcon className={`h-5 w-5 ${active ? 'text-white' : 'text-gray-400'}`} />
+        <div className="ml-3 flex-auto">
+          <p className={`text-sm font-medium ${active ? 'text-white' : 'text-gray-900'}`}>
+            See all {totalCount} products matching &quot;{query}&quot;
+          </p>
+        </div>
+        {active && (
+          <svg className="h-5 w-5 flex-none text-white" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" />
+          </svg>
+        )}
       </div>
-      {active && (
-        <svg className="h-5 w-5 flex-none text-white" viewBox="0 0 20 20" fill="currentColor">
-          <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" />
-        </svg>
-      )}
-    </div>
-  );
-}
+    );
+  }
+);
+
+SeeAllResultsOption.displayName = 'SeeAllResultsOption';
 
 export function SearchDialog() {
   const context = useContext(SearchContext);
@@ -195,8 +209,8 @@ export function SearchDialog() {
                       value={`search:${query}`}
                       as={Fragment}
                     >
-                      {({ focus }) => (
-                        <SeeAllResultsOption query={query} totalCount={totalCount} active={focus} />
+                      {({ active }) => (
+                        <SeeAllResultsOption query={query} totalCount={totalCount} active={active} />
                       )}
                     </ComboboxOption>
                     
@@ -207,8 +221,8 @@ export function SearchDialog() {
                         value={product.handle}
                         as={Fragment}
                       >
-                        {({ focus }) => (
-                          <ProductResult product={product} active={focus} />
+                        {({ active }) => (
+                          <ProductResult product={product} active={active} />
                         )}
                       </ComboboxOption>
                     ))}

@@ -1,34 +1,46 @@
 import { Product } from 'lib/shopify/types';
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
+import { forwardRef, useEffect, useRef } from 'react';
 
 interface ProductResultProps {
   product: Product;
   active: boolean;
 }
 
-export function ProductResult({ product, active }: ProductResultProps) {
-  const price = parseFloat(product.priceRange.maxVariantPrice.amount);
-  const itemRef = useRef<HTMLDivElement>(null);
-  
-  // Auto-scroll active item into view
-  useEffect(() => {
-    if (active && itemRef.current) {
-      itemRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'nearest'
-      });
-    }
-  }, [active]);
-  
-  return (
-    <div
-      ref={itemRef}
-      className={`flex cursor-pointer select-none items-center rounded-lg px-3 py-2 ${
-        active ? 'bg-indigo-600 text-white' : 'bg-gray-50 text-gray-900 hover:bg-gray-100'
-      }`}
-    >
+export const ProductResult = forwardRef<HTMLDivElement, ProductResultProps & React.HTMLAttributes<HTMLDivElement>>(
+  ({ product, active, ...props }, ref) => {
+    const price = parseFloat(product.priceRange.maxVariantPrice.amount);
+    const itemRef = useRef<HTMLDivElement>(null);
+    
+    // Auto-scroll active item into view
+    useEffect(() => {
+      if (active && itemRef.current) {
+        itemRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'nearest'
+        });
+      }
+    }, [active]);
+    
+    // Combine refs
+    const setRef = (node: HTMLDivElement | null) => {
+      itemRef.current = node;
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        (ref as any).current = node;
+      }
+    };
+    
+    return (
+      <div
+        ref={setRef}
+        {...props}
+        className={`flex cursor-pointer select-none items-center rounded-lg px-3 py-2 ${
+          active ? 'bg-indigo-600 text-white' : 'bg-gray-50 text-gray-900 hover:bg-gray-100'
+        }`}
+      >
       {/* Product image */}
       <div className="flex-none">
         <div className={`relative h-16 w-16 overflow-hidden rounded-md border ${
@@ -69,5 +81,7 @@ export function ProductResult({ product, active }: ProductResultProps) {
       )}
     </div>
   );
-}
+});
+
+ProductResult.displayName = 'ProductResult';
 

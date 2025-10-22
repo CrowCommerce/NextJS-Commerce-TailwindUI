@@ -1,75 +1,262 @@
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fcommerce&project-name=commerce&repo-name=commerce&demo-title=Next.js%20Commerce&demo-url=https%3A%2F%2Fdemo.vercel.store&demo-image=https%3A%2F%2Fbigcommerce-demo-asset-ksvtgfvnd.vercel.app%2Fbigcommerce.png&env=COMPANY_NAME,SHOPIFY_REVALIDATION_SECRET,SHOPIFY_STORE_DOMAIN,SHOPIFY_STOREFRONT_ACCESS_TOKEN,SITE_NAME)
+# Next.js Commerce × Tailwind UI
 
-# Next.js Commerce
+A high-performance, server-rendered Next.js ecommerce application built on Vercel's Next.js Commerce template, enhanced with premium Tailwind UI components for a polished, production-ready shopping experience.
 
-A high-performance, server-rendered Next.js App Router ecommerce application.
+## Built With
 
-This template uses React Server Components, Server Actions, `Suspense`, `useOptimistic`, and more.
+- **Next.js 16** (canary) - App Router with React Server Components
+- **React 19** - Latest features including Server Actions, Suspense, and useOptimistic
+- **Tailwind UI** - Premium UI components from Tailwind Labs
+- **Shopify** - Headless commerce platform via Storefront API
+- **TypeScript** - Full type safety
+- **Headless UI** - Accessible, unstyled UI components
 
-<h3 id="v1-note"></h3>
+## Based On
 
-> Note: Looking for Next.js Commerce v1? View the [code](https://github.com/vercel/commerce/tree/v1), [demo](https://commerce-v1.vercel.store), and [release notes](https://github.com/vercel/commerce/releases/tag/v1).
+This project is built on top of [Vercel's Next.js Commerce](https://github.com/vercel/commerce) starter template and enhanced with Tailwind UI components for a more polished user experience.
 
-## Providers
+## Major Customizations
 
-Vercel will only be actively maintaining a Shopify version [as outlined in our vision and strategy for Next.js Commerce](https://github.com/vercel/commerce/pull/966).
+### 🎨 UI Framework Overhaul
 
-Vercel is happy to partner and work with any commerce provider to help them get a similar template up and running and listed below. Alternative providers should be able to fork this repository and swap out the `lib/shopify` file with their own implementation while leaving the rest of the template mostly unchanged.
+Replaced the minimalist Vercel Commerce UI with premium Tailwind UI components throughout:
 
-- Shopify (this repository)
-- [BigCommerce](https://github.com/bigcommerce/nextjs-commerce) ([Demo](https://next-commerce-v2.vercel.app/))
-- [Ecwid by Lightspeed](https://github.com/Ecwid/ecwid-nextjs-commerce/) ([Demo](https://ecwid-nextjs-commerce.vercel.app/))
-- [Geins](https://github.com/geins-io/vercel-nextjs-commerce) ([Demo](https://geins-nextjs-commerce-starter.vercel.app/))
-- [Medusa](https://github.com/medusajs/vercel-commerce) ([Demo](https://medusa-nextjs-commerce.vercel.app/))
-- [Prodigy Commerce](https://github.com/prodigycommerce/nextjs-commerce) ([Demo](https://prodigy-nextjs-commerce.vercel.app/))
-- [Saleor](https://github.com/saleor/nextjs-commerce) ([Demo](https://saleor-commerce.vercel.app/))
-- [Shopware](https://github.com/shopwareLabs/vercel-commerce) ([Demo](https://shopware-vercel-commerce-react.vercel.app/))
-- [Swell](https://github.com/swellstores/verswell-commerce) ([Demo](https://verswell-commerce.vercel.app/))
-- [Umbraco](https://github.com/umbraco/Umbraco.VercelCommerce.Demo) ([Demo](https://vercel-commerce-demo.umbraco.com/))
-- [Wix](https://github.com/wix/headless-templates/tree/main/nextjs/commerce) ([Demo](https://wix-nextjs-commerce.vercel.app/))
-- [Fourthwall](https://github.com/FourthwallHQ/vercel-commerce) ([Demo](https://vercel-storefront.fourthwall.app/))
+- **Navigation**: Enhanced navbar with desktop/mobile split views, breadcrumbs
+- **Product Grid**: Tailwind UI catalog layouts with hover effects
+- **Product Detail**: Rich product pages with image galleries and variant selection
+- **Cart**: Sliding drawer using Headless UI Dialog components
+- **Forms**: Styled form inputs and buttons with focus states
+- **Search**: Command palette (⌘K) for instant product search
 
-> Note: Providers, if you are looking to use similar products for your demo, you can [download these assets](https://drive.google.com/file/d/1q_bKerjrwZgHwCw0ovfUMW6He9VtepO_/view?usp=sharing).
+### 🏠 Enhanced Home Page
 
-## Integrations
+Custom home page sections:
+- **Hero Section**: Full-width hero with call-to-action
+- **Trending Products**: Showcase of newest/featured products
+- **Collections**: Featured category highlights
 
-Integrations enable upgraded or additional functionality for Next.js Commerce
+### 🔍 Advanced Search
 
-- [Orama](https://github.com/oramasearch/nextjs-commerce) ([Demo](https://vercel-commerce.oramasearch.com/))
+- **Command Palette**: Keyboard-accessible search (Cmd/Ctrl + K)
+- **Instant Results**: Real-time product search with debouncing
+- **Accessible**: Full keyboard navigation support
 
-  - Upgrades search to include typeahead with dynamic re-rendering, vector-based similarity search, and JS-based configuration.
-  - Search runs entirely in the browser for smaller catalogs or on a CDN for larger.
+### 🛍️ Improved Shopping Experience
 
-- [React Bricks](https://github.com/ReactBricks/nextjs-commerce-rb) ([Demo](https://nextjs-commerce.reactbricks.com/))
-  - Edit pages, product details, and footer content visually using [React Bricks](https://www.reactbricks.com) visual headless CMS.
+**Product Pages**:
+- Related products section
+- Enhanced product detail view with Tailwind UI components
+- Optimized image galleries
+- Static generation with `generateStaticParams` for instant loading
 
-## Running locally
+**Category Pages**:
+- New `/products` and `/products/[collection]` routes
+- Advanced filtering and sorting
+- Mobile-optimized filter drawer
 
-You will need to use the environment variables [defined in `.env.example`](.env.example) to run Next.js Commerce. It's recommended you use [Vercel Environment Variables](https://vercel.com/docs/concepts/projects/environment-variables) for this, but a `.env` file is all that is necessary.
+**Cart System**:
+- Sliding drawer interface
+- Optimistic UI updates
+- Fixed cart state management with `revalidatePath`
+- Auto-open on add to cart
 
-> Note: You should not commit your `.env` file or it will expose secrets that will allow others to control your Shopify store.
+### 💰 Context-Aware Price Display
 
-1. Install Vercel CLI: `npm i -g vercel`
-2. Link local instance with Vercel and GitHub accounts (creates `.vercel` directory): `vercel link`
-3. Download your environment variables: `vercel env pull`
+Multiple price components for different contexts:
+- `ProductGridPrice` - Grid/catalog views
+- `ProductDetailPrice` - Product detail pages
+- `CartPrice` - Shopping cart
+
+### 🏗️ Architecture Improvements
+
+**Route Organization**:
+- Added `(store)` route group for logical separation
+- Organized product and search routes
+
+**Data Layer**:
+- Transformation utilities (`transformShopifyProductToTailwind`, etc.)
+- Convert Shopify data to Tailwind UI component formats
+- Type-safe data transformations
+
+**Performance**:
+- Static generation with `'use cache'` directives
+- Experimental Next.js 16 features enabled
+- Product page pre-generation
+- Optimized cart revalidation
+
+### 🛠️ Technical Enhancements
+
+**Cart State Management**:
+- Added `revalidatePath('/', 'layout')` to cart actions
+- Ensures cart updates without hard refresh
+- Fixed cart count and line item updates
+
+**Caching Strategy**:
+- `experimental.cacheComponents: true`
+- `'use cache'` directives on data fetching
+- Granular cache control with `cacheTag` and `cacheLife`
+
+**TypeScript**:
+- Custom types for Tailwind UI components
+- Strict type checking throughout
+
+## Dependencies
+
+### Added
+- `@vercel/speed-insights` - Performance monitoring
+
+### Removed
+- `sonner` - Replaced with custom toast/notification approach
+
+### Key Dependencies
+- `@headlessui/react` - Accessible UI components
+- `@heroicons/react` - Icon library
+- `clsx` - Conditional CSS classes
+- `geist` - Vercel's font family
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- pnpm (recommended) or npm
+- Shopify store with Storefront API access
+
+### Environment Variables
+
+Create a `.env.local` file with the following variables:
+
+```env
+SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
+SHOPIFY_STOREFRONT_ACCESS_TOKEN=your_storefront_access_token
+SITE_NAME=Your Store Name
+COMPANY_NAME=Your Company
+SHOPIFY_REVALIDATION_SECRET=your_webhook_secret
+```
+
+See [`.env.example`](.env.example) for more details.
+
+### Installation
 
 ```bash
+# Install dependencies
 pnpm install
+
+# Run development server
 pnpm dev
 ```
 
-Your app should now be running on [localhost:3000](http://localhost:3000/).
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-<details>
-  <summary>Expand if you work at Vercel and want to run locally and / or contribute</summary>
+### Build for Production
 
-1. Run `vc link`.
-1. Select the `Vercel Solutions` scope.
-1. Connect to the existing `commerce-shopify` project.
-1. Run `vc env pull` to get environment variables.
-1. Run `pnpm dev` to ensure everything is working correctly.
-</details>
+```bash
+pnpm build
+pnpm start
+```
 
-## Vercel, Next.js Commerce, and Shopify Integration Guide
+## Key Features
 
-You can use this comprehensive [integration guide](https://vercel.com/docs/integrations/ecommerce/shopify) with step-by-step instructions on how to configure Shopify as a headless CMS using Next.js Commerce as your headless Shopify storefront on Vercel.
+### User-Facing
+- ✨ Modern, polished UI with Tailwind UI components
+- 🔍 Instant search with command palette (⌘K)
+- 🛒 Smooth cart experience with optimistic updates
+- 📱 Fully responsive design
+- ♿ Accessible components with keyboard navigation
+- 🖼️ Optimized images with Next.js Image
+- ⚡ Lightning-fast page loads with static generation
+
+### Developer Experience
+- 🏗️ Type-safe with TypeScript
+- 🎯 React Server Components
+- 🔄 Server Actions for mutations
+- 📦 Organized component structure
+- 🧩 Reusable utility functions
+- 🎨 Tailwind CSS with custom configuration
+- 🚀 Next.js 16 experimental features
+
+## Project Structure
+
+```
+├── app/                          # Next.js App Router pages
+│   ├── (store)/                  # Store route group
+│   │   ├── products/             # Product catalog pages
+│   │   └── search/               # Search pages
+│   ├── product/[handle]/         # Individual product pages
+│   └── page.tsx                  # Home page
+├── components/
+│   ├── cart/                     # Shopping cart components
+│   ├── home/                     # Home page sections
+│   ├── layout/                   # Navigation, footer, etc.
+│   ├── price/                    # Price display components
+│   ├── product/                  # Product detail components
+│   └── search-command/           # Command palette search
+├── lib/
+│   ├── shopify/                  # Shopify integration
+│   └── utils.ts                  # Transformation utilities
+└── next.config.ts                # Next.js configuration
+```
+
+## Configuration
+
+### Next.js Config
+
+Key experimental features enabled:
+
+```typescript
+experimental: {
+  cacheComponents: true,    // Enable cache components
+  inlineCss: true,          // Inline CSS optimization
+  useCache: true            // Enable 'use cache' directive
+}
+```
+
+### Static Generation
+
+Product pages are statically generated at build time using `generateStaticParams`:
+
+```typescript
+export async function generateStaticParams() {
+  const products = await getProducts({});
+  return products.map((product) => ({
+    handle: product.handle
+  }));
+}
+```
+
+## Performance Optimizations
+
+- **Static Generation**: Product pages pre-rendered at build time
+- **Optimistic UI**: Instant feedback on cart actions
+- **Image Optimization**: Next.js Image with AVIF/WebP formats
+- **Code Splitting**: Automatic route-based code splitting
+- **Cache Control**: Granular caching with tags and lifecycles
+- **React 19**: Leverages latest React performance features
+
+## Shopify Integration
+
+Uses Shopify Storefront API for:
+- Product catalog
+- Collections/categories
+- Cart management
+- Checkout
+
+See the [official integration guide](https://vercel.com/docs/integrations/ecommerce/shopify) for setup details.
+
+## Contributing
+
+This is a customized template. For the base Next.js Commerce project, see [vercel/commerce](https://github.com/vercel/commerce).
+
+## License
+
+MIT - Based on Vercel's Next.js Commerce (MIT)
+
+## Acknowledgments
+
+- [Vercel](https://vercel.com) - Next.js Commerce template
+- [Tailwind Labs](https://tailwindui.com) - Tailwind UI components
+- [Shopify](https://shopify.com) - Commerce platform
+
+---
+
+Built with ❤️ using Next.js, React, and Tailwind CSS

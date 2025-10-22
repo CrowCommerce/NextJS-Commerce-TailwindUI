@@ -90,6 +90,7 @@ export function AddToCart({
 
   return (
     <form
+      className="w-full"
       action={async () => {
         addCartItem(finalVariant, product);
         addItemAction();

@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { ProductProvider } from 'components/product/product-context';
-import ProductWrapper from 'components/product/product-wrapper';
-import { Product } from 'lib/shopify/types';
-import { baseUrl, transformShopifyProductToTailwindDetail } from 'lib/utils';
-import { notFound } from 'next/navigation';
-import { Suspense, use, type ReactNode } from 'react';
+import { ProductProvider } from "components/product/product-context";
+import ProductWrapper from "components/product/product-wrapper";
+import { Product } from "lib/shopify/types";
+import { baseUrl, transformShopifyProductToTailwindDetail } from "lib/utils";
+import { notFound } from "next/navigation";
+import { Suspense, use, type ReactNode } from "react";
 
 export function ProductPageContent({
   productPromise,
-  relatedProductsSlot
+  relatedProductsSlot,
 }: {
   productPromise: Promise<Product | undefined>;
   relatedProductsSlot: ReactNode;
@@ -19,30 +19,40 @@ export function ProductPageContent({
   if (!product) return notFound();
 
   const productJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
+    "@context": "https://schema.org",
+    "@type": "Product",
     name: product.title,
     description: product.description,
     image: product.featuredImage?.url,
     offers: {
-      '@type': 'AggregateOffer',
+      "@type": "AggregateOffer",
       availability: product.availableForSale
-        ? 'https://schema.org/InStock'
-        : 'https://schema.org/OutOfStock',
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock",
       priceCurrency: product.priceRange.minVariantPrice.currencyCode,
       highPrice: product.priceRange.maxVariantPrice.amount,
-      lowPrice: product.priceRange.minVariantPrice.amount
-    }
+      lowPrice: product.priceRange.minVariantPrice.amount,
+    },
   };
 
   const breadcrumbJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: `${baseUrl}/` },
-      { '@type': 'ListItem', position: 2, name: 'Products', item: `${baseUrl}/products` },
-      { '@type': 'ListItem', position: 3, name: product.title, item: `${baseUrl}/product/${product.handle}` }
-    ]
+      { "@type": "ListItem", position: 1, name: "Home", item: `${baseUrl}/` },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Products",
+        item: `${baseUrl}/products`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: product.title,
+        item: `${baseUrl}/product/${product.handle}`,
+      },
+    ],
   };
 
   const transformedProduct = transformShopifyProductToTailwindDetail(product);
@@ -52,22 +62,24 @@ export function ProductPageContent({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(productJsonLd)
+          __html: JSON.stringify(productJsonLd),
         }}
       />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbJsonLd)
+          __html: JSON.stringify(breadcrumbJsonLd),
         }}
       />
       <Suspense fallback={null}>
         <ProductProvider>
-          <ProductWrapper product={product} transformedProduct={transformedProduct} />
+          <ProductWrapper
+            product={product}
+            transformedProduct={transformedProduct}
+          />
         </ProductProvider>
       </Suspense>
       {relatedProductsSlot}
     </div>
   );
 }
-

@@ -31,6 +31,7 @@ Replaced the minimalist Vercel Commerce UI with premium Tailwind UI components t
 ### 🏠 Enhanced Home Page
 
 Custom home page sections:
+
 - **Hero Section**: Full-width hero with call-to-action
 - **Trending Products**: Showcase of newest/featured products
 - **Collections**: Featured category highlights
@@ -44,17 +45,20 @@ Custom home page sections:
 ### 🛍️ Improved Shopping Experience
 
 **Product Pages**:
+
 - Related products section
 - Enhanced product detail view with Tailwind UI components
 - Optimized image galleries
 - Static generation with `generateStaticParams` for instant loading
 
 **Category Pages**:
+
 - New `/products` and `/products/[collection]` routes
 - Advanced filtering and sorting
 - Mobile-optimized filter drawer
 
 **Cart System**:
+
 - Sliding drawer interface
 - Optimistic UI updates
 - Fixed cart state management with `revalidatePath`
@@ -63,6 +67,7 @@ Custom home page sections:
 ### 💰 Context-Aware Price Display
 
 Multiple price components for different contexts:
+
 - `ProductGridPrice` - Grid/catalog views
 - `ProductDetailPrice` - Product detail pages
 - `CartPrice` - Shopping cart
@@ -70,15 +75,18 @@ Multiple price components for different contexts:
 ### 🏗️ Architecture Improvements
 
 **Route Organization**:
+
 - Added `(store)` route group for logical separation
 - Organized product and search routes
 
 **Data Layer**:
+
 - Transformation utilities (`transformShopifyProductToTailwind`, etc.)
 - Convert Shopify data to Tailwind UI component formats
 - Type-safe data transformations
 
 **Performance**:
+
 - Static generation with `'use cache'` directives
 - Experimental Next.js 16 features enabled
 - Product page pre-generation
@@ -87,28 +95,34 @@ Multiple price components for different contexts:
 ### 🛠️ Technical Enhancements
 
 **Cart State Management**:
+
 - Added `revalidatePath('/', 'layout')` to cart actions
 - Ensures cart updates without hard refresh
 - Fixed cart count and line item updates
 
 **Caching Strategy**:
+
 - `experimental.cacheComponents: true`
 - `'use cache'` directives on data fetching
 - Granular cache control with `cacheTag` and `cacheLife`
 
 **TypeScript**:
+
 - Custom types for Tailwind UI components
 - Strict type checking throughout
 
 ## Dependencies
 
 ### Added
+
 - `@vercel/speed-insights` - Performance monitoring
 
 ### Removed
+
 - `sonner` - Replaced with custom toast/notification approach
 
 ### Key Dependencies
+
 - `@headlessui/react` - Accessible UI components
 - `@heroicons/react` - Icon library
 - `clsx` - Conditional CSS classes
@@ -158,6 +172,7 @@ pnpm start
 ## Key Features
 
 ### User-Facing
+
 - ✨ Modern, polished UI with Tailwind UI components
 - 🔍 Instant search with command palette (⌘K)
 - 🛒 Smooth cart experience with optimistic updates
@@ -167,6 +182,7 @@ pnpm start
 - ⚡ Lightning-fast page loads with static generation
 
 ### Developer Experience
+
 - 🏗️ Type-safe with TypeScript
 - 🎯 React Server Components
 - 🔄 Server Actions for mutations
@@ -219,7 +235,7 @@ Product pages are statically generated at build time using `generateStaticParams
 export async function generateStaticParams() {
   const products = await getProducts({});
   return products.map((product) => ({
-    handle: product.handle
+    handle: product.handle,
   }));
 }
 ```
@@ -236,6 +252,7 @@ export async function generateStaticParams() {
 ## Shopify Integration
 
 Uses Shopify Storefront API for:
+
 - Product catalog
 - Collections/categories
 - Cart management

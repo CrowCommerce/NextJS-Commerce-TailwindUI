@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
-import { FunnelIcon } from '@heroicons/react/20/solid';
-import { XMarkIcon } from '@heroicons/react/24/outline';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
+import { FunnelIcon } from "@heroicons/react/20/solid";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 export default function MobileFilters({
-  collections
+  collections,
 }: {
   collections: Array<{ name: string; href: string }>;
 }) {
@@ -28,7 +28,11 @@ export default function MobileFilters({
       </button>
 
       {/* Mobile filter dialog */}
-      <Dialog open={mobileFiltersOpen} onClose={setMobileFiltersOpen} className="relative z-40 lg:hidden">
+      <Dialog
+        open={mobileFiltersOpen}
+        onClose={setMobileFiltersOpen}
+        className="relative z-40 lg:hidden"
+      >
         <DialogBackdrop
           transition
           className="fixed inset-0 bg-black/25 transition-opacity duration-300 ease-linear data-closed:opacity-0"
@@ -62,7 +66,7 @@ export default function MobileFilters({
                     <li key={collection.name}>
                       <Link
                         href={collection.href}
-                        className={`block px-2 py-3 ${isActive ? 'underline underline-offset-4' : ''}`}
+                        className={`block px-2 py-3 ${isActive ? "underline underline-offset-4" : ""}`}
                       >
                         {collection.name}
                       </Link>
@@ -77,4 +81,3 @@ export default function MobileFilters({
     </>
   );
 }
-

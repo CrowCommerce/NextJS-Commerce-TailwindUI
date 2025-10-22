@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { removeItem } from 'components/cart/actions';
-import type { CartItem } from 'lib/shopify/types';
-import { useActionState } from 'react';
+import { removeItem } from "components/cart/actions";
+import type { CartItem } from "lib/shopify/types";
+import { useActionState } from "react";
 
 export function DeleteItemButton({
   item,
-  optimisticUpdate
+  optimisticUpdate,
 }: {
   item: CartItem;
   optimisticUpdate: any;
@@ -18,7 +18,7 @@ export function DeleteItemButton({
   return (
     <form
       action={async () => {
-        optimisticUpdate(merchandiseId, 'delete');
+        optimisticUpdate(merchandiseId, "delete");
         removeItemAction();
       }}
     >

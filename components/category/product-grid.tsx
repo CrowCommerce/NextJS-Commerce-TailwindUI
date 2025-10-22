@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import type { CategoryProduct } from './types';
+import Link from "next/link";
+import type { CategoryProduct } from "./types";
 
 interface ProductGridProps {
   products: CategoryProduct[];
@@ -31,4 +31,3 @@ export default function ProductGrid({ products }: ProductGridProps) {
     </div>
   );
 }
-

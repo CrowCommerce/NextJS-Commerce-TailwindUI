@@ -1,53 +1,54 @@
-'use client'
+"use client";
 
 import {
-    Dialog,
-    DialogBackdrop,
-    DialogPanel,
-    Tab,
-    TabGroup,
-    TabList,
-    TabPanel,
-    TabPanels,
-} from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import { Navigation } from 'lib/shopify/types'
-import Link from 'next/link'
-import { usePathname, useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  Tab,
+  TabGroup,
+  TabList,
+  TabPanel,
+  TabPanels,
+} from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { Navigation } from "lib/shopify/types";
+import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
-export default function NavbarMobile({ 
-  navigation, 
-  isOpen, 
-  onClose 
-}: { 
-  navigation: Navigation
-  isOpen: boolean
-  onClose: () => void
+export default function NavbarMobile({
+  navigation,
+  isOpen,
+  onClose,
+}: {
+  navigation: Navigation;
+  isOpen: boolean;
+  onClose: () => void;
 }) {
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    onClose()
-  }, [pathname, searchParams, onClose])
+    onClose();
+  }, [pathname, searchParams, onClose]);
 
   useEffect(() => {
     const onResize = () => {
-      if (typeof window !== 'undefined' && window.innerWidth >= 1024) onClose()
-    }
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
-  }, [onClose])
+      if (typeof window !== "undefined" && window.innerWidth >= 1024) onClose();
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [onClose]);
 
   return (
-    <Dialog open={isOpen} onClose={onClose} className="relative z-40 lg:hidden">
+    <Dialog open={isOpen} onClose={onClose} className="relative z-50 lg:hidden">
       <DialogBackdrop
         transition
         className="fixed inset-0 bg-black/25 transition-opacity duration-300 ease-linear data-closed:opacity-0"
       />
-      <div className="fixed inset-0 z-40 flex">
+      <div className="fixed inset-0 z-50 flex">
         <DialogPanel
+          id="mobile-menu"
           transition
           className="relative flex w-full max-w-xs transform flex-col overflow-y-auto bg-white pb-12 shadow-xl transition duration-300 ease-in-out data-closed:-translate-x-full"
         >
@@ -55,7 +56,9 @@ export default function NavbarMobile({
             <button
               type="button"
               onClick={onClose}
-              className="relative -m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"
+              className="relative -m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-indigo-600"
+              aria-label="Close menu"
+              data-testid="close-mobile-menu"
             >
               <span className="absolute -inset-0.5" />
               <span className="sr-only">Close menu</span>
@@ -79,11 +82,17 @@ export default function NavbarMobile({
             </div>
             <TabPanels>
               {navigation.categories.map((category, categoryIdx) => (
-                <TabPanel key={category.name} className="space-y-12 px-4 pt-10 pb-6">
+                <TabPanel
+                  key={category.name}
+                  className="space-y-12 px-4 pt-10 pb-6"
+                >
                   <div className="grid grid-cols-1 items-start gap-x-6 gap-y-10">
                     <div className="grid grid-cols-1 gap-x-6 gap-y-10">
                       <div>
-                        <p id={`mobile-featured-heading-${categoryIdx}`} className="font-medium text-gray-900">
+                        <p
+                          id={`mobile-featured-heading-${categoryIdx}`}
+                          className="font-medium text-gray-900"
+                        >
                           Featured
                         </p>
                         <ul
@@ -93,7 +102,11 @@ export default function NavbarMobile({
                         >
                           {category.featured.map((item) => (
                             <li key={item.name} className="flex">
-                              <Link prefetch={true} href={item.href} className="text-gray-500">
+                              <Link
+                                prefetch={true}
+                                href={item.href}
+                                className="text-gray-500"
+                              >
                                 {item.name}
                               </Link>
                             </li>
@@ -101,13 +114,24 @@ export default function NavbarMobile({
                         </ul>
                       </div>
                       <div>
-                        <p id="mobile-categories-heading" className="font-medium text-gray-900">
+                        <p
+                          id="mobile-categories-heading"
+                          className="font-medium text-gray-900"
+                        >
                           Categories
                         </p>
-                        <ul role="list" aria-labelledby="mobile-categories-heading" className="mt-6 space-y-6">
+                        <ul
+                          role="list"
+                          aria-labelledby="mobile-categories-heading"
+                          className="mt-6 space-y-6"
+                        >
                           {category.categories.map((item) => (
                             <li key={item.name} className="flex">
-                              <Link prefetch={true} href={item.href} className="text-gray-500">
+                              <Link
+                                prefetch={true}
+                                href={item.href}
+                                className="text-gray-500"
+                              >
                                 {item.name}
                               </Link>
                             </li>
@@ -117,13 +141,24 @@ export default function NavbarMobile({
                     </div>
                     <div className="grid grid-cols-1 gap-x-6 gap-y-10">
                       <div>
-                        <p id="mobile-collection-heading" className="font-medium text-gray-900">
+                        <p
+                          id="mobile-collection-heading"
+                          className="font-medium text-gray-900"
+                        >
                           Collection
                         </p>
-                        <ul role="list" aria-labelledby="mobile-collection-heading" className="mt-6 space-y-6">
+                        <ul
+                          role="list"
+                          aria-labelledby="mobile-collection-heading"
+                          className="mt-6 space-y-6"
+                        >
                           {category.collection.map((item) => (
                             <li key={item.name} className="flex">
-                              <Link prefetch={true} href={item.href} className="text-gray-500">
+                              <Link
+                                prefetch={true}
+                                href={item.href}
+                                className="text-gray-500"
+                              >
                                 {item.name}
                               </Link>
                             </li>
@@ -132,13 +167,24 @@ export default function NavbarMobile({
                       </div>
 
                       <div>
-                        <p id="mobile-brand-heading" className="font-medium text-gray-900">
+                        <p
+                          id="mobile-brand-heading"
+                          className="font-medium text-gray-900"
+                        >
                           Brands
                         </p>
-                        <ul role="list" aria-labelledby="mobile-brand-heading" className="mt-6 space-y-6">
+                        <ul
+                          role="list"
+                          aria-labelledby="mobile-brand-heading"
+                          className="mt-6 space-y-6"
+                        >
                           {category.brands.map((item) => (
                             <li key={item.name} className="flex">
-                              <Link prefetch={true} href={item.href} className="text-gray-500">
+                              <Link
+                                prefetch={true}
+                                href={item.href}
+                                className="text-gray-500"
+                              >
                                 {item.name}
                               </Link>
                             </li>
@@ -155,15 +201,18 @@ export default function NavbarMobile({
           <div className="space-y-6 border-t border-gray-200 px-4 py-6">
             {navigation.pages.map((page) => (
               <div key={page.name} className="flow-root">
-                <Link prefetch={true} href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
+                <Link
+                  prefetch={true}
+                  href={page.href}
+                  className="-m-2 block p-2 font-medium text-gray-900"
+                >
                   {page.name}
                 </Link>
               </div>
             ))}
           </div>
-
         </DialogPanel>
       </div>
     </Dialog>
-  )
+  );
 }

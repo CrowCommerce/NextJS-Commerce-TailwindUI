@@ -1,25 +1,31 @@
-'use client'
+"use client";
 
-import { addItem } from 'components/cart/actions'
-import { useCart } from 'components/cart/cart-context'
-import type { Product } from 'lib/shopify/types'
-import type { TailwindRelatedProduct } from 'lib/utils'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useActionState } from 'react'
+import { addItem } from "components/cart/actions";
+import { useCart } from "components/cart/cart-context";
+import type { Product } from "lib/shopify/types";
+import type { TailwindRelatedProduct } from "lib/utils";
+import Image from "next/image";
+import Link from "next/link";
+import { useActionState } from "react";
 
 interface RelatedProductsProps {
-  products: TailwindRelatedProduct[]
-  fullProducts: Product[]
+  products: TailwindRelatedProduct[];
+  fullProducts: Product[];
 }
 
-export default function RelatedProducts({ products, fullProducts }: RelatedProductsProps) {
-  if (!products || products.length === 0) return null
-  const { addCartItem } = useCart()
-  const [message, formAction] = useActionState(addItem, null)
+export default function RelatedProducts({
+  products,
+  fullProducts,
+}: RelatedProductsProps) {
+  if (!products || products.length === 0) return null;
+  const { addCartItem } = useCart();
+  const [message, formAction] = useActionState(addItem, null);
 
   return (
-    <section aria-labelledby="related-heading" className="mx-auto max-w-7xl mt-10 border-t border-gray-200 px-4 py-16 sm:px-0">
+    <section
+      aria-labelledby="related-heading"
+      className="mx-auto max-w-7xl mt-10 border-t border-gray-200 px-4 py-16 sm:px-0"
+    >
       <h2 id="related-heading" className="text-xl font-bold text-gray-900">
         Customers also bought
       </h2>
@@ -28,9 +34,9 @@ export default function RelatedProducts({ products, fullProducts }: RelatedProdu
         {products.map((product, index) => {
           const fullProduct = fullProducts[index];
           if (!fullProduct) return null;
-          
+
           const addItemAction = formAction.bind(null, product.variantId);
-          
+
           return (
             <div key={product.id} className="flex h-full flex-col">
               <Link href={product.href} className="block group">
@@ -47,18 +53,28 @@ export default function RelatedProducts({ products, fullProducts }: RelatedProdu
                       aria-hidden="true"
                       className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black to-transparent opacity-50"
                     />
-                    <p className="relative text-lg font-semibold text-white">{product.price}</p>
+                    <p className="relative text-lg font-semibold text-white">
+                      {product.price}
+                    </p>
                   </div>
                 </div>
                 <div className="mt-4">
-                  <h3 className="text-sm font-medium text-gray-900">{product.name}</h3>
-                  {product.color && <p className="mt-1 text-sm text-gray-500">{product.color}</p>}
+                  <h3 className="text-sm font-medium text-gray-900">
+                    {product.name}
+                  </h3>
+                  {product.color && (
+                    <p className="mt-1 text-sm text-gray-500">
+                      {product.color}
+                    </p>
+                  )}
                 </div>
               </Link>
               <div className="mt-auto pt-6">
                 <form
                   action={async () => {
-                    const variant = fullProduct.variants.find(v => v.id === product.variantId)!;
+                    const variant = fullProduct.variants.find(
+                      (v) => v.id === product.variantId,
+                    )!;
                     addCartItem(variant, fullProduct);
                     addItemAction();
                   }}
@@ -76,5 +92,5 @@ export default function RelatedProducts({ products, fullProducts }: RelatedProdu
         })}
       </div>
     </section>
-  )
+  );
 }

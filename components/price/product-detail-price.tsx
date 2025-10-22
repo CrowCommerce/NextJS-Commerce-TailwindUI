@@ -1,18 +1,20 @@
 export default function ProductDetailPrice({
   amount,
-  currencyCode
+  currencyCode,
 }: {
   amount: string;
   currencyCode: string;
 }) {
   return (
-    <p suppressHydrationWarning={true} className="text-3xl tracking-tight text-gray-900">
+    <p
+      suppressHydrationWarning={true}
+      className="text-3xl tracking-tight text-gray-900"
+    >
       {new Intl.NumberFormat(undefined, {
-        style: 'currency',
+        style: "currency",
         currency: currencyCode,
-        currencyDisplay: 'narrowSymbol'
+        currencyDisplay: "narrowSymbol",
       }).format(parseFloat(amount))}
     </p>
   );
 }
-

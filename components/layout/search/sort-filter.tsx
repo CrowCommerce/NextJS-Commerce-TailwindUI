@@ -1,5 +1,5 @@
-import { Suspense } from 'react';
-import SortFilterMenu from './sort-filter-menu';
+import { Suspense } from "react";
+import SortFilterMenu from "./sort-filter-menu";
 
 export default function SortFilter() {
   return (
@@ -8,4 +8,3 @@ export default function SortFilter() {
     </Suspense>
   );
 }
-

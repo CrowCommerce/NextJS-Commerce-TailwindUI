@@ -1,32 +1,37 @@
-'use client'
+"use client";
 
-import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
-import { ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { redirectToCheckout } from 'components/cart/actions'
-import { useCart } from 'components/cart/cart-context'
-import { EditItemQuantityButton } from 'components/cart/edit-item-quantity-button'
-import CartPrice from 'components/price/cart-price'
-import LoadingDots from 'components/template-loading-dots'
-import { DEFAULT_OPTION } from 'lib/constants'
-import { createUrl } from 'lib/utils'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Suspense, useEffect, useRef, useState } from 'react'
-import { useFormStatus } from 'react-dom'
-import { createCartAndSetCookie } from './actions'
-import { DeleteItemButton } from './delete-item-button'
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/react";
+import { ShoppingBagIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { redirectToCheckout } from "components/cart/actions";
+import { useCart } from "components/cart/cart-context";
+import { EditItemQuantityButton } from "components/cart/edit-item-quantity-button";
+import CartPrice from "components/price/cart-price";
+import LoadingDots from "components/template-loading-dots";
+import { DEFAULT_OPTION } from "lib/constants";
+import { createUrl } from "lib/utils";
+import Image from "next/image";
+import Link from "next/link";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { useFormStatus } from "react-dom";
+import { createCartAndSetCookie } from "./actions";
+import { DeleteItemButton } from "./delete-item-button";
 
 function CartCount() {
-  const { cart } = useCart()
-  return <>{cart?.totalQuantity ?? 0}</>
+  const { cart } = useCart();
+  return <>{cart?.totalQuantity ?? 0}</>;
 }
 
 export default function Cart() {
-  const { cart, updateCartItem } = useCart()
-  const [isOpen, setIsOpen] = useState(false)
-  const quantityRef = useRef(cart?.totalQuantity)
-  const openCart = () => setIsOpen(true)
-  const closeCart = () => setIsOpen(false)
+  const { cart, updateCartItem } = useCart();
+  const [isOpen, setIsOpen] = useState(false);
+  const quantityRef = useRef(cart?.totalQuantity);
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
 
   useEffect(() => {
     if (!cart) {
@@ -42,17 +47,17 @@ export default function Cart() {
       cart?.totalQuantity > 0
     ) {
       if (!isOpen) {
-        setIsOpen(true)
+        setIsOpen(true);
       }
-      quantityRef.current = cart?.totalQuantity
+      quantityRef.current = cart?.totalQuantity;
     }
-  }, [isOpen, cart?.totalQuantity])
+  }, [isOpen, cart?.totalQuantity]);
 
   return (
     <>
       {/* Cart Button */}
-      <button 
-        onClick={openCart} 
+      <button
+        onClick={openCart}
         className="group -m-2 flex items-center rounded-md p-2 focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2"
       >
         <ShoppingBagIcon
@@ -84,7 +89,9 @@ export default function Cart() {
                 <div className="flex h-full flex-col overflow-y-auto bg-white shadow-xl">
                   <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                     <div className="flex items-start justify-between">
-                      <DialogTitle className="text-lg font-medium text-gray-900">Shopping cart</DialogTitle>
+                      <DialogTitle className="text-lg font-medium text-gray-900">
+                        Shopping cart
+                      </DialogTitle>
                       <div className="ml-3 flex h-7 items-center">
                         <button
                           type="button"
@@ -105,31 +112,51 @@ export default function Cart() {
                             <p className="text-gray-500">Your cart is empty</p>
                           </div>
                         ) : (
-                          <ul role="list" className="-my-6 divide-y divide-gray-200">
+                          <ul
+                            role="list"
+                            className="-my-6 divide-y divide-gray-200"
+                          >
                             {cart.lines
                               .sort((a, b) =>
                                 a.merchandise.product.title.localeCompare(
-                                  b.merchandise.product.title
-                                )
+                                  b.merchandise.product.title,
+                                ),
                               )
                               .map((item) => {
-                                const merchandiseSearchParams: Record<string, string> = {}
-                                item.merchandise.selectedOptions.forEach(({ name, value }) => {
-                                  if (value !== DEFAULT_OPTION) {
-                                    merchandiseSearchParams[name.toLowerCase()] = value
-                                  }
-                                })
+                                const merchandiseSearchParams: Record<
+                                  string,
+                                  string
+                                > = {};
+                                item.merchandise.selectedOptions.forEach(
+                                  ({ name, value }) => {
+                                    if (value !== DEFAULT_OPTION) {
+                                      merchandiseSearchParams[
+                                        name.toLowerCase()
+                                      ] = value;
+                                    }
+                                  },
+                                );
                                 const merchandiseUrl = createUrl(
                                   `/product/${item.merchandise.product.handle}`,
-                                  new URLSearchParams(merchandiseSearchParams)
-                                )
+                                  new URLSearchParams(merchandiseSearchParams),
+                                );
 
                                 return (
-                                  <li key={item.id || item.merchandise.id} className="flex py-6">
+                                  <li
+                                    key={item.id || item.merchandise.id}
+                                    className="flex py-6"
+                                  >
                                     <div className="size-24 shrink-0 overflow-hidden rounded-md border border-gray-200">
                                       <Image
-                                        alt={item.merchandise.product.featuredImage.altText || item.merchandise.product.title}
-                                        src={item.merchandise.product.featuredImage.url}
+                                        alt={
+                                          item.merchandise.product.featuredImage
+                                            .altText ||
+                                          item.merchandise.product.title
+                                        }
+                                        src={
+                                          item.merchandise.product.featuredImage
+                                            .url
+                                        }
                                         width={96}
                                         height={96}
                                         className="size-full object-cover"
@@ -146,26 +173,44 @@ export default function Cart() {
                                           </h3>
                                           <CartPrice
                                             className="ml-4"
-                                            amount={item.cost.totalAmount.amount}
-                                            currencyCode={item.cost.totalAmount.currencyCode}
+                                            amount={
+                                              item.cost.totalAmount.amount
+                                            }
+                                            currencyCode={
+                                              item.cost.totalAmount.currencyCode
+                                            }
                                           />
                                         </div>
-                                        
                                       </div>
                                       <div className="flex flex-1 items-end justify-between text-sm">
                                         <div className="ml-0 flex h-7 flex-row items-center rounded-full border border-gray-200 bg-white">
-                                          <EditItemQuantityButton item={item} type="minus" optimisticUpdate={updateCartItem} size="xs" />
-                                          <span className="relative z-10 mx-1 w-8 px-0.5 text-center text-sm font-semibold leading-none text-indigo-500 tabular-nums select-none">{item.quantity}</span>
-                                          <EditItemQuantityButton item={item} type="plus" optimisticUpdate={updateCartItem} size="xs" />
+                                          <EditItemQuantityButton
+                                            item={item}
+                                            type="minus"
+                                            optimisticUpdate={updateCartItem}
+                                            size="xs"
+                                          />
+                                          <span className="relative z-10 mx-1 w-8 px-0.5 text-center text-sm font-semibold leading-none text-indigo-500 tabular-nums select-none">
+                                            {item.quantity}
+                                          </span>
+                                          <EditItemQuantityButton
+                                            item={item}
+                                            type="plus"
+                                            optimisticUpdate={updateCartItem}
+                                            size="xs"
+                                          />
                                         </div>
 
                                         <div className="flex">
-                                          <DeleteItemButton item={item} optimisticUpdate={updateCartItem} />
+                                          <DeleteItemButton
+                                            item={item}
+                                            optimisticUpdate={updateCartItem}
+                                          />
                                         </div>
                                       </div>
                                     </div>
                                   </li>
-                                )
+                                );
                               })}
                           </ul>
                         )}
@@ -177,7 +222,7 @@ export default function Cart() {
                     <div className="flex justify-between text-base font-medium text-gray-900">
                       <p>Subtotal</p>
                       <div className="text-right">
-                        {cart && cart.cost.totalAmount.amount !== '0' ? (
+                        {cart && cart.cost.totalAmount.amount !== "0" ? (
                           <CartPrice
                             amount={cart.cost.totalAmount.amount}
                             currencyCode={cart.cost.totalAmount.currencyCode}
@@ -211,7 +256,9 @@ export default function Cart() {
                       </div>
                     </div>
                     */}
-                    <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+                    <p className="mt-0.5 text-sm text-gray-500">
+                      Shipping and taxes calculated at checkout.
+                    </p>
                     <div className="mt-6">
                       <form action={redirectToCheckout}>
                         <CheckoutButton />
@@ -219,7 +266,7 @@ export default function Cart() {
                     </div>
                     <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                       <p>
-                        or{' '}
+                        or{" "}
                         <button
                           type="button"
                           onClick={closeCart}
@@ -238,11 +285,11 @@ export default function Cart() {
         </div>
       </Dialog>
     </>
-  )
+  );
 }
 
 function CheckoutButton() {
-  const { pending } = useFormStatus()
+  const { pending } = useFormStatus();
 
   return (
     <button
@@ -250,7 +297,7 @@ function CheckoutButton() {
       type="submit"
       disabled={pending}
     >
-      {pending ? <LoadingDots className="bg-white" /> : 'Checkout'}
+      {pending ? <LoadingDots className="bg-white" /> : "Checkout"}
     </button>
-  )
+  );
 }

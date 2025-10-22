@@ -1,7 +1,7 @@
-import { PageContent } from 'components/page/page-content';
-import { getPage } from 'lib/shopify';
-import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { PageContent } from "components/page/page-content";
+import { getPage } from "lib/shopify";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 export async function generateMetadata(props: {
   params: Promise<{ page: string }>;
@@ -17,12 +17,14 @@ export async function generateMetadata(props: {
     openGraph: {
       publishedTime: page.createdAt,
       modifiedTime: page.updatedAt,
-      type: 'article'
-    }
+      type: "article",
+    },
   };
 }
 
-export default async function Page(props: { params: Promise<{ page: string }> }) {
+export default async function Page(props: {
+  params: Promise<{ page: string }>;
+}) {
   const params = await props.params;
   // Don't await the fetch, pass the Promise to the client component
   const pagePromise = getPage(params.page);

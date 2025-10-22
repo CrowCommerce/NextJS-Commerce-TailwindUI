@@ -1,5 +1,5 @@
-import Footer from 'components/layout/footer';
-import { Suspense } from 'react';
+import Footer from "components/layout/footer";
+import { Suspense } from "react";
 
 const PageSkeleton = () => (
   <div className="animate-pulse">

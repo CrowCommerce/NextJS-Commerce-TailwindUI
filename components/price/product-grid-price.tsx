@@ -1,18 +1,20 @@
 export default function ProductGridPrice({
   amount,
-  currencyCode
+  currencyCode,
 }: {
   amount: string;
   currencyCode: string;
 }) {
   return (
-    <p suppressHydrationWarning={true} className="mt-1 text-lg font-medium text-gray-900">
+    <p
+      suppressHydrationWarning={true}
+      className="mt-1 text-lg font-medium text-gray-900"
+    >
       {new Intl.NumberFormat(undefined, {
-        style: 'currency',
+        style: "currency",
         currency: currencyCode,
-        currencyDisplay: 'narrowSymbol'
+        currencyDisplay: "narrowSymbol",
       }).format(parseFloat(amount))}
     </p>
   );
 }
-

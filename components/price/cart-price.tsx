@@ -1,7 +1,7 @@
 export default function CartPrice({
   amount,
   currencyCode,
-  className
+  className,
 }: {
   amount: string;
   currencyCode: string;
@@ -10,11 +10,10 @@ export default function CartPrice({
   return (
     <p suppressHydrationWarning={true} className={className}>
       {new Intl.NumberFormat(undefined, {
-        style: 'currency',
+        style: "currency",
         currency: currencyCode,
-        currencyDisplay: 'narrowSymbol'
+        currencyDisplay: "narrowSymbol",
       }).format(parseFloat(amount))}
     </p>
   );
 }
-
